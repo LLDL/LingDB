@@ -176,7 +176,7 @@ class IsParentIn(models.Model):
 
 
 
-class Phono_Experiment(models.Model):
+class Experiment(models.Model):
     class Meta:
         verbose_name = "Experiment"
         verbose_name_plural = "Experiments"
@@ -200,7 +200,6 @@ class Phono_Experiment(models.Model):
     )
 
 
-
 class Experiment_Section(models.Model):
     class Meta:
         verbose_name = "Experiment Section"
@@ -215,3 +214,4 @@ class Experiment_Section(models.Model):
         max_length = 10, 
         choices = STATUS_CHOICES
     )
+    section_of = models.ForeignKey(Language, on_delete=models.CASCADE)
