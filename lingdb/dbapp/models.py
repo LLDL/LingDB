@@ -3,11 +3,17 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 class Language(models.Model):
-    language_name = models.CharField(max_length = 100)
+    language_name = models.CharField(max_length = 100, primary_key=True)
     
 class Family(models.Model):
     class Meta:
         verbose_name_plural = "Families"
+
+class Musical_Experience(models.Model):
+    class Meta:
+        verbose_name = "Musical Experience"
+        verbose_name_plural = "Musical Experiences"
+    skill = models.CharField(max_length = 100)
 
 class Adult(models.Model):
     sfu_id = models.IntegerField(blank = True, null = True)
@@ -64,7 +70,8 @@ class Adult(models.Model):
         return self.given_name
 
     languages = models.ManyToManyField(Language, through='Speaks')
-    is_parent = models.ManyToManyField(Family, through='IsParentIn')
+    musical_experiences = models.ManyToManyField(Musical_Experience, through='IsExperiencedIn')
+    parent_in = models.ManyToManyField(Family, through='IsParentIn', blank = True)
 
 
 class Child(models.Model):
@@ -83,7 +90,8 @@ class Child(models.Model):
     hereditary_audio_problems = models.BooleanField()
     hereditary_language_pathologies = models.BooleanField()
     health_notes = models.TextField(max_length=1000, blank = True, null = True)
-
+    family = models.ManyToManyField(Family)
+    exposed_to = models.ManyToManyField(Language, through='IsExposedTo')
 
     GENDER_CHOICES = (
         ('F', 'Female'),
@@ -93,6 +101,18 @@ class Child(models.Model):
     gender = models.CharField(
         max_length = 1, 
         choices = GENDER_CHOICES
+    )
+
+class IsExposedTo(models.Model):
+    class Meta:
+        verbose_name_plural = "Is Exposed To"
+    child = models.ForeignKey(Child, on_delete = models.PROTECT)
+    language = models.ForeignKey(Language, on_delete = models.PROTECT)
+    percentage_exposure = models.SmallIntegerField(
+        validators=[
+            MinValueValidator(0), 
+            MaxValueValidator(100),
+        ]
     )
 
 class Speaks(models.Model):
@@ -121,6 +141,31 @@ class Speaks(models.Model):
         ]
     )
 
+class IsExperiencedIn(models.Model):
+    class Meta:
+        verbose_name_plural = "Musical Experience Relations"
+    person = models.ForeignKey(Adult, on_delete = models.PROTECT)
+    experience = models.ForeignKey(Musical_Experience, on_delete = models.PROTECT)
+    nth_most_dominant = models.SmallIntegerField(
+        validators=[
+            MinValueValidator(1), 
+            MaxValueValidator(20),
+        ]
+    )
+    age_learning_started = models.SmallIntegerField(
+        validators=[
+            MinValueValidator(0), 
+            MaxValueValidator(120),
+        ]
+    )
+
+    age_learning_ended = models.SmallIntegerField(
+        validators=[
+            MinValueValidator(0), 
+            MaxValueValidator(120),
+        ]
+    )
+
 class IsParentIn(models.Model):
     class Meta:
         verbose_name_plural = "Parents"
@@ -128,17 +173,22 @@ class IsParentIn(models.Model):
     family = models.ForeignKey(Family, on_delete = models.PROTECT)
     is_primary_contact = models.BooleanField()
 
-class Musical_Experience(models.Model):
-    class Meta:
-        verbose_name = "Musical Experience"
-        verbose_name_plural = "Musical Experiences"
-    skill = models.CharField(max_length = 100)
+
+
 
 class Phono_Experiment(models.Model):
     class Meta:
-        verbose_name = "Phono Experiment"
-        verbose_name_plural = "Phono Experiments"
+        verbose_name = "Experiment"
+        verbose_name_plural = "Experiments"
     experiment_name = models.CharField(max_length = 100)
+    LAB_CHOICES = (
+        ('ld', 'LangDev'),
+        ('ph', 'Phono'),
+    )
+    lab = models.CharField(
+        max_length = 2,
+        choices = LAB_CHOICES
+    )
     STATUS_CHOICES = (
         ('prep', 'In Prep'),
         ('recruiting', 'Actively Recruiting'),
@@ -149,11 +199,13 @@ class Phono_Experiment(models.Model):
         choices = STATUS_CHOICES
     )
 
-class Langdev_Experiment(models.Model):
+
+
+class Experiment_Section(models.Model):
     class Meta:
-        verbose_name = "LangDev Experiment"
-        verbose_name_plural = "LangDev Experiments"
-    experiment_name = models.CharField(max_length = 100)
+        verbose_name = "Experiment Section"
+        verbose_name_plural = "Experiment Sections"
+    experiment_section_name = models.CharField(max_length = 100)
     STATUS_CHOICES = (
         ('prep', 'In Prep'),
         ('recruiting', 'Actively Recruiting'),
@@ -163,35 +215,3 @@ class Langdev_Experiment(models.Model):
         max_length = 10, 
         choices = STATUS_CHOICES
     )
-
-
-class Phono_Experiment_Section(models.Model):
-    class Meta:
-        verbose_name = "Phono Experiment Section"
-        verbose_name_plural = "Phono Experiment Sections"
-    phono_experiment_section_name = models.CharField(max_length = 100)
-    STATUS_CHOICES = (
-        ('prep', 'In Prep'),
-        ('recruiting', 'Actively Recruiting'),
-        ('inactive', 'Inactive'),
-    )
-    status = models.CharField(
-        max_length = 10, 
-        choices = STATUS_CHOICES
-    )
-
-class Langdev_Experiment_Section(models.Model):
-    class Meta:
-        verbose_name = "LangDev Experiment Section"
-        verbose_name_plural = "LangDev Experiment Sections"
-    langdev_experiment_section_name = models.CharField(max_length = 100)
-    STATUS_CHOICES = (
-        ('prep', 'In Prep'),
-        ('recruiting', 'Actively Recruiting'),
-        ('inactive', 'Inactive'),
-    )
-    status = models.CharField(
-        max_length = 10, 
-        choices = STATUS_CHOICES
-    )    
-
