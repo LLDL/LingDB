@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('app/', include('dbapp.urls')),
+    path('app/', include('ParticipantDB.urls')),
     path('admin/', admin.site.urls),
 ]
