@@ -1,7 +1,72 @@
 {% if adult %}
     <h2>
-        {{ adult.id }}
+        Adult # {{ adult.id }}
     </h2>
+    <div>
+        <table>
+            <tr>
+                <td class="field_name">Given Name:</td>
+                <td class="field_value">{{adult.given_name}}</td>
+            </tr> 
+            {% if adult.preferred_name %}
+            <tr>
+                    <td class="field_name">Preferred Name:</td>
+                    <td class="field_value">{{adult.preferred_name}}</td>
+            </tr>    
+            {% endif %}
+            <tr>
+                    <td class="field_name">Surname:</td>
+                    <td class="field_value">{{adult.surname}}</td>
+            </tr> 
+            <tr>
+                    <td class="field_name">Birth Date:</td>
+                    <td class="field_value">{{adult.birth_date}}</td>
+            </tr> 
+            <tr>
+                    <td class="field_name">Gender:</td>
+                    <td class="field_value">{{adult.gender}}</td>
+            </tr> 
+            {% if adult.sfu_id %}
+            <tr>
+                    <td class="field_name">SFU ID:</td>
+                    <td class="field_value">{{adult.sfu_id}}</td>
+            </tr>    
+            {% endif %}
+            <tr>
+                    <td class="field_name">Contact Preference:</td>
+                    <td class="field_value">{{adult.get_contact_pref_display}}</td>
+            </tr>    
+            <tr>
+                    <td class="field_name">Preferred Phone Time:</td>
+                    <td class="field_value">{{adult.get_pref_phone_time_display}}</td>
+            </tr> 
+            {% if adult.health_notes %}
+            <tr>
+                    <td class="field_name">Health Notes:</td>
+                    <td class="field_value">{{adult.health_notes}}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td class="field_name">Languages Spoken:</td>
+                <td class="field_value">
+                    {% for language in adult.languages.all%}
+                        {{language}}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% if adult.musical_background.all.count > 0 %}
+            <tr>
+                <td class="field_name">Musical Skills:</td>
+                <td class="field_value">
+                    {% for skill in adult.musical_background.all%}
+                        {{skill}}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
 {% else %}
     <h2>Not Available</h2>
 {% endif %}

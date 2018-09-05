@@ -32,7 +32,6 @@ class Person(models.Model):
     
 class Adult(Person):
     sfu_id = models.IntegerField(blank = True, null = True)
-    birth_date = models.DateField()
     address = models.CharField(max_length=200)
     years_of_education = models.SmallIntegerField(
         validators=[
@@ -260,13 +259,9 @@ class Musical_Experience(models.Model):
         validators=[
             MinValueValidator(1), 
             MaxValueValidator(20),
-        ], 
-        blank = True,
-        null = True,
+        ]
     )
     age_learning_started = models.SmallIntegerField(
-        blank = True,
-        null = True,
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
@@ -274,8 +269,6 @@ class Musical_Experience(models.Model):
     )
 
     age_learning_ended = models.SmallIntegerField(
-        blank = True,
-        null = True,
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
