@@ -1,5 +1,26 @@
-<h2>People</h2>
-
-<h2>Participation</h2>
-
-<h2>Reference</h2>
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>People</h2>
+    <ul>
+        <li><a href="/people/query">Query</a></li>
+        <li></li>
+        <li><a href="/adult/new">Adult +</a></li>
+        <li><a href="/child/new">Child +</a></li>
+        <li><a href="/family/new">Family +</a></li>
+    </ul>
+    <h2>Participation</h2>
+    <ul>
+        <li><a href="/participation/query">Query</a></li>
+        <li></li>
+        <li><a href="/experiment_section_run/new">Experiment Run +</a></li>
+        <li><a href="/assessment_run/new">Assessment Run +</a></li>
+    </ul>
+    <h2>Reference</h2>
+    <ul>
+        <li><a href="/musical_experience">Musical Experience +</a></li>
+        <li><a href="/language/new">Language +</a></li>
+        <li><a href="/experiment/new">Experiment +</a></li>
+        <li><a href="/experiment_section/new">Experiment Section +</a></li>
+        <li><a href="/assessment/new">Assessment +</a></li>
+    </ul>
+{% endblock  %}

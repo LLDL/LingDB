@@ -1,0 +1,101 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    {% if child %}
+        <h2>
+            Child # {{ child.id }}
+        </h2>
+        <div>
+            <table>
+                <tr>
+                    <td class="field_name">Given Name:</td>
+                    <td class="field_value">{{child.given_name}}</td>
+                </tr> 
+                {% if child.preferred_name %}
+                <tr>
+                        <td class="field_name">Preferred Name:</td>
+                        <td class="field_value">{{child.preferred_name}}</td>
+                </tr>    
+                {% endif %}
+                <tr>
+                        <td class="field_name">Surname:</td>
+                        <td class="field_value">{{child.surname}}</td>
+                </tr> 
+                <tr>
+                        <td class="field_name">Birth Date:</td>
+                        <td class="field_value">{{child.birth_date}}</td>
+                </tr> 
+                <tr>
+                        <td class="field_name">Gender:</td>
+                        <td class="field_value">{{child.gender}}</td>
+                </tr> 
+                {% if child.gestation_length_weeks %}
+                <tr>
+                        <td class="field_name">Gestation Length:</td>
+                        <td class="field_value">{{child.gestation_length_weeks}}</td>
+                </tr> 
+                {% endif %}
+                {% if child.was_full_term %}
+                <tr>
+                        <td class="field_name">Was Full Term:</td>
+                        <td class="field_value">{{child.was_full_term}}</td>
+                </tr> 
+                {% endif %}
+                {% if child.birth_height %}
+                <tr>
+                        <td class="field_name">Birth Height:</td>
+                        <td class="field_value">{{child.birth_height}}</td>
+                </tr> 
+                {% endif %}
+                {% if child.birth_weight %}
+                <tr>
+                        <td class="field_name">Birth Weight:</td>
+                        <td class="field_value">{{child.birth_weight}}</td>
+                </tr> 
+                {% endif %}
+                {% if child.personal_notes %}
+                <tr>
+                        <td class="field_name">Personal Notes:</td>
+                        <td class="field_value">{{child.personal_notes}}</td>
+                </tr>
+                {% endif %}
+                {% if child.hx_repeated_ear_infection %}
+                <tr>
+                        <td class="field_name">HX Repeated Ear Infection:</td>
+                        <td class="field_value">{{child.hx_repeated_ear_infection}}</td>
+                </tr>
+                {% endif %}
+                {% if child.last_ear_infection %}
+                <tr>
+                        <td class="field_name">Last Ear Infection:</td>
+                        <td class="field_value">{{child.last_ear_infection}}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                        <td class="field_name">Hereditary Audio Problems:</td>
+                        <td class="field_value">{{child.hereditary_audio_problems}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Hereditary Language Pathologies:</td>
+                        <td class="field_value">{{child.hereditary_language_pathologies}}</td>
+                </tr>
+                {% if child.health_notes %}
+                <tr>
+                        <td class="field_name">Health Notes:</td>
+                        <td class="field_value">{{child.health_notes}}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td class="field_name">Languages Exposed To:</td>
+                    <td class="field_value">
+                        {% for language in child.exposed_to.all%}
+                            {{language}}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    {% else %}
+        <h2>Not Available</h2>
+    {% endif %}
+{% endblock %}
