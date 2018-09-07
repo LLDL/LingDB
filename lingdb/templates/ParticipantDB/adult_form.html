@@ -1,11 +1,9 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    <h2>
-        New Adult
-    </h2>
+    <h2>New Adult</h2>
     <form method="post">
         {% csrf_token %}
-        {{form.as_p}}
+        {{form}}
         <input type="submit" value="Save">
     </form>
 {% endblock %}
