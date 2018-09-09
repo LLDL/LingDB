@@ -5,6 +5,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404
+from .utils import make_unique_id
 
 @login_required
 def index(request):
@@ -23,12 +24,12 @@ def child_detail(request, child_id):
 @login_required
 def add_adult(request):
     if request.method == "POST":
-        form = AdultForm(request.POST)
+        form = AdultForm(request.POST, initial={'id': make_unique_id()})
         if form.is_valid():
             form.save()
             return redirect('/')
     else:
-        form = AdultForm()
+        form = AdultForm(initial={'id': make_unique_id()})
         return render(request, "ParticipantDB/adult_form.html", {'form': form})
 
 @login_required
