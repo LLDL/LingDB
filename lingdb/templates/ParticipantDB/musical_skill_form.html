@@ -1,0 +1,9 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>New Musical Skill</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

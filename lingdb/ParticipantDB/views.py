@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from .models import Adult
 from .models import Child
-from .forms import AdultForm
+from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404
@@ -31,4 +31,24 @@ def add_adult(request):
         form = AdultForm()
         return render(request, "ParticipantDB/adult_form.html", {'form': form})
 
+@login_required
+def add_language(request):
+    if request.method == "POST":
+        form = LanguageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = LanguageForm()
+        return render(request, "ParticipantDB/language_form.html", {'form': form})
 
+@login_required
+def add_musical_skill(request):
+    if request.method == "POST":
+        form = Musical_Skill_Form(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = Musical_Skill_Form()
+        return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
