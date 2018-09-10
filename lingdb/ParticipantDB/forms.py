@@ -1,4 +1,4 @@
-from .models import Adult, Language, Musical_Skill
+from .models import Adult, Language, Family, Child, Musical_Skill
 from django.forms import *
 
 class AdultForm(ModelForm):
@@ -9,12 +9,25 @@ class AdultForm(ModelForm):
             'birth_date': DateInput(attrs={'type': 'date'})
         }
 
+class ChildForm(ModelForm):
+    class Meta:
+        model = Child
+        fields = ('id','given_name','preferred_name','surname','birth_date','gender','gestation_length_weeks','was_full_term','birth_weight','birth_height','personal_notes','hx_repeated_ear_infection','last_ear_infection','hereditary_audio_problems','hereditary_language_pathologies','health_notes','exposed_to')
+        widgets = {
+            'birth_date': DateInput(attrs={'type': 'date'})
+        }
+
 class LanguageForm(ModelForm):
     class Meta:
         model = Language
         fields = ('language_name',)
 
-class Musical_Skill_Form(ModelForm):
+class MusicalSkillForm(ModelForm):
     class Meta:
         model = Musical_Skill
         fields = ('skill',)
+
+class FamilyForm(ModelForm):
+    class Meta:
+        model = Family
+        fields = ('parents', 'children', )

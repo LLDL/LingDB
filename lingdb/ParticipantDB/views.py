@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from .models import Adult
 from .models import Child
+from .models import Family
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
@@ -33,6 +34,17 @@ def add_adult(request):
         return render(request, "ParticipantDB/adult_form.html", {'form': form})
 
 @login_required
+def add_child(request):
+    if request.method == "POST":
+        form = ChildForm(request.POST, initial={'id': make_unique_id()})
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = ChildForm(initial={'id': make_unique_id()})
+        return render(request, "ParticipantDB/child_form.html", {'form': form})
+
+@login_required
 def add_language(request):
     if request.method == "POST":
         form = LanguageForm(request.POST)
@@ -46,10 +58,21 @@ def add_language(request):
 @login_required
 def add_musical_skill(request):
     if request.method == "POST":
-        form = Musical_Skill_Form(request.POST)
+        form = MusicalSkillForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('/')
     else:
-        form = Musical_Skill_Form()
+        form = MusicalSkillForm()
         return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
+
+@login_required
+def add_family(request):
+    if request.method == "POST":
+        form = FamilyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = FamilyForm()
+        return render(request, "ParticipantDB/family_form.html", {'form': form})
