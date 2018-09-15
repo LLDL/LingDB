@@ -63,8 +63,8 @@ class Adult(Person):
     pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, default = 'DNC')
     
     health_notes = models.TextField(max_length=1000, blank = True, null = True)
-    languages = models.ManyToManyField(Language, through='Speaks')
-    musical_background = models.ManyToManyField(Musical_Skill, through='Musical_Experience', blank = True)
+    languages = models.ManyToManyField('Language', null = True, blank = True, through='Speaks')
+    musical_background = models.ManyToManyField('Musical_Skill', through='Musical_Experience', blank = True)
 
     def get_absolute_url(self):
         return reverse('adult-detail', kwargs={'pk': self.pk})
@@ -82,14 +82,14 @@ class Child(Person):
     hereditary_audio_problems = models.BooleanField()
     hereditary_language_pathologies = models.BooleanField()
     health_notes = models.TextField(max_length=1000, blank = True, null = True    )
-    exposed_to = models.ManyToManyField(Language, through='IsExposedTo', default = None)
+    exposed_to = models.ManyToManyField('Language', through='IsExposedTo', default = None)
 
 class Family(models.Model):
     class Meta:
         verbose_name = "Family"
         verbose_name_plural = "Families"
-    parents = models.ManyToManyField(Adult, through='IsParentIn')
-    children = models.ManyToManyField(Child, through='IsChildIn')
+    parents = models.ManyToManyField('Adult', through='IsParentIn')
+    children = models.ManyToManyField('Child', through='IsChildIn')
     def __str__(self):
         return 'Parents: %s, Children: %s' % (self.parents, self.children) 
 
@@ -229,8 +229,8 @@ class IsExposedTo(models.Model):
 class Speaks(models.Model):
     class Meta:
         verbose_name_plural = "Speaks"
-    person = models.ForeignKey(Adult, on_delete = models.CASCADE, default = None)
-    language = models.ForeignKey(Language, on_delete = models.CASCADE, default = None)
+    person = models.ForeignKey(Adult, related_name = 'speaker', on_delete = models.CASCADE, default = None)
+    language = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None)
     is_native = models.BooleanField()
     nth_most_dominant = models.SmallIntegerField(
         validators=[

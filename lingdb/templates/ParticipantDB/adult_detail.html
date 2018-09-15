@@ -48,24 +48,7 @@
                         <td class="field_value">{{adult.health_notes}}</td>
                 </tr>
                 {% endif %}
-                <tr>
-                    <td class="field_name">Languages Spoken:</td>
-                    <td class="field_value">
-                        {% for language in adult.languages.all%}
-                            {{language}}<br>
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% if adult.musical_background.all.count > 0 %}
-                <tr>
-                    <td class="field_name">Musical Skills:</td>
-                    <td class="field_value">
-                        {% for skill in adult.musical_background.all%}
-                            {{skill}}<br>
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endif %}
+
             </table>
 
         </div>

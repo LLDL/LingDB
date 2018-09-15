@@ -1,10 +1,11 @@
-from .models import Adult, Language, Family, Child, Musical_Skill
+from .models import Adult, Language, Family, Child, Musical_Skill, Speaks
 from django.forms import *
+
 
 class AdultForm(ModelForm):
     class Meta:
         model = Adult
-        fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','health_notes','languages','musical_background')
+        fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','health_notes')
         widgets = {
             'birth_date': DateInput(attrs={'type': 'date'})
         }
@@ -31,3 +32,9 @@ class FamilyForm(ModelForm):
     class Meta:
         model = Family
         fields = ('parents', 'children', )
+
+
+class SpeaksForm(ModelForm):
+    class Meta:
+        model = Speaks
+        fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started')

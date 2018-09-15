@@ -2,11 +2,13 @@ from django.http import HttpResponse
 from .models import Adult
 from .models import Child
 from .models import Family
+from .models import Speaks
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404
 from .utils import make_unique_id
+from django.forms import inlineformset_factory
 
 @login_required
 def index(request):
@@ -25,13 +27,13 @@ def child_detail(request, child_id):
 @login_required
 def add_adult(request):
     if request.method == "POST":
-        form = AdultForm(request.POST, initial={'id': make_unique_id()})
+        form = AdultForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('add_speaks', form.cleaned_data['id'])
     else:
         form = AdultForm(initial={'id': make_unique_id()})
-        return render(request, "ParticipantDB/adult_form.html", {'form': form})
+    return render(request, "ParticipantDB/adult_form.html", {'form': form})
 
 @login_required
 def add_child(request):
@@ -76,3 +78,21 @@ def add_family(request):
     else:
         form = FamilyForm()
         return render(request, "ParticipantDB/family_form.html", {'form': form})
+
+@login_required
+def add_speaks(request, adult_id):
+    adult = Adult.objects.get(pk=adult_id)
+    if request.method == "POST":
+        form = SpeaksForm(request.POST, instance = adult)
+        if form.is_valid():
+            adult_mod = form.save(commit=False)
+            adult_mod.save()
+            # speaksLanguage = Speaks.objects.create(person=adult_mod, language=form.)
+            # for speaksLanguage in form.cleaned_data.get('speaksLanguages'):
+            #     speaksLanguage = Speaks(person=adult_mod, language=speaksLanguage,)
+            #     speaksLanguage.save()
+            return redirect('/adult/' + str(adult_id))
+    else:
+        form = SpeaksForm(initial = {'person': adult})
+        return render(request, "ParticipantDB/speaks_form.html", {'form': form})
+    
