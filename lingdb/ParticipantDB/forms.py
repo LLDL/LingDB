@@ -37,4 +37,4 @@ class FamilyForm(ModelForm):
 class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
-        fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started')
+        fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')

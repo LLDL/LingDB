@@ -17,7 +17,8 @@ def index(request):
 @login_required
 def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
-    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult})
+    speaks = Speaks.objects.filter(person = adult)
+    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks})
 
 @login_required
 def child_detail(request, child_id):
@@ -87,10 +88,14 @@ def add_speaks(request, adult_id):
         if form.is_valid():
             adult_mod = form.save(commit=False)
             adult_mod.save()
-            # speaksLanguage = Speaks.objects.create(person=adult_mod, language=form.)
-            # for speaksLanguage in form.cleaned_data.get('speaksLanguages'):
-            #     speaksLanguage = Speaks(person=adult_mod, language=speaksLanguage,)
-            #     speaksLanguage.save()
+            speaksLanguage = Speaks()
+            speaksLanguage.person = adult
+            speaksLanguage.language = form.cleaned_data['language']
+            speaksLanguage.is_native = form.cleaned_data['is_native']
+            speaksLanguage.nth_most_dominant = form.cleaned_data['nth_most_dominant']
+            speaksLanguage.age_learning_started = form.cleaned_data['age_learning_started']
+            speaksLanguage.age_learning_ended = form.cleaned_data['age_learning_ended']
+            speaksLanguage.save()
             return redirect('/adult/' + str(adult_id))
     else:
         form = SpeaksForm(initial = {'person': adult})
