@@ -4,6 +4,13 @@
     <form method="post">
         {% csrf_token %}
         {{form}}
+
+        {{ formset.management_form }}
+        {% for langform in formset %}
+            <div>
+                {{langform}}
+            </div>
+        {% endfor %}
         <input type="submit" value="Save">
     </form>
 {% endblock %}

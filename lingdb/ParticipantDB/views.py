@@ -27,14 +27,24 @@ def child_detail(request, child_id):
 
 @login_required
 def add_adult(request):
+    speaks_forms = SpeaksInlineFormSet(
+        queryset = Speaks.objects.none()
+    )
     if request.method == "POST":
         form = AdultForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('add_speaks', form.cleaned_data['id'])
+        speaks_forms = SpeaksInlineFormSet(request.POST, queryset = Speaks.objects.none())
+        if form.is_valid() and speaks_forms.is_valid():
+            adult = form.save(commit=False)
+            adult.save()
+            speakslangs = speaks_forms.save(commit=False)
+            for speakslang in speakslangs:
+                speakslang.person = adult
+                speakslang.save()
+            
+            return redirect('/')
     else:
         form = AdultForm(initial={'id': make_unique_id()})
-    return render(request, "ParticipantDB/adult_form.html", {'form': form})
+    return render(request, "ParticipantDB/adult_form.html", {'form': form, 'formset': speaks_forms})
 
 @login_required
 def add_child(request):

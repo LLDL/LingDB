@@ -38,3 +38,19 @@ class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
         fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+
+
+SpeaksFormSet = modelformset_factory(
+    Speaks,
+    form = SpeaksForm,
+    extra = 0
+)
+
+SpeaksInlineFormSet = inlineformset_factory(
+    Adult,
+    Speaks,
+    extra = 4,
+    fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
+    formset = SpeaksFormSet,
+    min_num = 1,
+)
