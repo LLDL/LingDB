@@ -12,7 +12,19 @@ from django.forms import inlineformset_factory
 
 @login_required
 def index(request):
-    return render(request, 'ParticipantDB/index.html', {})
+    if request.method == 'GET' and request.GET.get('searchPeopleField', None):
+        person = request.GET.get('searchPeopleField', None)
+        try:
+            adult = Adult.objects.get(pk=person)
+            return redirect('/adult/' + person)
+        except Adult.DoesNotExist:
+            try: 
+                child  = Child.objects.get(pk=person)
+            except Child.DoesNotExist:
+                raise Http404("No Adult or Child matches id " + person)
+    else:
+        return render(request, 'ParticipantDB/index.html', {})
+
 
 @login_required
 def adult_detail(request, adult_id):
