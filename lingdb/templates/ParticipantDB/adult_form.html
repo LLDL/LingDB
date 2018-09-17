@@ -1,16 +1,20 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
     <h2>New Adult</h2>
+    
     <form method="post">
         {% csrf_token %}
+        <h3>Personal &amp; Contact Info</h3>
         {{form}}
 
         {{ formset.management_form }}
+        <h3>Languages Spoken</h3>
         {% for langform in formset %}
             <div>
                 {{langform}}
             </div>
         {% endfor %}
+        <h3>Musical Experience</h3>
         <input type="submit" value="Save">
     </form>
 {% endblock %}

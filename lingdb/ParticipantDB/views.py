@@ -60,14 +60,26 @@ def add_adult(request):
 
 @login_required
 def add_child(request):
+    exposure_forms = ExposureInlineFormSet(
+        queryset = IsExposedTo.objects.none()
+    )
     if request.method == "POST":
-        form = ChildForm(request.POST, initial={'id': make_unique_id()})
-        if form.is_valid():
-            form.save()
+        form = ChildForm(request.POST)
+        exposure_forms = ExposureInlineFormSet(request.POST, queryset = IsExposedTo.objects.none())
+        if form.is_valid() and exposure_forms.is_valid():
+            child = form.save(commit=False)
+            child.save()
+            exposedToLangs = exposure_forms.save(commit=False)
+            for exposedToLang in exposedToLangs:
+                exposedToLang.child = child
+                exposedToLang.save()
+                        
             return redirect('/')
     else:
         form = ChildForm(initial={'id': make_unique_id()})
-        return render(request, "ParticipantDB/child_form.html", {'form': form})
+        return render(request, "ParticipantDB/child_form.html", {'form': form, 'formset': exposure_forms})
+
+
 
 @login_required
 def add_language(request):

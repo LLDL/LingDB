@@ -3,7 +3,14 @@
     <h2>New Child</h2>
     <form method="post">
         {% csrf_token %}
+        <h3>Personal &amp; Info</h3>
         {{form}}
+        <h3>Languages Exposed To</h3>
+        {% for exposureform in formset %}
+            <div>
+                {{exposureform}}
+            </div>
+        {% endfor %}
         <input type="submit" value="Save">
     </form>
 {% endblock %}
