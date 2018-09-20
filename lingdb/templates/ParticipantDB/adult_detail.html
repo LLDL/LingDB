@@ -51,15 +51,23 @@
 
             </table>
             <table>
-				{% for speaksLanguage in speaksLanguages %}
+                {% for speaksLanguage in speaksLanguages %}
 					{{speaksLanguage.language}}
 					{{speaksLanguage.is_native}}
 					{{speaksLanguage.nth_most_dominant}}
 					{{speaksLanguage.age_learning_started}}
 					{{speaksLanguage.age_learning_ended}}
-				{% endfor %}
+                {% endfor %}
             </table>
-        </div>
+            <table>
+                {% for musical_exp in musical_exps %}
+					{{musical_exp.experience}}
+					{{musical_exp.nth_most_dominant}}
+					{{musical_exp.age_learning_started}}
+					{{musical_exp.age_learning_ended}}
+                {% endfor %}
+			</table>
+		</div>
     {% else %}
         <h2>Not Available</h2>
     {% endif %}

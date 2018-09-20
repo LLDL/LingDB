@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
-from django.forms import ModelForm 
 
 class Language(models.Model):
     language_name = models.CharField(max_length = 100, primary_key = True)
@@ -12,6 +11,7 @@ class Musical_Skill(models.Model):
     class Meta:
         verbose_name = "Musical Skill"
         verbose_name_plural = "Musical Skills"
+
     skill = models.CharField(max_length = 100, primary_key = True)
     def __str__(self):
         return '%s' % (self.skill) 
@@ -20,11 +20,11 @@ class Lab(models.Model):
     lab_name = models.CharField(max_length = 100, primary_key = True)
 
 class Person(models.Model):
-    id = models.IntegerField(primary_key = True)
-    given_name = models.CharField(max_length = 100)
-    preferred_name = models.CharField(max_length = 100, blank = True, null = True)
-    surname = models.CharField(max_length = 100, default='')
-    birth_date = models.DateField()
+    id = models.IntegerField(primary_key = True, verbose_name = "ID")
+    given_name = models.CharField(max_length = 100, verbose_name = "Given Name")
+    preferred_name = models.CharField(max_length = 100, blank = True, null = True, verbose_name = "Preferred Name")
+    surname = models.CharField(max_length = 100, default='', verbose_name = "Surname")
+    birth_date = models.DateField(verbose_name = "Birth Date")
     gender = models.CharField(max_length = 100, default='')
     def __str__(self):
         return '%s %s' % (self.given_name, self.surname) 
@@ -33,13 +33,14 @@ class Person(models.Model):
         abstract = True
     
 class Adult(Person):
-    sfu_id = models.IntegerField(blank = True, null = True)
+    sfu_id = models.IntegerField(blank = True, null = True, verbose_name = "SFU ID")
     address = models.CharField(max_length=200)
     years_of_education = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(20),
-        ]
+        ],
+        verbose_name = "Years of Education"
     )
     phone = models.CharField(max_length=50, blank = True, null = True)
     email = models.EmailField(blank = True, null = True)
@@ -48,7 +49,7 @@ class Adult(Person):
         ('P', 'Phone'),
         ('E', 'Email'),
     )
-    contact_pref = models.CharField(max_length=1, choices = CONTACT_CHOICES)    
+    contact_pref = models.CharField(max_length=1, choices = CONTACT_CHOICES, verbose_name = "Contact Preference")    
 
     PHONETIME_CHOICES = (
         ('WDM', 'Weekday Mornings'),
@@ -60,11 +61,11 @@ class Adult(Person):
         ('ANY', 'Anytime'),
         ('DNC', 'Do Not Call'),
     )
-    pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, default = 'DNC')
+    pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, default = 'DNC', verbose_name = "Preferred Phone Time")
     
-    health_notes = models.TextField(max_length=1000, blank = True, null = True)
-    languages = models.ManyToManyField('Language', null = True, blank = True, through='Speaks')
-    musical_background = models.ManyToManyField('Musical_Skill', through='Musical_Experience', blank = True)
+    health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
+    languages = models.ManyToManyField('Language', blank = True, through='Speaks')
+    musical_background = models.ManyToManyField('Musical_Skill', blank = True, through='Musical_Experience')
 
     def get_absolute_url(self):
         return reverse('adult-detail', kwargs={'pk': self.pk})
@@ -72,17 +73,17 @@ class Adult(Person):
 class Child(Person):
     class Meta:
         verbose_name_plural = "Children"
-    gestation_length_weeks = models.SmallIntegerField(blank = True, null = True)
-    was_full_term = models.BooleanField(blank = True, null = True)
-    birth_weight = models.SmallIntegerField("Birth Weight (Grams)", blank = True, null = True)
-    birth_height = models.SmallIntegerField("Birth Height (CM)", blank = True, null = True)
-    personal_notes = models.TextField(max_length=1000, blank = True, null = True)
-    hx_repeated_ear_infection = models.TextField(max_length=1000, blank = True, null = True)
-    last_ear_infection = models.DateField(blank = True, null = True    )
-    hereditary_audio_problems = models.BooleanField()
-    hereditary_language_pathologies = models.BooleanField()
-    health_notes = models.TextField(max_length=1000, blank = True, null = True    )
-    exposed_to = models.ManyToManyField('Language', through='IsExposedTo', default = None)
+    gestation_length_weeks = models.SmallIntegerField(blank = True, null = True, verbose_name = "Gestation Length (Weeks)")
+    was_full_term = models.BooleanField(blank = True, null = True, verbose_name = "Was Full Term?")
+    birth_weight = models.SmallIntegerField(blank = True, null = True, verbose_name = "Birth Weight (Grams)")
+    birth_height = models.SmallIntegerField(blank = True, null = True, verbose_name = "Birth Height (CM)")
+    personal_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name="Personal Notes")
+    hx_repeated_ear_infection = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "HX of Repeated Ear Infection")
+    last_ear_infection = models.DateField(blank = True, null = True, verbose_name = "Last Ear Infection")
+    hereditary_audio_problems = models.BooleanField(verbose_name = "Hereditary Audio Problems?")
+    hereditary_language_pathologies = models.BooleanField(verbose_name = "Hereditary Language Pathologies?")
+    health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
+    exposed_to = models.ManyToManyField('Language', through='IsExposedTo', default = None, verbose_name = "Languages Exposed To")
 
 class Family(models.Model):
     class Meta:
@@ -94,7 +95,7 @@ class Family(models.Model):
         return 'Parents: %s, Children: %s' % (self.parents, self.children) 
 
 class Experiment(models.Model):
-    experiment_name = models.CharField(max_length = 100, primary_key = True)
+    experiment_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Experiment Name")
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     STATUS_CHOICES = (
         ('prep', 'In Prep'),
@@ -256,10 +257,9 @@ class Speaks(models.Model):
 
 class Musical_Experience(models.Model):
     class Meta:
-        verbose_name = "Musical Experience"
         verbose_name_plural = "Musical Experiences"
-    person = models.ForeignKey(Adult, on_delete = models.CASCADE, default = None)
-    experience = models.ForeignKey(Musical_Skill, on_delete = models.CASCADE, default = None)
+    person = models.ForeignKey(Adult, related_name = 'musician', on_delete = models.CASCADE, default = None)
+    experience = models.ForeignKey(Musical_Skill, related_name = 'instrument', on_delete = models.CASCADE, default = None)
     nth_most_dominant = models.SmallIntegerField(
         validators=[
             MinValueValidator(1), 
@@ -270,15 +270,17 @@ class Musical_Experience(models.Model):
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
-        ], 
+        ]
     )
 
     age_learning_ended = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
-        ], 
+        ]
     )
+    def __str__(self):
+        return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.experience) 
 
 class IsParentIn(models.Model):
     class Meta:

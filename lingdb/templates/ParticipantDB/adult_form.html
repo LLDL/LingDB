@@ -5,16 +5,60 @@
     <form method="post">
         {% csrf_token %}
         <h3>Personal &amp; Contact Info</h3>
-        {{form}}
+        <table id="new_adult_table">
+            {{adult_form.as_table}}
+        </table>
 
-        {{ formset.management_form }}
         <h3>Languages Spoken</h3>
-        {% for langform in formset %}
-            <div>
-                {{langform}}
-            </div>
-        {% endfor %}
+        {{ speaks_formset.management_form }}
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Language</th>
+                    <th class="field_name">Native?</th>
+                    <th class="field_name">Dominance</th>
+                    <th class="field_name">Age Learning Started</th>
+                    <th class="field_name">Age Learning Ended</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for speaks_form in speaks_formset %}
+                    <tr>            
+                        <td class="field_value">{{speaks_form.language}}</td>  
+                        <td class="field_value_input">{{speaks_form.is_native}}</td>  
+                        <td class="field_value">{{speaks_form.nth_most_dominant}}</td>  
+                        <td class="field_value">{{speaks_form.age_learning_started}}</td>  
+                        <td class="field_value">{{speaks_form.age_learning_ended}}</td>  
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
         <h3>Musical Experience</h3>
+        {{ musical_experience_formset.management_form }}
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Experience</th>
+                    <th class="field_name">Dominance</th>
+                    <th class="field_name">Age Learning Started</th>
+                    <th class="field_name">Age Learning Ended</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for musical_experience in musical_experience_formset %}
+                    <tr>            
+                        <td class="field_value">{{musical_experience.experience}}</td>  
+                        <td class="field_value">{{musical_experience.nth_most_dominant}}</td>  
+                        <td class="field_value">{{musical_experience.age_learning_started}}</td>  
+                        <td class="field_value">{{musical_experience.age_learning_ended}}</td>  
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
         <input type="submit" value="Save">
     </form>
 {% endblock %}

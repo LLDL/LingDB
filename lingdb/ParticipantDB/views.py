@@ -1,8 +1,5 @@
 from django.http import HttpResponse
-from .models import Adult
-from .models import Child
-from .models import Family
-from .models import Speaks
+from .models import Adult, Child, Family, Speaks, Musical_Experience, Musical_Skill, Language
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
@@ -30,7 +27,8 @@ def index(request):
 def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
-    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks})
+    musical_exps = Musical_Experience.objects.filter(person = adult)
+    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})
 
 @login_required
 def child_detail(request, child_id):
@@ -42,22 +40,31 @@ def add_adult(request):
     speaks_forms = SpeaksInlineFormSet(
         queryset = Speaks.objects.none()
     )
+    musical_experience_forms = MusicalExperienceInlineFormSet(
+        queryset = Musical_Experience.objects.none()   
+    )
     if request.method == "POST":
-        form = AdultForm(request.POST)
+        adult_form = AdultForm(request.POST)
         speaks_forms = SpeaksInlineFormSet(request.POST, queryset = Speaks.objects.none())
-        if form.is_valid() and speaks_forms.is_valid():
-            adult = form.save(commit=False)
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, queryset = Musical_Experience.objects.none())
+        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():
+            adult = adult_form.save(commit=False)
             adult.save()
+            
             speakslangs = speaks_forms.save(commit=False)
             for speakslang in speakslangs:
                 speakslang.person = adult
                 speakslang.save()
-            
+
+            musical_experiences = musical_experience_forms.save(commit=False)
+            for musical_experience in musical_experiences:
+                musical_experience.person = adult
+                musical_experience.save()
+
             return redirect('/')
     else:
-        form = AdultForm(initial={'id': make_unique_id()})
-    return render(request, "ParticipantDB/adult_form.html", {'form': form, 'formset': speaks_forms})
-
+        adult_form = AdultForm(initial={'id': make_unique_id()})
+    return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
 @login_required
 def add_child(request):
     exposure_forms = ExposureInlineFormSet(
@@ -134,4 +141,24 @@ def add_speaks(request, adult_id):
     else:
         form = SpeaksForm(initial = {'person': adult})
         return render(request, "ParticipantDB/speaks_form.html", {'form': form})
+    
+@login_required
+def add_musical_experience(request, adult_id):
+    adult = Adult.objects.get(pk=adult_id)
+    if request.method == "POST":
+        form = MusicalExperienceForm(request.POST, instance = adult)
+        if form.is_valid():
+            adult_mod = form.save(commit=False)
+            adult_mod.save()
+            hasMusicalExperience = Musical_Experience()
+            hasMusicalExperience.person = adult
+            hasMusicalExperience.experience = form.cleaned_data['experience']
+            hasMusicalExperience.nth_most_dominant = form.cleaned_data['nth_most_dominant']
+            hasMusicalExperience.age_learning_started = form.cleaned_data['age_learning_started']
+            hasMusicalExperience.age_learning_ended = form.cleaned_data['age_learning_ended']
+            hasMusicalExperience.save()
+            return redirect('/adult/' + str(adult_id))
+    else:
+        form = MusicalExperienceForm(initial = {'person': adult})
+        return render(request, "ParticipantDB/musical_experience_form.html", {'form': form})
     

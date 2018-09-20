@@ -1,4 +1,10 @@
-input, select, textarea{
-    display: block; 
-    margin-bottom: 1em;
+#new_adult_table{
+    text-align: left;
+}
+.field_value_input{
+    text-align: -moz-center;
+    text-align: -webkit-center;
+}
+form{
+    margin-bottom: 0em;
 }

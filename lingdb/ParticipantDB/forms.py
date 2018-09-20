@@ -1,4 +1,4 @@
-from .models import Adult, Language, Family, Child, Musical_Skill, Speaks, IsExposedTo
+from .models import Adult, Language, Family, Child, Musical_Skill, Speaks, IsExposedTo, Musical_Experience
 from django.forms import *
 
 
@@ -38,6 +38,10 @@ class SpeaksForm(ModelForm):
         model = Speaks
         fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
 
+class MusicalExperienceForm(ModelForm):
+    class Meta:
+        model = Musical_Experience
+        fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -47,6 +51,12 @@ class ExposureForm(ModelForm):
 SpeaksFormSet = modelformset_factory(
     Speaks,
     form = SpeaksForm,
+    extra = 0
+)
+
+MusicalExperienceFormSet = modelformset_factory(
+    Musical_Experience,
+    form = MusicalExperienceForm,
     extra = 0
 )
 
@@ -72,4 +82,13 @@ ExposureInlineFormSet = inlineformset_factory(
     fields = ('language', 'percentage_exposure'),
     formset = ExposureFormSet,
     min_num = 1,
+)
+
+MusicalExperienceInlineFormSet = inlineformset_factory(
+    Adult,
+    Musical_Experience,
+    extra = 4,
+    fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
+    formset = MusicalExperienceFormSet,
+    min_num = 0,
 )
