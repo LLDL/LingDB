@@ -7,7 +7,7 @@ class Language(models.Model):
     def __str__(self):
         return '%s' % (self.language_name) 
 
-class Musical_Skill(models.Model):
+class MusicalSkill(models.Model):
     class Meta:
         verbose_name = "Musical Skill"
         verbose_name_plural = "Musical Skills"
@@ -65,7 +65,7 @@ class Adult(Person):
     
     health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
     languages = models.ManyToManyField('Language', blank = True, through='Speaks')
-    musical_background = models.ManyToManyField('Musical_Skill', blank = True, through='Musical_Experience')
+    musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')
 
     def get_absolute_url(self):
         return reverse('adult-detail', kwargs={'pk': self.pk})
@@ -217,7 +217,7 @@ class IsExposedTo(models.Model):
     class Meta:
         verbose_name_plural = "Is Exposed To"
     child = models.ForeignKey(Child, on_delete = models.CASCADE, default = None)
-    language = models.ForeignKey(Language, on_delete = models.CASCADE, default = None)
+    lang = models.ForeignKey(Language, on_delete = models.CASCADE, default = None)
     percentage_exposure = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
@@ -225,13 +225,13 @@ class IsExposedTo(models.Model):
         ]
     )
     def __str__(self):
-        return '%s is exposed %s to %s' % (self.child, self.percentage_exposure, self.language) 
+        return '%s is exposed %s to %s' % (self.child, self.percentage_exposure, self.lang) 
 
 class Speaks(models.Model):
     class Meta:
         verbose_name_plural = "Speaks"
     person = models.ForeignKey(Adult, related_name = 'speaker', on_delete = models.CASCADE, default = None)
-    language = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None)
+    lang = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None)
     is_native = models.BooleanField()
     nth_most_dominant = models.SmallIntegerField(
         validators=[
@@ -253,13 +253,13 @@ class Speaks(models.Model):
         ]
     )
     def __str__(self):
-        return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.language) 
+        return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.lang) 
 
-class Musical_Experience(models.Model):
+class MusicalExperience(models.Model):
     class Meta:
         verbose_name_plural = "Musical Experiences"
     person = models.ForeignKey(Adult, related_name = 'musician', on_delete = models.CASCADE, default = None)
-    experience = models.ForeignKey(Musical_Skill, related_name = 'instrument', on_delete = models.CASCADE, default = None)
+    experience = models.ForeignKey(MusicalSkill, related_name = 'instrument', on_delete = models.CASCADE, default = None)
     nth_most_dominant = models.SmallIntegerField(
         validators=[
             MinValueValidator(1), 

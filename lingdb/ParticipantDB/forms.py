@@ -1,4 +1,5 @@
-from .models import Adult, Language, Family, Child, Musical_Skill, Speaks, IsExposedTo, Musical_Experience
+from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience
+# from .models import Adult, Language, Family, Child, Speaks, IsExposedTo
 from django.forms import *
 
 
@@ -25,7 +26,7 @@ class LanguageForm(ModelForm):
 
 class MusicalSkillForm(ModelForm):
     class Meta:
-        model = Musical_Skill
+        model = MusicalSkill
         fields = ('skill',)
 
 class FamilyForm(ModelForm):
@@ -36,17 +37,17 @@ class FamilyForm(ModelForm):
 class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
-        fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+        fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
 
 class MusicalExperienceForm(ModelForm):
     class Meta:
-        model = Musical_Experience
+        model = MusicalExperience
         fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
 
 class ExposureForm(ModelForm):
     class Meta:
         model = IsExposedTo
-        fields = ('language', 'percentage_exposure')
+        fields = ('lang', 'percentage_exposure')
 
 SpeaksFormSet = modelformset_factory(
     Speaks,
@@ -55,7 +56,7 @@ SpeaksFormSet = modelformset_factory(
 )
 
 MusicalExperienceFormSet = modelformset_factory(
-    Musical_Experience,
+    MusicalExperience,
     form = MusicalExperienceForm,
     extra = 0
 )
@@ -69,26 +70,20 @@ ExposureFormSet = modelformset_factory(
 SpeaksInlineFormSet = inlineformset_factory(
     Adult,
     Speaks,
-    extra = 4,
-    fields = ('language', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
+    fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
     formset = SpeaksFormSet,
-    min_num = 1,
 )
 
 ExposureInlineFormSet = inlineformset_factory(
     Child,
     IsExposedTo,
-    extra = 4,
-    fields = ('language', 'percentage_exposure'),
+    fields = ('lang', 'percentage_exposure'),
     formset = ExposureFormSet,
-    min_num = 1,
 )
 
 MusicalExperienceInlineFormSet = inlineformset_factory(
     Adult,
-    Musical_Experience,
-    extra = 4,
+    MusicalExperience,
     fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
     formset = MusicalExperienceFormSet,
-    min_num = 0,
 )

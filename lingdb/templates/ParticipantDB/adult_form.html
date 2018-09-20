@@ -23,13 +23,13 @@
                 
             </thead>
             <tbody>
-                {% for speaks_form in speaks_formset %}
+                {% for speaks in speaks_formset %}
                     <tr>            
-                        <td class="field_value">{{speaks_form.language}}</td>  
-                        <td class="field_value_input">{{speaks_form.is_native}}</td>  
-                        <td class="field_value">{{speaks_form.nth_most_dominant}}</td>  
-                        <td class="field_value">{{speaks_form.age_learning_started}}</td>  
-                        <td class="field_value">{{speaks_form.age_learning_ended}}</td>  
+                        <td class="field_value">{{speaks.lang}}</td>  
+                        <td class="field_value_input">{{speaks.is_native}}</td>  
+                        <td class="field_value">{{speaks.nth_most_dominant}}</td>  
+                        <td class="field_value">{{speaks.age_learning_started}}</td>  
+                        <td class="field_value">{{speaks.age_learning_ended}}</td>  
                     </tr>
                 {% endfor %}
             </tbody>

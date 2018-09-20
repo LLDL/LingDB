@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from .models import Adult, Child, Family, Speaks, Musical_Experience, Musical_Skill, Language
+from .models import Adult, Child, Family, Speaks, MusicalExperience, MusicalSkill, Language
+# from .models import Adult, Child, Family, Speaks, Language
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
@@ -27,8 +28,9 @@ def index(request):
 def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
-    musical_exps = Musical_Experience.objects.filter(person = adult)
+    musical_exps = MusicalExperience.objects.filter(person = adult)
     return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})
+    # return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks})
 
 @login_required
 def child_detail(request, child_id):
@@ -37,17 +39,25 @@ def child_detail(request, child_id):
 
 @login_required
 def add_adult(request):
+    
+    musical_experience_forms = MusicalExperienceInlineFormSet(
+        queryset = MusicalExperience.objects.none()   
+    )
     speaks_forms = SpeaksInlineFormSet(
         queryset = Speaks.objects.none()
-    )
-    musical_experience_forms = MusicalExperienceInlineFormSet(
-        queryset = Musical_Experience.objects.none()   
     )
     if request.method == "POST":
         adult_form = AdultForm(request.POST)
         speaks_forms = SpeaksInlineFormSet(request.POST, queryset = Speaks.objects.none())
-        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, queryset = Musical_Experience.objects.none())
-        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, queryset = MusicalExperience.objects.none())
+        if adult_form.is_valid():
+            print('adult_form valid')
+        if speaks_forms.is_valid():
+            print('speaks_forms valid')
+        if musical_experience_forms.is_valid():
+            print('musical_experience_forms valid')
+        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
+            print('test')
             adult = adult_form.save(commit=False)
             adult.save()
             
@@ -62,9 +72,12 @@ def add_adult(request):
                 musical_experience.save()
 
             return redirect('/')
+        
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
+    print('fail')
     return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
+    # return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms})
 @login_required
 def add_child(request):
     exposure_forms = ExposureInlineFormSet(
@@ -131,7 +144,7 @@ def add_speaks(request, adult_id):
             adult_mod.save()
             speaksLanguage = Speaks()
             speaksLanguage.person = adult
-            speaksLanguage.language = form.cleaned_data['language']
+            speaksLanguage.lang = form.cleaned_data['lang']
             speaksLanguage.is_native = form.cleaned_data['is_native']
             speaksLanguage.nth_most_dominant = form.cleaned_data['nth_most_dominant']
             speaksLanguage.age_learning_started = form.cleaned_data['age_learning_started']
@@ -140,7 +153,7 @@ def add_speaks(request, adult_id):
             return redirect('/adult/' + str(adult_id))
     else:
         form = SpeaksForm(initial = {'person': adult})
-        return render(request, "ParticipantDB/speaks_form.html", {'form': form})
+    return render(request, "ParticipantDB/speaks_form.html", {'form': form})
     
 @login_required
 def add_musical_experience(request, adult_id):
@@ -150,7 +163,7 @@ def add_musical_experience(request, adult_id):
         if form.is_valid():
             adult_mod = form.save(commit=False)
             adult_mod.save()
-            hasMusicalExperience = Musical_Experience()
+            hasMusicalExperience = MusicalExperience()
             hasMusicalExperience.person = adult
             hasMusicalExperience.experience = form.cleaned_data['experience']
             hasMusicalExperience.nth_most_dominant = form.cleaned_data['nth_most_dominant']
@@ -160,5 +173,5 @@ def add_musical_experience(request, adult_id):
             return redirect('/adult/' + str(adult_id))
     else:
         form = MusicalExperienceForm(initial = {'person': adult})
-        return render(request, "ParticipantDB/musical_experience_form.html", {'form': form})
+    return render(request, "ParticipantDB/musical_experience_form.html", {'form': form})
     
