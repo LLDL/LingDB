@@ -72,6 +72,10 @@ SpeaksInlineFormSet = inlineformset_factory(
     Speaks,
     fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
     formset = SpeaksFormSet,
+    min_num = 0,
+    max_num = 5,
+    validate_min = True,
+    validate_max = True,
 )
 
 ExposureInlineFormSet = inlineformset_factory(
@@ -86,4 +90,8 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     MusicalExperience,
     fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
     formset = MusicalExperienceFormSet,
+    min_num = 0,
+    max_num = 5,
+    validate_min = True,
+    validate_max = True,
 )

@@ -48,15 +48,22 @@ def add_adult(request):
     )
     if request.method == "POST":
         adult_form = AdultForm(request.POST)
-        speaks_forms = SpeaksInlineFormSet(request.POST, queryset = Speaks.objects.none())
-        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, queryset = MusicalExperience.objects.none())
-        if adult_form.is_valid():
-            print('adult_form valid')
-        if speaks_forms.is_valid():
-            print('speaks_forms valid')
-        if musical_experience_forms.is_valid():
-            print('musical_experience_forms valid')
-        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
+        speaks_forms = SpeaksInlineFormSet(request.POST)
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST)
+        
+        speaksformflag = True
+        for speaksform in speaks_forms:
+            if not speaksform.is_valid():
+                speaksformflag = False
+        print('SpeaksFormFlag' + str(speaksformflag))
+
+        musicflag = True
+        for musicform in musical_experience_forms:
+            if not musicform.is_valid():
+                musicflag = False
+        print('MusicFlag' + str(musicflag))   
+
+        if adult_form.is_valid() and speaksformflag and musicflag:   
             print('test')
             adult = adult_form.save(commit=False)
             adult.save()
