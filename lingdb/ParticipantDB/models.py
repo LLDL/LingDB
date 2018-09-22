@@ -231,26 +231,32 @@ class Speaks(models.Model):
     class Meta:
         verbose_name_plural = "Speaks"
     person = models.ForeignKey(Adult, related_name = 'speaker', on_delete = models.CASCADE, default = None)
-    lang = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None)
-    is_native = models.BooleanField()
+    lang = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None, null = True, blank = True)
+    is_native = models.BooleanField(default = False, blank = True, null = True)
     nth_most_dominant = models.SmallIntegerField(
         validators=[
             MinValueValidator(1), 
             MaxValueValidator(20),
-        ]
+        ],
+        blank = True, 
+        null = True
     )
     age_learning_started = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
-        ]
+        ],
+        blank = True, 
+        null = True
     )
 
     age_learning_ended = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
-        ]
+        ],
+        blank = True, 
+        null = True
     )
     def __str__(self):
         return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.lang) 
@@ -259,25 +265,31 @@ class MusicalExperience(models.Model):
     class Meta:
         verbose_name_plural = "Musical Experiences"
     person = models.ForeignKey(Adult, related_name = 'musician', on_delete = models.CASCADE, default = None)
-    experience = models.ForeignKey(MusicalSkill, related_name = 'instrument', on_delete = models.CASCADE, default = None)
+    experience = models.ForeignKey(MusicalSkill, related_name = 'instrument', on_delete = models.CASCADE, default = None, null = True, blank = True)
     nth_most_dominant = models.SmallIntegerField(
         validators=[
             MinValueValidator(1), 
             MaxValueValidator(20),
-        ]
+        ],
+        blank = True, 
+        null = True
     )
     age_learning_started = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
-        ]
+        ],
+        blank = True, 
+        null = True
     )
 
     age_learning_ended = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
-        ]
+        ],
+        blank = True, 
+        null = True
     )
     def __str__(self):
         return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.experience) 

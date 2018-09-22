@@ -8,10 +8,13 @@
         <table id="new_adult_table">
             {{adult_form.as_table}}
         </table>
-
+        
+        
         <h3>Languages Spoken</h3>
+        
         {{ speaks_formset.management_form }}
         {{ speaks_formset.errors }}
+        {{ speaks_formset.non_form_errors}}
         <table>
             <thead>
                 <tr>
@@ -39,6 +42,7 @@
         <h3>Musical Experience</h3>
         {{ musical_experience_formset.management_form }}
         {{ musical_experience_formset.errors }}
+        {{ musical_experience.non_form_errors}}
         <table>
             <thead>
                 <tr>

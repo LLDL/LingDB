@@ -41,48 +41,51 @@ def child_detail(request, child_id):
 def add_adult(request):
     
     musical_experience_forms = MusicalExperienceInlineFormSet(
-        queryset = MusicalExperience.objects.none()   
+        queryset = MusicalExperience.objects.none(), 
+        prefix = 'musical_experiences'
     )
     speaks_forms = SpeaksInlineFormSet(
-        queryset = Speaks.objects.none()
+        queryset = Speaks.objects.none(), 
+        prefix = 'speaks_forms'
+        
     )
     if request.method == "POST":
         adult_form = AdultForm(request.POST)
-        speaks_forms = SpeaksInlineFormSet(request.POST)
-        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST)
+        speaks_forms = SpeaksInlineFormSet(request.POST, prefix = 'speaks_forms')
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, prefix = 'musical_experiences')
         
-        speaksformflag = True
-        for speaksform in speaks_forms:
-            if not speaksform.is_valid():
-                speaksformflag = False
-        print('SpeaksFormFlag' + str(speaksformflag))
-
-        musicflag = True
-        for musicform in musical_experience_forms:
-            if not musicform.is_valid():
-                musicflag = False
-        print('MusicFlag' + str(musicflag))   
-
-        if adult_form.is_valid() and speaksformflag and musicflag:   
-            print('test')
+        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
             adult = adult_form.save(commit=False)
             adult.save()
-            
-            speakslangs = speaks_forms.save(commit=False)
-            for speakslang in speakslangs:
-                speakslang.person = adult
-                speakslang.save()
 
-            musical_experiences = musical_experience_forms.save(commit=False)
-            for musical_experience in musical_experiences:
-                musical_experience.person = adult
-                musical_experience.save()
+            # speakslangs = speaks_forms.save(commit=False)
+            # for speakslang in speakslangs:
+            #     speakslang.person = adult
+            #     speakslang.save()
+
+            # musical_experiences = musical_experience_forms.save(commit=False)
+            # for musical_experience in musical_experiences:
+            #     musical_experience.person = adult
+            #     musical_experience.save()
+
+            
+            for speaks_form in speaks_forms:
+                if speaks_form.is_valid():
+                    inst = speaks_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()
+
+            for musical_experience_form in musical_experience_forms:
+                if musical_experience_form.is_valid():
+                    inst = musical_experience_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()
 
             return redirect('/')
         
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
-    print('fail')
+
     return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
     # return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms})
 @login_required
