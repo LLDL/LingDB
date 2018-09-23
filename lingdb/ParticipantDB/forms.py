@@ -51,20 +51,17 @@ class ExposureForm(ModelForm):
 
 SpeaksFormSet = modelformset_factory(
     Speaks,
-    form = SpeaksForm,
-    extra = 0
+    form = SpeaksForm
 )
 
 MusicalExperienceFormSet = modelformset_factory(
     MusicalExperience,
     form = MusicalExperienceForm,
-    extra = 0
 )
 
 ExposureFormSet = modelformset_factory(
     IsExposedTo,
     form = ExposureForm,
-    extra = 0
 )
 
 SpeaksInlineFormSet = inlineformset_factory(
@@ -72,10 +69,11 @@ SpeaksInlineFormSet = inlineformset_factory(
     Speaks,
     fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
     formset = SpeaksFormSet,
-    min_num = 0,
+    extra = 5,
     max_num = 5,
+    min_num = 1,
     validate_min = True,
-    validate_max = True,
+
 )
 
 ExposureInlineFormSet = inlineformset_factory(
@@ -83,6 +81,10 @@ ExposureInlineFormSet = inlineformset_factory(
     IsExposedTo,
     fields = ('lang', 'percentage_exposure'),
     formset = ExposureFormSet,
+    extra = 5,
+    max_num = 5,
+    min_num = 1,
+    validate_min = True,
 )
 
 MusicalExperienceInlineFormSet = inlineformset_factory(
@@ -90,8 +92,8 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     MusicalExperience,
     fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
     formset = MusicalExperienceFormSet,
-    min_num = 0,
+    extra = 5,
     max_num = 5,
-    validate_min = True,
-    validate_max = True,
+    min_num = 0,
+    validate_min = False,
 )

@@ -71,13 +71,13 @@ def add_adult(request):
 
             
             for speaks_form in speaks_forms:
-                if speaks_form.is_valid():
+                if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
                     inst = speaks_form.save(commit=False)
                     inst.person = adult
                     inst.save()
 
             for musical_experience_form in musical_experience_forms:
-                if musical_experience_form.is_valid():
+                if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
                     inst = musical_experience_form.save(commit=False)
                     inst.person = adult
                     inst.save()
