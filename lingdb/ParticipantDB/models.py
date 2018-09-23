@@ -67,8 +67,6 @@ class Adult(Person):
     languages = models.ManyToManyField('Language', blank = True, through='Speaks')
     musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')
 
-    def get_absolute_url(self):
-        return reverse('adult-detail', kwargs={'pk': self.pk})
 
 class Child(Person):
     class Meta:

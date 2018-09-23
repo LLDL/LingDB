@@ -5,6 +5,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404
+from django.urls import reverse
 from .utils import make_unique_id
 from django.forms import inlineformset_factory
 
@@ -81,7 +82,8 @@ def add_adult(request):
                     inst.person = adult
                     inst.save()
 
-            return redirect('/')
+            # return redirect('/')
+            return redirect(reverse('adult_detail', kwargs={'adult_id': adult.id}))
         
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
