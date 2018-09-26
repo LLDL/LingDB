@@ -93,7 +93,7 @@
                     </td>
                 </tr>
             </table>
-
+            <a href="{% url 'delete_child' child_id=child.id %}">Delete {{child.id}}</a>
         </div>
     {% else %}
         <h2>Not Available</h2>

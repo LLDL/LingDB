@@ -15,10 +15,11 @@ def index(request):
         person = request.GET.get('searchPeopleField', None)
         try:
             adult = Adult.objects.get(pk=person)
-            return redirect('/adult/' + person)
+            return redirect(reverse('adult_detail', kwargs={'adult_id': person}))
         except Adult.DoesNotExist:
             try: 
                 child  = Child.objects.get(pk=person)
+                return redirect(reverse('child_detail', kwargs={'child_id': person}))
             except Child.DoesNotExist:
                 raise Http404("No Adult or Child matches id " + person)
     else:
@@ -31,12 +32,27 @@ def adult_detail(request, adult_id):
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
     return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})
-    # return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks})
 
 @login_required
 def child_detail(request, child_id):
     child = get_object_or_404(Child, pk=child_id)
     return render(request, 'ParticipantDB/child_detail.html', {'child': child})
+
+@login_required
+def delete_adult(request, adult_id):
+    try:
+        Adult.objects.get(pk=adult_id).delete()
+        return redirect(reverse('index'))
+    except Adult.DoesNotExist:
+        raise Http404("No adult with id" + adult_id)
+    
+@login_required
+def delete_child(request, child_id):
+    try:
+        Child.objects.get(pk=child_id).delete()
+        return redirect(reverse('index'))
+    except Child.DoesNotExist:
+        raise Http404("No child with id" + child_id)
 
 @login_required
 def add_adult(request):
@@ -58,17 +74,6 @@ def add_adult(request):
         if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
             adult = adult_form.save(commit=False)
             adult.save()
-
-            # speakslangs = speaks_forms.save(commit=False)
-            # for speakslang in speakslangs:
-            #     speakslang.person = adult
-            #     speakslang.save()
-
-            # musical_experiences = musical_experience_forms.save(commit=False)
-            # for musical_experience in musical_experiences:
-            #     musical_experience.person = adult
-            #     musical_experience.save()
-
             
             for speaks_form in speaks_forms:
                 if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
@@ -90,6 +95,8 @@ def add_adult(request):
 
     return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
     # return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms})
+
+
 @login_required
 def add_child(request):
     exposure_forms = ExposureInlineFormSet(
