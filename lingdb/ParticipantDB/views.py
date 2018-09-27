@@ -111,20 +111,24 @@ def update_adult(request, adult_id):
         speaks_forms = SpeaksInlineFormSet(request.POST, request.FILES, prefix = 'speaks_forms')
         musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, request.FILES, prefix = 'musical_experiences')
         
-        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
+        if adult_form.is_valid():   
             adult = adult_form.save(commit=False)
             adult.save()
-            for speaks_form in speaks_forms:
-                if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
+            
+            if speaks_forms.is_valid():  
+                Speaks.objects.filter(person=adult_inst).delete()
+                for speaks_form in speaks_forms:
                     inst = speaks_form.save(commit=False)
-                    inst.person = adult
-                    inst.save()
-
-            for musical_experience_form in musical_experience_forms:
-                if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
-                    inst = musical_experience_form.save(commit=False)
-                    inst.person = adult
-                    inst.save()
+                    if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
+                        inst.person = adult
+                        inst.save()
+            if musical_experience_forms.is_valid():  
+                MusicalExperience.objects.filter(person=adult_inst).delete()
+                for musical_experience_form in musical_experience_forms:
+                    if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
+                        inst = musical_experience_form.save(commit=False)
+                        inst.person = adult
+                        inst.save()
             
             
             return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
