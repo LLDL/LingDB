@@ -1,58 +1,51 @@
-from django.http import HttpResponse
-from .models import Adult, Child, Family, Speaks, MusicalExperience, MusicalSkill, Language
-# from .models import Adult, Child, Family, Speaks, Language
-from .forms import *
+# Django Imports ----------------------------------------------------------------
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import Http404
-from django.urls import reverse
-from .utils import make_unique_id
 from django.forms import inlineformset_factory
+from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
+
+# Project Imports ---------------------------------------------------------------
+from .forms import AdultForm, ChildForm, ExposureForm, ExposureInlineFormSet, FamilyForm, LanguageForm, MusicalExperienceForm, MusicalExperienceFormSet, MusicalExperienceInlineFormSet, MusicalSkillForm, SpeaksForm, SpeaksFormSet, SpeaksInlineFormSet
+from .models import *
+from .utils import make_unique_id
+
+# Index Views -------------------------------------------------------------------
 
 @login_required
 def index(request):
-    if request.method == 'GET' and request.GET.get('searchPeopleField', None):
+    
+    if (request.method == 'GET') and (request.GET.get('searchPeopleField', None)):
+        # Open by ID Handling
         person = request.GET.get('searchPeopleField', None)
         try:
-            adult = Adult.objects.get(pk=person)
+            Adult.objects.get(pk=person)
             return redirect(reverse('adult_detail', kwargs={'adult_id': person}))
         except Adult.DoesNotExist:
             try: 
-                child  = Child.objects.get(pk=person)
+                Child.objects.get(pk=person)
                 return redirect(reverse('child_detail', kwargs={'child_id': person}))
             except Child.DoesNotExist:
                 raise Http404("No Adult or Child matches id " + person)
     else:
+        # Standard Visit to Index
         return render(request, 'ParticipantDB/index.html', {})
 
+# Family Views -----------------------------------------------------------------
 
 @login_required
-def adult_detail(request, adult_id):
-    adult = get_object_or_404(Adult, pk=adult_id)
-    speaks = Speaks.objects.filter(person = adult)
-    musical_exps = MusicalExperience.objects.filter(person = adult)
-    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})
+def add_family(request):
+    if request.method == "POST":
+        form = FamilyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = FamilyForm()
+        return render(request, "ParticipantDB/family_form.html", {'form': form})
 
-@login_required
-def child_detail(request, child_id):
-    child = get_object_or_404(Child, pk=child_id)
-    return render(request, 'ParticipantDB/child_detail.html', {'child': child})
 
-@login_required
-def delete_adult(request, adult_id):
-    try:
-        Adult.objects.get(pk=adult_id).delete()
-        return redirect(reverse('index'))
-    except Adult.DoesNotExist:
-        raise Http404("No adult with id" + adult_id)
-    
-@login_required
-def delete_child(request, child_id):
-    try:
-        Child.objects.get(pk=child_id).delete()
-        return redirect(reverse('index'))
-    except Child.DoesNotExist:
-        raise Http404("No child with id" + child_id)
+# Adult Views ------------------------------------------------------------------
 
 @login_required
 def add_adult(request):
@@ -94,8 +87,24 @@ def add_adult(request):
         adult_form = AdultForm(initial={'id': make_unique_id()})
 
     return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
-    # return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms})
 
+@login_required
+def adult_detail(request, adult_id):
+    adult = get_object_or_404(Adult, pk=adult_id)
+    speaks = Speaks.objects.filter(person = adult)
+    musical_exps = MusicalExperience.objects.filter(person = adult)
+    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})
+
+@login_required
+def delete_adult(request, adult_id):
+    try:
+        Adult.objects.get(pk=adult_id).delete()
+        return redirect(reverse('index'))
+    except Adult.DoesNotExist:
+        raise Http404("No adult with id" + adult_id)
+    
+
+# Child Views ------------------------------------------------------------------
 
 @login_required
 def add_child(request):
@@ -112,13 +121,26 @@ def add_child(request):
             for exposedToLang in exposedToLangs:
                 exposedToLang.child = child
                 exposedToLang.save()
-                        
             return redirect('/')
     else:
         form = ChildForm(initial={'id': make_unique_id()})
         return render(request, "ParticipantDB/child_form.html", {'form': form, 'formset': exposure_forms})
 
+@login_required
+def child_detail(request, child_id):
+    child = get_object_or_404(Child, pk=child_id)
+    return render(request, 'ParticipantDB/child_detail.html', {'child': child})
 
+@login_required
+def delete_child(request, child_id):
+    try:
+        Child.objects.get(pk=child_id).delete()
+        return redirect(reverse('index'))
+    except Child.DoesNotExist:
+        raise Http404("No child with id" + child_id)
+
+
+# Language Views ------------------------------------------------------------------
 
 @login_required
 def add_language(request):
@@ -130,28 +152,6 @@ def add_language(request):
     else:
         form = LanguageForm()
         return render(request, "ParticipantDB/language_form.html", {'form': form})
-
-@login_required
-def add_musical_skill(request):
-    if request.method == "POST":
-        form = MusicalSkillForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = MusicalSkillForm()
-        return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
-
-@login_required
-def add_family(request):
-    if request.method == "POST":
-        form = FamilyForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = FamilyForm()
-        return render(request, "ParticipantDB/family_form.html", {'form': form})
 
 @login_required
 def add_speaks(request, adult_id):
@@ -173,7 +173,19 @@ def add_speaks(request, adult_id):
     else:
         form = SpeaksForm(initial = {'person': adult})
     return render(request, "ParticipantDB/speaks_form.html", {'form': form})
-    
+
+# Musical Views ------------------------------------------------------------------
+@login_required
+def add_musical_skill(request):
+    if request.method == "POST":
+        form = MusicalSkillForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = MusicalSkillForm()
+        return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
+  
 @login_required
 def add_musical_experience(request, adult_id):
     adult = Adult.objects.get(pk=adult_id)

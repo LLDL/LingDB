@@ -1,7 +1,17 @@
-from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience
-# from .models import Adult, Language, Family, Child, Speaks, IsExposedTo
-from django.forms import *
+# Django Imports ----------------------------------------------------------------
+from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory
 
+# Project Imports ---------------------------------------------------------------
+from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience
+
+# Family Forms ------------------------------------------------------------------
+
+class FamilyForm(ModelForm):
+    class Meta:
+        model = Family
+        fields = ('parents', 'children', )
+
+# Adult Forms -------------------------------------------------------------------
 
 class AdultForm(ModelForm):
     class Meta:
@@ -11,6 +21,8 @@ class AdultForm(ModelForm):
             'birth_date': DateInput(attrs={'type': 'date'})
         }
 
+# Child Forms -------------------------------------------------------------------
+
 class ChildForm(ModelForm):
     class Meta:
         model = Child
@@ -19,30 +31,17 @@ class ChildForm(ModelForm):
             'birth_date': DateInput(attrs={'type': 'date'})
         }
 
+# Language Forms ----------------------------------------------------------------
+
 class LanguageForm(ModelForm):
     class Meta:
         model = Language
         fields = ('language_name',)
 
-class MusicalSkillForm(ModelForm):
-    class Meta:
-        model = MusicalSkill
-        fields = ('skill',)
-
-class FamilyForm(ModelForm):
-    class Meta:
-        model = Family
-        fields = ('parents', 'children', )
-
 class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
         fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
-
-class MusicalExperienceForm(ModelForm):
-    class Meta:
-        model = MusicalExperience
-        fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -52,11 +51,6 @@ class ExposureForm(ModelForm):
 SpeaksFormSet = modelformset_factory(
     Speaks,
     form = SpeaksForm
-)
-
-MusicalExperienceFormSet = modelformset_factory(
-    MusicalExperience,
-    form = MusicalExperienceForm,
 )
 
 ExposureFormSet = modelformset_factory(
@@ -73,7 +67,6 @@ SpeaksInlineFormSet = inlineformset_factory(
     max_num = 5,
     min_num = 1,
     validate_min = True,
-
 )
 
 ExposureInlineFormSet = inlineformset_factory(
@@ -85,6 +78,23 @@ ExposureInlineFormSet = inlineformset_factory(
     max_num = 5,
     min_num = 1,
     validate_min = True,
+)
+
+# Musical Forms -----------------------------------------------------------------
+
+class MusicalSkillForm(ModelForm):
+    class Meta:
+        model = MusicalSkill
+        fields = ('skill',)
+
+class MusicalExperienceForm(ModelForm):
+    class Meta:
+        model = MusicalExperience
+        fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+
+MusicalExperienceFormSet = modelformset_factory(
+    MusicalExperience,
+    form = MusicalExperienceForm,
 )
 
 MusicalExperienceInlineFormSet = inlineformset_factory(
