@@ -2,7 +2,7 @@
 {% block content %}
     <h2>New Adult</h2>
     
-    <form method="post">
+    <form action="{% url 'update_adult' adult_id %}" method="post">
         {% csrf_token %}
         <h3>Personal &amp; Contact Info</h3>
         <table id="new_adult_table">
@@ -31,6 +31,7 @@
             </thead>
             <tbody>
                 {% for speaks in speaks_formset %}
+                    {{speaks.id}}
                     <tr>            
                         <td class="field_value">{{speaks.lang}}</td>  
                         <td class="field_value_input">{{speaks.is_native}}</td>  
@@ -62,6 +63,7 @@
             </thead>
             <tbody>
                 {% for musical_experience in musical_experience_formset %}
+                    {{musical_experience.id}}
                     <tr>            
                         <td class="field_value">{{musical_experience.experience}}</td>  
                         <td class="field_value">{{musical_experience.nth_most_dominant}}</td>  

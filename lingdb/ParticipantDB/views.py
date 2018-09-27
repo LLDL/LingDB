@@ -29,7 +29,7 @@ def index(request):
                 raise Http404("No Adult or Child matches id " + person)
     else:
         # Standard Visit to Index
-        return render(request, 'ParticipantDB/index.html', {})
+        return render(request, 'ParticipantDB/index.html')
 
 # Family Views -----------------------------------------------------------------
 
@@ -39,7 +39,7 @@ def add_family(request):
         form = FamilyForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect(reverse('index'))
     else:
         form = FamilyForm()
         return render(request, "ParticipantDB/family_form.html", {'form': form})
@@ -49,7 +49,7 @@ def add_family(request):
 
 @login_required
 def add_adult(request):
-    
+
     musical_experience_forms = MusicalExperienceInlineFormSet(
         queryset = MusicalExperience.objects.none(), 
         prefix = 'musical_experiences'
@@ -80,13 +80,65 @@ def add_adult(request):
                     inst.person = adult
                     inst.save()
 
-            # return redirect('/')
             return redirect(reverse('adult_detail', kwargs={'adult_id': adult.id}))
         
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
 
     return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
+
+
+@login_required
+def update_adult(request, adult_id):
+    try:
+        adult_inst = Adult.objects.get(pk=adult_id)
+    except Adult.DoesNotExist:
+        Http404("No Adult with id " + person)
+
+    speaks_forms = SpeaksInlineFormSet(
+        prefix = 'speaks_forms',
+        queryset = Speaks.objects.filter(person=adult_inst),
+    )
+    
+    musical_experience_forms = MusicalExperienceInlineFormSet(
+        prefix = 'musical_experiences',
+        queryset = MusicalExperience.objects.filter(person=adult_inst),
+    )
+   
+    if request.method == "POST":
+        adult_form = AdultForm(request.POST, request.FILES, instance=adult_inst)
+        
+        speaks_forms = SpeaksInlineFormSet(request.POST, request.FILES, prefix = 'speaks_forms')
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, request.FILES, prefix = 'musical_experiences')
+        
+        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
+            adult = adult_form.save(commit=False)
+            adult.save()
+            for speaks_form in speaks_forms:
+                if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
+                    inst = speaks_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()
+
+            for musical_experience_form in musical_experience_forms:
+                if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
+                    inst = musical_experience_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()
+            
+            
+            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
+        
+
+    else:
+        adult_form = AdultForm(instance = adult_inst)
+
+    return render(request, "ParticipantDB/adult_form_update.html", {'adult_id': adult_id, 'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
+
+
+
+
+
 
 @login_required
 def adult_detail(request, adult_id):
@@ -121,7 +173,7 @@ def add_child(request):
             for exposedToLang in exposedToLangs:
                 exposedToLang.child = child
                 exposedToLang.save()
-            return redirect('/')
+            return redirect(reverse('index'))
     else:
         form = ChildForm(initial={'id': make_unique_id()})
         return render(request, "ParticipantDB/child_form.html", {'form': form, 'formset': exposure_forms})
@@ -148,7 +200,7 @@ def add_language(request):
         form = LanguageForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect(reverse('index'))
     else:
         form = LanguageForm()
         return render(request, "ParticipantDB/language_form.html", {'form': form})
@@ -169,7 +221,8 @@ def add_speaks(request, adult_id):
             speaksLanguage.age_learning_started = form.cleaned_data['age_learning_started']
             speaksLanguage.age_learning_ended = form.cleaned_data['age_learning_ended']
             speaksLanguage.save()
-            return redirect('/adult/' + str(adult_id))
+            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
+            # return redirect('/adult/' + str(adult_id))
     else:
         form = SpeaksForm(initial = {'person': adult})
     return render(request, "ParticipantDB/speaks_form.html", {'form': form})
@@ -181,7 +234,7 @@ def add_musical_skill(request):
         form = MusicalSkillForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect(reverse('index'))
     else:
         form = MusicalSkillForm()
         return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
@@ -201,7 +254,8 @@ def add_musical_experience(request, adult_id):
             hasMusicalExperience.age_learning_started = form.cleaned_data['age_learning_started']
             hasMusicalExperience.age_learning_ended = form.cleaned_data['age_learning_ended']
             hasMusicalExperience.save()
-            return redirect('/adult/' + str(adult_id))
+            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
+            # return redirect('/adult/' + str(adult_id))
     else:
         form = MusicalExperienceForm(initial = {'person': adult})
     return render(request, "ParticipantDB/musical_experience_form.html", {'form': form})

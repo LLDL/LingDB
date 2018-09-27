@@ -67,7 +67,8 @@
 					{{musical_exp.age_learning_ended}}
                 {% endfor %}
 			</table>
-			<a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult.id}}</a>
+            <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult.id}}</a>
+            <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult.id}}</a>
         </div>
     {% else %}
         <h2>Not Available</h2>

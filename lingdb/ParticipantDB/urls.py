@@ -9,6 +9,7 @@ urlpatterns = [
     path('adult/<int:adult_id>/delete/', views.delete_adult, name='delete_adult'),
     path('child/<int:child_id>/delete/', views.delete_child, name='delete_child'),
     path('adult/add/', views.add_adult, name='add_adult'),  
+    path('adult/<int:adult_id>/update/', views.update_adult, name='update_adult'),
     path('child/add/', views.add_child, name='add_child'),  
     path('language/add/', views.add_language, name='add_language'),   
     path('musical_skill/add/', views.add_musical_skill, name='add_musical_skill'),   
