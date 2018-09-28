@@ -51,22 +51,48 @@
 
             </table>
             <table>
-                {% for speaksLanguage in speaksLanguages %}
-					{{speaksLanguage.lang}}
-					{{speaksLanguage.is_native}}
-					{{speaksLanguage.nth_most_dominant}}
-					{{speaksLanguage.age_learning_started}}
-					{{speaksLanguage.age_learning_ended}}
-                {% endfor %}
+                <thead>
+                    <tr>
+                        <th class="field_name">Language</th>
+                        <th class="field_name">Native</th>
+                        <th class="field_name">Dominance</th>
+                        <th class="field_name">Age Learning Started</th>
+                        <th class="field_name">Age Learning Ended</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for speaksLanguage in speaksLanguages %}
+                        <td class="field_value">{{speaksLanguage.lang}}</td>
+                        <td class="field_value">{{speaksLanguage.is_native}}</td>
+                        <td class="field_value">{{speaksLanguage.nth_most_dominant}}</td>
+                        <td class="field_value">{{speaksLanguage.age_learning_started}}</td>
+                        <td class="field_value">{{speaksLanguage.age_learning_ended}}</td>
+                    {% endfor %}
+                </tbody>
             </table>
-            <table>
-                {% for musical_exp in musical_exps %}
-					{{musical_exp.experience}}
-					{{musical_exp.nth_most_dominant}}
-					{{musical_exp.age_learning_started}}
-					{{musical_exp.age_learning_ended}}
-                {% endfor %}
-			</table>
+            {% if musical_exps.count > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="field_name">Musical Experience</th>
+                            <th class="field_name">Dominance</th>
+                            <th class="field_name">Age Learning Started</th>
+                            <th class="field_name">Age Learning Ended</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for musical_exp in musical_exps %}
+                            <tr>
+                                <td class="field_value">{{musical_exp.experience}}</td>
+                                <td class="field_value">{{musical_exp.nth_most_dominant}}</td>
+                                <td class="field_value">{{musical_exp.age_learning_started}}</td>
+                                <td class="field_value">{{musical_exp.age_learning_ended}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
             <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult.id}}</a>
             <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult.id}}</a>
         </div>

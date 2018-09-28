@@ -139,11 +139,6 @@ def update_adult(request, adult_id):
 
     return render(request, "ParticipantDB/adult_form_update.html", {'adult_id': adult_id, 'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
 
-
-
-
-
-
 @login_required
 def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
