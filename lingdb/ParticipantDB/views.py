@@ -93,7 +93,7 @@ def update_adult(request, adult_id):
     try:
         adult_inst = Adult.objects.get(pk=adult_id)
     except Adult.DoesNotExist:
-        Http404("No Adult with id " + person)
+        Http404("No Adult with id " + adult_id)
 
     speaks_forms = SpeaksInlineFormSet(
         prefix = 'speaks_forms',
@@ -116,20 +116,25 @@ def update_adult(request, adult_id):
             adult.save()
             
             if speaks_forms.is_valid():  
-                Speaks.objects.filter(person=adult_inst).delete()
+                oldSpeaks = Speaks.objects.filter(person=adult_inst)
+                if oldSpeaks.exists():
+                    oldSpeaks.delete()
+
                 for speaks_form in speaks_forms:
                     inst = speaks_form.save(commit=False)
                     if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
                         inst.person = adult
                         inst.save()
             if musical_experience_forms.is_valid():  
-                MusicalExperience.objects.filter(person=adult_inst).delete()
+                oldMusicalExperiences = MusicalExperience.objects.filter(person=adult_inst)
+                if oldMusicalExperiences.exists():
+                    oldMusicalExperiences.delete()
                 for musical_experience_form in musical_experience_forms:
                     if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
                         inst = musical_experience_form.save(commit=False)
                         inst.person = adult
                         inst.save()
-            
+            ##TODO: make deleteable speaks and musical experiences
             
             return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
         
@@ -163,24 +168,60 @@ def add_child(request):
         queryset = IsExposedTo.objects.none()
     )
     if request.method == "POST":
-        form = ChildForm(request.POST)
-        exposure_forms = ExposureInlineFormSet(request.POST, queryset = IsExposedTo.objects.none())
-        if form.is_valid() and exposure_forms.is_valid():
-            child = form.save(commit=False)
+        child_form = ChildForm(request.POST)
+        exposure_forms = ExposureInlineFormSet(request.POST)
+        if child_form.is_valid() and exposure_forms.is_valid():
+            child = child_form.save(commit=False)
             child.save()
-            exposedToLangs = exposure_forms.save(commit=False)
-            for exposedToLang in exposedToLangs:
-                exposedToLang.child = child
-                exposedToLang.save()
-            return redirect(reverse('index'))
+            for exposure_form in exposure_forms:
+                if exposure_form.cleaned_data.get('lang'):
+                    inst = exposure_form.save(commit=False)
+                    inst.child = child
+                    inst.save()
+            
+            return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
     else:
-        form = ChildForm(initial={'id': make_unique_id()})
-        return render(request, "ParticipantDB/child_form.html", {'form': form, 'formset': exposure_forms})
+        child_form = ChildForm(initial={'id': make_unique_id()})
+    return render(request, "ParticipantDB/child_form.html", {'child_form': child_form, 'exposure_forms': exposure_forms})
+
+@login_required
+def update_child(request, child_id):
+    try:
+        child_inst = Child.objects.get(pk=child_id)
+    except Child.DoesNotExist:
+        Http404("No Child with id " + child_id)
+
+    exposure_forms = ExposureInlineFormSet(
+        queryset = IsExposedTo.objects.filter(child=child_inst)
+    )
+    
+    if request.method == "POST":
+        child_form = ChildForm(request.POST, instance = child_inst)
+        exposure_forms = ExposureInlineFormSet(request.POST)
+        if child_form.is_valid():
+            child = child_form.save(commit=False)
+            child.save()
+
+            if exposure_forms.is_valid():
+                oldExposures = IsExposedTo.objects.filter(child=child_inst)
+                if oldExposures.exists():
+                    oldExposures.delete()
+                for exposure_form in exposure_forms:
+                    if exposure_form.cleaned_data.get('lang'):
+                        inst = exposure_form.save(commit=False)
+                        inst.child = child
+                        inst.save()
+            return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
+    else:
+        child_form = ChildForm(instance = child_inst)
+
+    return render(request, "ParticipantDB/child_form_update.html", {'child_id': child_id, 'child_form': child_form, 'exposure_forms': exposure_forms})
 
 @login_required
 def child_detail(request, child_id):
     child = get_object_or_404(Child, pk=child_id)
-    return render(request, 'ParticipantDB/child_detail.html', {'child': child})
+    languages_exposed_to = IsExposedTo.objects.filter(child = child)
+    return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to})
 
 @login_required
 def delete_child(request, child_id):

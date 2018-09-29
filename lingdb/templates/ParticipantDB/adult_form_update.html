@@ -1,6 +1,6 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    <h2>New Adult</h2>
+    <h2>Update Adult # {{adult_id}}</h2>
     
     <form action="{% url 'update_adult' adult_id %}" method="post">
         {% csrf_token %}

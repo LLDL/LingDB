@@ -1,7 +1,7 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    <h2>New Child</h2>
-    <form method="post">
+    <h2>Update Child # {{child_id}}</h2>
+    <form action="{% url 'update_child' child_id %}" method="post">
         {% csrf_token %}
         <h3>Personal &amp; Info</h3>
         <table id="new_child_table">
@@ -26,6 +26,7 @@
             </thead>
             <tbody>
                 {% for exposure_form in exposure_forms %}
+                    {{exposure_form.id}}
                     <tr>            
                         <td class="field_value">{{exposure_form.lang}}</td>  
                         <td class="field_value_input">{{exposure_form.percentage_exposure}}</td>
@@ -33,11 +34,6 @@
                 {% endfor %}
             </tbody>
         </table>
-
-
-
-
-
 
         <input type="submit" value="Save">
     </form>
