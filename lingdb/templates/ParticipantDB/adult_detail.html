@@ -62,11 +62,13 @@
                 </thead>
                 <tbody>
                     {% for speaksLanguage in speaksLanguages %}
-                        <td class="field_value">{{speaksLanguage.lang}}</td>
-                        <td class="field_value">{{speaksLanguage.is_native}}</td>
-                        <td class="field_value">{{speaksLanguage.nth_most_dominant}}</td>
-                        <td class="field_value">{{speaksLanguage.age_learning_started}}</td>
-                        <td class="field_value">{{speaksLanguage.age_learning_ended}}</td>
+                        <tr>
+                            <td class="field_value">{{speaksLanguage.lang}}</td>
+                            <td class="field_value">{{speaksLanguage.is_native}}</td>
+                            <td class="field_value">{{speaksLanguage.nth_most_dominant}}</td>
+                            <td class="field_value">{{speaksLanguage.age_learning_started}}</td>
+                            <td class="field_value">{{speaksLanguage.age_learning_ended}}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

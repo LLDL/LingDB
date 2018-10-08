@@ -114,27 +114,32 @@ def update_adult(request, adult_id):
         if adult_form.is_valid():   
             adult = adult_form.save(commit=False)
             adult.save()
-            
-            if speaks_forms.is_valid():  
-                oldSpeaks = Speaks.objects.filter(person=adult_inst)
-                if oldSpeaks.exists():
-                    oldSpeaks.delete()
-
+            print(speaks_forms)
+            if speaks_forms.is_valid():
                 for speaks_form in speaks_forms:
-                    inst = speaks_form.save(commit=False)
-                    if speaks_form.is_valid() and speaks_form.cleaned_data.get('lang'):
+                    if speaks_form.cleaned_data.get('DELETE'):
+                        print('Delete:')
+                        print(speaks_form.cleaned_data.get('lang'))
+                        toDelete = speaks_form.cleaned_data.get('lang')
+                        Speaks.objects.filter(person=adult_inst, lang=toDelete).delete()
+                        # delete
+                    elif speaks_form.cleaned_data.get('lang'):
+                        inst = speaks_form.save(commit=False)
                         inst.person = adult
                         inst.save()
+                    
             if musical_experience_forms.is_valid():  
-                oldMusicalExperiences = MusicalExperience.objects.filter(person=adult_inst)
-                if oldMusicalExperiences.exists():
-                    oldMusicalExperiences.delete()
                 for musical_experience_form in musical_experience_forms:
-                    if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
+                    if musical_experience_form.cleaned_data.get('DELETE'):
+                        print('Delete:')
+                        print(musical_experience_form.cleaned_data.get('experience'))
+                        print(musical_experience_form.cleaned_data.get('experience'))
+                        toDelete = musical_experience_form.cleaned_data.get('experience')
+                        MusicalExperience.objects.filter(person=adult_inst, experience=toDelete).delete()
+                    elif musical_experience_form.cleaned_data.get('experience'):
                         inst = musical_experience_form.save(commit=False)
                         inst.person = adult
                         inst.save()
-            ##TODO: make deleteable speaks and musical experiences
             
             return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
         

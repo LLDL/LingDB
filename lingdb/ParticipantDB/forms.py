@@ -51,7 +51,8 @@ class ExposureForm(ModelForm):
 
 SpeaksFormSet = modelformset_factory(
     Speaks,
-    form = SpeaksForm
+    form = SpeaksForm,
+    can_delete = True
 )
 
 ExposureFormSet = modelformset_factory(
@@ -67,7 +68,7 @@ SpeaksInlineFormSet = inlineformset_factory(
     extra = 5,
     max_num = 5,
     min_num = 1,
-    validate_min = True,
+    validate_min = True
 )
 
 ExposureInlineFormSet = inlineformset_factory(
