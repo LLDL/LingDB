@@ -3,7 +3,32 @@
     <h2>New Family</h2>
     <form method="post">
         {% csrf_token %}
-        {{form}}
+        {{family_form.as_table}}
+
+        <h3>Parent(s)</h3>
+        {{ parent_forms.management_form}}
+        {% if parent_forms.errors %}
+            {{ parent_forms.errors }}
+        {% endif %}
+        {% if parent_forms.non_form_errors %}
+            {{ parent_forms.non_form_errors }}
+        {% endif %}
+        {% for parent_form in parent_forms %}
+            {{parent_form.parent}}           
+        {% endfor %}
+
+        <h3>Child(ren)</h3>
+        {{ child_forms.management_form}}
+        {% if child_forms.errors %}
+            {{ child_forms.errors }}
+        {% endif %}
+        {% if child_forms.non_form_errors %}
+            {{ child_forms.non_form_errors }}
+        {% endif %}
+        {% for child_form in child_forms %}
+            {{child_form.child}}           
+        {% endfor %}
+
         <input type="submit" value="Save">
     </form>
 {% endblock %}

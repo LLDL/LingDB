@@ -87,6 +87,7 @@ class Family(models.Model):
     class Meta:
         verbose_name = "Family"
         verbose_name_plural = "Families"
+    id = models.IntegerField(primary_key = True, verbose_name = "ID")
     parents = models.ManyToManyField('Adult', through='IsParentIn')
     children = models.ManyToManyField('Child', through='IsChildIn')
     def __str__(self):
@@ -284,8 +285,8 @@ class IsParentIn(models.Model):
     class Meta:
         verbose_name = "Is Parent In"
         verbose_name_plural = "Are Parents In"
-    parent = models.ForeignKey(Adult, on_delete = models.CASCADE)
-    family = models.ForeignKey(Family, on_delete = models.CASCADE)
+    parent = models.ForeignKey(Adult, related_name='parent', on_delete = models.CASCADE)
+    family = models.ForeignKey(Family, related_name='family', on_delete = models.CASCADE)
 
 class IsChildIn(models.Model):
     class Meta:

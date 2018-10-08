@@ -2,14 +2,60 @@
 from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory
 
 # Project Imports ---------------------------------------------------------------
-from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience
+from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience, IsParentIn, IsChildIn
 
 # Family Forms ------------------------------------------------------------------
-
 class FamilyForm(ModelForm):
     class Meta:
         model = Family
-        fields = ('parents', 'children', )
+        fields = ('id',) 
+
+class ParentForm(ModelForm):
+    class Meta:
+        model = IsParentIn
+        fields = ('parent',)
+
+ParentFormSet = modelformset_factory(
+    IsParentIn,
+    form = ParentForm,
+    fields = ('parent',),
+    can_delete = True
+)
+
+ParentInlineFormSet = inlineformset_factory(
+    Adult,
+    IsParentIn,
+    formset = ParentFormSet,
+    fields = ('parent',),
+    extra = 1,
+    max_num = 2,
+    min_num = 1,
+    validate_min = True
+)
+
+class ChildInFamilyForm(ModelForm):
+    class Meta:
+        model = IsChildIn
+        fields = ('child',)
+
+ChildInFamilyFormSet = modelformset_factory(
+    IsChildIn,
+    form = ChildInFamilyForm,
+    fields = ('child',),
+    can_delete = True
+)
+
+ChildInFamilyInlineFormSet = inlineformset_factory(
+    Child,
+    IsChildIn,
+    formset = ChildInFamilyFormSet,
+    fields = ('child',),
+    extra = 9,
+    max_num = 10,
+    min_num = 1,
+    validate_min = True
+)
+
 
 # Adult Forms -------------------------------------------------------------------
 

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 
 # Project Imports ---------------------------------------------------------------
-from .forms import AdultForm, ChildForm, ExposureForm, ExposureInlineFormSet, FamilyForm, LanguageForm, MusicalExperienceForm, MusicalExperienceFormSet, MusicalExperienceInlineFormSet, MusicalSkillForm, SpeaksForm, SpeaksFormSet, SpeaksInlineFormSet
+from .forms import AdultForm, ChildForm, ExposureForm, ExposureInlineFormSet, FamilyForm, LanguageForm, MusicalExperienceForm, MusicalExperienceFormSet, MusicalExperienceInlineFormSet, MusicalSkillForm, SpeaksForm, SpeaksFormSet, SpeaksInlineFormSet, ParentForm, ParentFormSet, ParentInlineFormSet, ChildInFamilyForm, ChildInFamilyFormSet, ChildInFamilyInlineFormSet
 from .models import *
 from .utils import make_unique_id
 
@@ -38,15 +38,56 @@ def index(request):
 
 @login_required
 def add_family(request):
+    child_forms = ChildInFamilyInlineFormSet(
+        queryset = IsChildIn.objects.none(),
+        prefix = 'children'
+    )
+    parent_forms = ParentInlineFormSet(
+        queryset = IsParentIn.objects.none(),
+        prefix = 'parents'
+    )
     if request.method == "POST":
-        form = FamilyForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('index'))
-    else:
-        form = FamilyForm()
-        return render(request, "ParticipantDB/family_form.html", {'form': form})
+        family_form = FamilyForm(request.POST)
+        child_forms = ChildInFamilyInlineFormSet(request.POST, prefix='children')
+        parent_forms = ParentInlineFormSet(request.POST, prefix='parents')
+        if family_form.is_valid() and child_forms.is_valid() and parent_forms.is_valid():
+            family = family_form.save(commit=False)
+            family.save()
+            
+            for parent_form in parent_forms:
+                if parent_form.cleaned_data.get('parent'):
+                    inst = parent_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
+            
+            for child_form in child_forms:
+                if child_form.cleaned_data.get('child'):
+                    inst = child_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
 
+            return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
+
+    else:
+        family_form = FamilyForm(initial={'id': make_unique_id()})
+
+    return render(request, "ParticipantDB/family_form.html", {'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
+
+@login_required
+def family_detail(request, family_id):
+    family = get_object_or_404(Family, pk=family_id)
+    parents = IsParentIn.objects.filter(family = family)
+    children = IsChildIn.objects.filter(family = family)
+    return render(request, 'ParticipantDB/family_detail.html', {'family': family, 'parents': parents, 'children': children})
+
+@login_required
+def delete_family(request, family_id):
+    try:
+        Family.objects.get(pk=family_id).delete()
+        return redirect(reverse('index'))
+    except Family.DoesNotExist:
+        raise Http404("No family with id" + family_id)
+    
 
 # Adult Views ------------------------------------------------------------------
 

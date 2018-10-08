@@ -1,0 +1,16 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>
+        Family # {{ family.id }}
+    </h2>
+    <h3>Parents</h3>
+    {% for parent in parents %}
+        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">{{parent.parent.id}}, {{parent.parent.given_name}} {{parent.parent.surname}}<br></a>
+    {% endfor %}
+    <h3>Children</h3>
+    {% for child in children %}
+        <a href="{% url 'child_detail' child_id=child.child.id %}">{{child.child.id}}, {{child.child.given_name}} {{child.child.surname}}<br></a>
+    {% endfor %}
+    <br>
+    <a href="{% url 'delete_family' family_id=family.id %}">Delete {{family.id}}</a>
+{% endblock %}
