@@ -18,13 +18,16 @@ def index(request):
     if (request.method == 'GET') and (request.GET.get('searchPeopleField', None)):
         # Open by ID Handling
         person = request.GET.get('searchPeopleField', None)
+        # If adult exists, open that adult's details
         try:
             Adult.objects.get(pk=person)
             return redirect(reverse('adult_detail', kwargs={'adult_id': person}))
+        # Adult doesn't exist, try with child
         except Adult.DoesNotExist:
             try: 
                 Child.objects.get(pk=person)
                 return redirect(reverse('child_detail', kwargs={'child_id': person}))
+            #neither exist
             except Child.DoesNotExist:
                 raise Http404("No Adult or Child matches id " + person)
     else:
@@ -49,7 +52,6 @@ def add_family(request):
 
 @login_required
 def add_adult(request):
-
     musical_experience_forms = MusicalExperienceInlineFormSet(
         queryset = MusicalExperience.objects.none(), 
         prefix = 'musical_experiences'
@@ -57,7 +59,6 @@ def add_adult(request):
     speaks_forms = SpeaksInlineFormSet(
         queryset = Speaks.objects.none(), 
         prefix = 'speaks_forms'
-        
     )
     if request.method == "POST":
         adult_form = AdultForm(request.POST)
@@ -114,12 +115,9 @@ def update_adult(request, adult_id):
         if adult_form.is_valid():   
             adult = adult_form.save(commit=False)
             adult.save()
-            print(speaks_forms)
             if speaks_forms.is_valid():
                 for speaks_form in speaks_forms:
                     if speaks_form.cleaned_data.get('DELETE'):
-                        print('Delete:')
-                        print(speaks_form.cleaned_data.get('lang'))
                         toDelete = speaks_form.cleaned_data.get('lang')
                         Speaks.objects.filter(person=adult_inst, lang=toDelete).delete()
                         # delete
@@ -131,9 +129,6 @@ def update_adult(request, adult_id):
             if musical_experience_forms.is_valid():  
                 for musical_experience_form in musical_experience_forms:
                     if musical_experience_form.cleaned_data.get('DELETE'):
-                        print('Delete:')
-                        print(musical_experience_form.cleaned_data.get('experience'))
-                        print(musical_experience_form.cleaned_data.get('experience'))
                         toDelete = musical_experience_form.cleaned_data.get('experience')
                         MusicalExperience.objects.filter(person=adult_inst, experience=toDelete).delete()
                     elif musical_experience_form.cleaned_data.get('experience'):
@@ -208,11 +203,11 @@ def update_child(request, child_id):
             child.save()
 
             if exposure_forms.is_valid():
-                oldExposures = IsExposedTo.objects.filter(child=child_inst)
-                if oldExposures.exists():
-                    oldExposures.delete()
                 for exposure_form in exposure_forms:
-                    if exposure_form.cleaned_data.get('lang'):
+                    if exposure_form.cleaned_data.get('DELETE'):
+                        toDelete = exposure_form.cleaned_data.get('lang')
+                        IsExposedTo.objects.filter(child=child_inst, lang=toDelete).delete()
+                    elif exposure_form.cleaned_data.get('lang'):
                         inst = exposure_form.save(commit=False)
                         inst.child = child
                         inst.save()

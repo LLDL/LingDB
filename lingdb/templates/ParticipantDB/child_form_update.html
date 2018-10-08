@@ -21,6 +21,7 @@
                 <tr>
                     <th class="field_name">Language</th>
                     <th class="field_name">Exposure Percentage</th>
+                    <th class="field name">Delete?</th>
                 </tr>
                 
             </thead>
@@ -30,6 +31,7 @@
                     <tr>            
                         <td class="field_value">{{exposure_form.lang}}</td>  
                         <td class="field_value_input">{{exposure_form.percentage_exposure}}</td>
+                        <td class="field_value">{{exposure_form.DELETE}}</td>
                     </tr>
                 {% endfor %}
             </tbody>

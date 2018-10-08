@@ -43,6 +43,8 @@ class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
         fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+        widgets = {
+        }
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -58,6 +60,7 @@ SpeaksFormSet = modelformset_factory(
 ExposureFormSet = modelformset_factory(
     IsExposedTo,
     form = ExposureForm,
+    can_delete = True
 )
 
 SpeaksInlineFormSet = inlineformset_factory(
