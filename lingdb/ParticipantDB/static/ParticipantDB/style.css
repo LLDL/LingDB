@@ -8,3 +8,31 @@
 form{
     margin-bottom: 0em;
 }
+
+/* Index */
+body{
+    margin: 0;
+}
+h1{
+    background-color: #a6192e;
+    padding: 1em;
+    position: relative;
+    overflow: hidden;
+}
+#home{
+    color: #ffffff;
+    display: inline-block;
+    text-decoration: none;
+}
+#logoutForm{    
+    float: right;
+}
+#logout{
+    background-color: #ffffff;
+    border: solid 0px #000000;
+    padding: 1em;
+    font-weight: 700;
+}
+#logout:hover, #home:hover{
+    cursor: pointer
+}

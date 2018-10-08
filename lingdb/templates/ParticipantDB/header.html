@@ -2,8 +2,11 @@
 <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
 
 <h1>
-    <a href="/"> SFU Department of Linguistics Participant Database</a>
+    <a href="/" id="home"> SFU Linguistics Participant Database</a>
+    
+    <form action="/accounts/logout" method="get" id="logoutForm">
+        <input type="submit" name="logout" id="logout" value="Logout"/>
+    </form>
 </h1>
-<a href="/accounts/logout">Logout</a>
 {% block content %}
 {% endblock %}
