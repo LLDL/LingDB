@@ -5,6 +5,7 @@
 	Child # {{ child.id }}
 </h2>
 <div>
+	<h3>Personal Info</h3>
 	<table>
 		<tr>
 			<td class="field_name">Given Name:</td>
@@ -85,23 +86,32 @@
 		</tr>
 		{% endif %}
 	</table>
-	<table>
-		<thead>
-			<tr>
-				<th class="field_name">Language</th>
-				<th class="field_name">Exposure Percentage</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for language_exposed_to in languages_exposed_to %}
-				<tr class="field_value">
-					<td class="field_value">{{language_exposed_to.lang}}</td>
-					<td class="field_value">{{language_exposed_to.percentage_exposure}}</td>
+	{% if languages_exposed_to.count > 0%}
+		<h3>Languages Exposed To</h3>
+		<table>
+			<thead>
+				<tr>
+					<th class="field_name">Language</th>
+					<th class="field_name">Exposure Percentage</th>
 				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{% for language_exposed_to in languages_exposed_to %}
+					<tr class="field_value">
+						<td class="field_value">{{language_exposed_to.lang}}</td>
+						<td class="field_value">{{language_exposed_to.percentage_exposure}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
 
+	{% if child_in %}
+		<h3>Family</h3>
+		<a href="{% url 'family_detail' family_id=child_in.family.id %}">View Family ({{child_in.family.id}})</a>
+	{% endif %}
+	
+	<h3>Manage</h3>
 	<a href="{% url 'delete_child' child_id=child.id %}">Delete {{child.id}}</a>
 	<a href="{% url 'update_child'  child_id=child.id %}">Update {{child.id}}</a>
 </div>

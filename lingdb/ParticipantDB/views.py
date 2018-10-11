@@ -323,7 +323,9 @@ def update_child(request, child_id):
 def child_detail(request, child_id):
     child = get_object_or_404(Child, pk=child_id)
     languages_exposed_to = IsExposedTo.objects.filter(child = child)
-    return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to})
+    child_in = IsChildIn.objects.get(child = child)
+    return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'child_in': child_in})
+
 
 @login_required
 def delete_child(request, child_id):
