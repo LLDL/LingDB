@@ -1,31 +1,32 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    <h2>People</h2>
-    <ul>
-        <li><a href="/people/query">Query</a></li>
-        <li> 
-            <form id="searchPeople" action="." method="get" accept-charset="utf-8">
-                <input class="searchField" id="searchPeopleField" name="searchPeopleField" type="text" placeholder="Enter ID">
-                <input type="submit" id="SearchPeopleButton" value="Search">
-            </form>
-        </li>
-        <li><a href="/adult/add">Adult +</a></li>
-        <li><a href="/child/add">Child +</a></li>
-        <li><a href="/family/add">Family +</a></li>
-    </ul>
-    <h2>Participation</h2>
-    <ul>
-        <li><a href="/participation/query">Query</a></li>
-        <li></li>
-        <li><a href="/experiment_section_run/add">Experiment Run +</a></li>
-        <li><a href="/assessment_run/add">Assessment Run +</a></li>
-    </ul>
-    <h2>Reference</h2>
-    <ul>
-        <li><a href="/musical_skill/add">Musical Skill +</a></li>
-        <li><a href="/language/add">Language +</a></li>
-        <li><a href="/experiment/add">Experiment +</a></li>
-        <li><a href="/experiment_section/add">Experiment Section +</a></li>
-        <li><a href="/assessment/add">Assessment +</a></li>
-    </ul>
+        <h2>People</h2>
+        <ul>
+            <li><a href="/people/query">Query</a></li>
+            <li> 
+                <form id="searchPeople" action="." method="get" accept-charset="utf-8">
+                    <input class="searchField" id="searchPeopleField" name="searchPeopleField" type="text" placeholder="Enter ID">
+                    <input type="submit" id="SearchPeopleButton" value="Search">
+                </form>
+            </li>
+            <li><a href="/adult/add">Adult +</a></li>
+            <li><a href="/child/add">Child +</a></li>
+            <li><a href="/family/add">Family +</a></li>
+        </ul>
+        <h2>Participation</h2>
+        <ul>
+            <li><a href="/participation/query">Query</a></li>
+            <li></li>
+            <li><a href="/experiment_section_run/add">Experiment Run +</a></li>
+            <li><a href="/assessment_run/add">Assessment Run +</a></li>
+        </ul>
+        <h2>Reference</h2>
+        <ul>
+            <li><a href="/musical_skill/add">Musical Skill +</a></li>
+            <li><a href="/language/add">Language +</a></li>
+            <li><a href="/experiment/add">Experiment +</a></li>
+            <li><a href="/experiment_section/add">Experiment Section +</a></li>
+            <li><a href="/assessment/add">Assessment +</a></li>
+        </ul>
+        
 {% endblock  %}

@@ -1,14 +1,23 @@
 #new_adult_table, #new_child_table{
     text-align: left;
 }
+.generic_input{
+    padding: .5em;
+}
+
 .field_value_input{
     text-align: -moz-center;
     text-align: -webkit-center;
 }
+.error{
+    color: #a6192e;
+}
 form{
     margin-bottom: 0em;
 }
-
+#main-content{
+    padding: 0em 1em 1em 1em;
+}
 /* Index */
 body{
     margin: 0;
@@ -18,6 +27,12 @@ h1{
     padding: 1em;
     position: relative;
     overflow: hidden;
+}
+th{
+    padding: .25em .5em;
+}
+td{
+    padding: .25em .5em;
 }
 #home{
     color: #ffffff;

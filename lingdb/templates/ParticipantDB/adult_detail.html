@@ -1,55 +1,57 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    {% if adult %}
-        <h2>
-            Adult # {{ adult.id }}
-        </h2>
-        <div>
-            <table>
-                <tr>
-                    <td class="field_name">Given Name:</td>
-                    <td class="field_value">{{adult.given_name}}</td>
-                </tr> 
-                {% if adult.preferred_name %}
-                <tr>
-                        <td class="field_name">Preferred Name:</td>
-                        <td class="field_value">{{adult.preferred_name}}</td>
-                </tr>    
-                {% endif %}
-                <tr>
-                        <td class="field_name">Surname:</td>
-                        <td class="field_value">{{adult.surname}}</td>
-                </tr> 
-                <tr>
-                        <td class="field_name">Birth Date:</td>
-                        <td class="field_value">{{adult.birth_date}}</td>
-                </tr> 
-                <tr>
-                        <td class="field_name">Gender:</td>
-                        <td class="field_value">{{adult.gender}}</td>
-                </tr> 
-                {% if adult.sfu_id %}
-                <tr>
-                        <td class="field_name">SFU ID:</td>
-                        <td class="field_value">{{adult.sfu_id}}</td>
-                </tr>    
-                {% endif %}
-                <tr>
-                        <td class="field_name">Contact Preference:</td>
-                        <td class="field_value">{{adult.get_contact_pref_display}}</td>
-                </tr>    
-                <tr>
-                        <td class="field_name">Preferred Phone Time:</td>
-                        <td class="field_value">{{adult.get_pref_phone_time_display}}</td>
-                </tr> 
-                {% if adult.health_notes %}
-                <tr>
-                        <td class="field_name">Health Notes:</td>
-                        <td class="field_value">{{adult.health_notes}}</td>
-                </tr>
-                {% endif %}
+    <h2>
+        Adult # {{ adult.id }}
+    </h2>
+    <div>
+        <h3>Personal Info</h3>
+        <table>
+            <tr>
+                <td class="field_name">Given Name:</td>
+                <td class="field_value">{{adult.given_name}}</td>
+            </tr> 
+            {% if adult.preferred_name %}
+            <tr>
+                    <td class="field_name">Preferred Name:</td>
+                    <td class="field_value">{{adult.preferred_name}}</td>
+            </tr>    
+            {% endif %}
+            <tr>
+                    <td class="field_name">Surname:</td>
+                    <td class="field_value">{{adult.surname}}</td>
+            </tr> 
+            <tr>
+                    <td class="field_name">Birth Date:</td>
+                    <td class="field_value">{{adult.birth_date}}</td>
+            </tr> 
+            <tr>
+                    <td class="field_name">Gender:</td>
+                    <td class="field_value">{{adult.gender}}</td>
+            </tr> 
+            {% if adult.sfu_id %}
+            <tr>
+                    <td class="field_name">SFU ID:</td>
+                    <td class="field_value">{{adult.sfu_id}}</td>
+            </tr>    
+            {% endif %}
+            <tr>
+                    <td class="field_name">Contact Preference:</td>
+                    <td class="field_value">{{adult.get_contact_pref_display}}</td>
+            </tr>    
+            <tr>
+                    <td class="field_name">Preferred Phone Time:</td>
+                    <td class="field_value">{{adult.get_pref_phone_time_display}}</td>
+            </tr> 
+            {% if adult.health_notes %}
+            <tr>
+                    <td class="field_name">Health Notes:</td>
+                    <td class="field_value">{{adult.health_notes}}</td>
+            </tr>
+            {% endif %}
 
-            </table>
+        </table>
+        {% if speaksLanguages.count > 0 %}
+            <h3>Languages Spoken</h3>
             <table>
                 <thead>
                     <tr>
@@ -72,33 +74,41 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% if musical_exps.count > 0 %}
-                <table>
-                    <thead>
+        {% endif %}
+        {% if musical_exps.count > 0 %}
+            <h3>Musical Experiences</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Musical Experience</th>
+                        <th class="field_name">Dominance</th>
+                        <th class="field_name">Age Learning Started</th>
+                        <th class="field_name">Age Learning Ended</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for musical_exp in musical_exps %}
                         <tr>
-                            <th class="field_name">Musical Experience</th>
-                            <th class="field_name">Dominance</th>
-                            <th class="field_name">Age Learning Started</th>
-                            <th class="field_name">Age Learning Ended</th>
+                            <td class="field_value">{{musical_exp.experience}}</td>
+                            <td class="field_value">{{musical_exp.nth_most_dominant}}</td>
+                            <td class="field_value">{{musical_exp.age_learning_started}}</td>
+                            <td class="field_value">{{musical_exp.age_learning_ended}}</td>
                         </tr>
-                    </thead>
-                    
-                    <tbody>
-                        {% for musical_exp in musical_exps %}
-                            <tr>
-                                <td class="field_value">{{musical_exp.experience}}</td>
-                                <td class="field_value">{{musical_exp.nth_most_dominant}}</td>
-                                <td class="field_value">{{musical_exp.age_learning_started}}</td>
-                                <td class="field_value">{{musical_exp.age_learning_ended}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-            <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult.id}}</a>
-            <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult.id}}</a>
-        </div>
-    {% else %}
-        <h2>Not Available</h2>
-    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if parent_in %}
+            <h3>Family</h3>
+            <a href="{% url 'family_detail' family_id=parent_in.family.id %}">View Family ({{parent_in.family.id}})</a>
+        {% endif %}
+
+        <h3>Manage</h3>
+        <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult.id}}</a><br>
+        <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult.id}}</a>
+
+        
+    </div>
 {% endblock %}

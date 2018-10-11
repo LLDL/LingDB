@@ -7,31 +7,63 @@
 
         <h3>Parent(s)</h3>
         {{ parent_forms.management_form}}
-        {% if parent_forms.errors %}
-            {{ parent_forms.errors }}
-        {% endif %}
         {% if parent_forms.non_form_errors %}
-            {{ parent_forms.non_form_errors }}
+            <div class="error">
+                {{ parent_forms.non_form_errors }}
+            </div>
         {% endif %}
-        {% for parent_form in parent_forms %}
-            {{parent_form.id}}
-            {{parent_form.parent}}           
-            {{parent_form.DELETE}}
-        {% endfor %}
 
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Adult</th>
+                    <th class="field_name">Delete?</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for parent_form in parent_forms %}
+                    {{parent_form.id}}
+                    <tr>
+                        <td class="field_value">
+                            {{parent_form.parent}}
+                        </td>
+                        <td class="field_value">
+                            {{parent_form.DELETE}}
+                        </td>  
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
         <h3>Child(ren)</h3>
         {{ child_forms.management_form}}
-        {% if child_forms.errors %}
-            {{ child_forms.errors }}
-        {% endif %}
         {% if child_forms.non_form_errors %}
-            {{ child_forms.non_form_errors }}
+            <div class="error">
+                {{ child_forms.non_form_errors }}
+            </div>
         {% endif %}
-        {% for child_form in child_forms %}
-            {{child_form.id}}
-            {{child_form.child}}   
-            {{child_form.DELETE}}        
-        {% endfor %}
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Child</th>
+                    <th class="field_value_input">Delete?</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for child_form in child_forms %}
+                    {{child_form.id}}
+                    <tr>
+                        <td class="field_value">
+                            {{child_form.child}}
+                        </td>
+                        <td class="field_value_input">
+                            {{child_form.DELETE}}
+                        </td>  
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <input type="submit" value="Save">
     </form>
