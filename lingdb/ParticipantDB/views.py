@@ -251,7 +251,10 @@ def adult_detail(request, adult_id):
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
     parent_in = IsParentIn.objects.get(parent = adult)
-    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'parent_in': parent_in})
+    family = Family.objects.get(pk=parent_in.family.id)
+    all_parents = IsParentIn.objects.filter(family = family)
+    all_children = IsChildIn.objects.filter(family = family)
+    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children})
 
 @login_required
 def delete_adult(request, adult_id):

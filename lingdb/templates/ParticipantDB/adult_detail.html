@@ -100,9 +100,20 @@
             </table>
         {% endif %}
 
-        {% if parent_in %}
+        {% if family %}
             <h3>Family</h3>
-            <a href="{% url 'family_detail' family_id=parent_in.family.id %}">View Family ({{parent_in.family.id}})</a>
+            <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
+            </a><br>
+            <h4>Spouse</h4>
+            {% for parent in parents %}
+                {% if parent.parent.id != adult.id %}
+                    {{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}<br>
+                {% endif %}
+            {% endfor %}
+            <h4>Child(ren)</h4>
+            {% for child in children %}
+                {{child.child.id}} - {{child.child.given_name}} {{child.child.surname}}<br>
+            {% endfor %}
         {% endif %}
 
         <h3>Manage</h3>
