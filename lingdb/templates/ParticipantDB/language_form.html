@@ -3,7 +3,7 @@
     <h2>New Language</h2>
     <form method="post">
         {% csrf_token %}
-        {{form}}
+        Language Name: {{form.language_name}}<br>
         <input type="submit" value="Save">
     </form>
 {% endblock %}

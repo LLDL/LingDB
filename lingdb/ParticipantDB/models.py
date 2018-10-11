@@ -91,7 +91,7 @@ class Family(models.Model):
     parents = models.ManyToManyField('Adult', through='IsParentIn')
     children = models.ManyToManyField('Child', through='IsChildIn')
     def __str__(self):
-        return '%s' % (self.id) 
+        return 'Family # %s' % (self.id) 
 
 class Experiment(models.Model):
     experiment_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Experiment Name")

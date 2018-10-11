@@ -1,16 +1,20 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
     <h2>
-        Family # {{ family.id }}
+        Family # {{family.id}}
     </h2>
     <h3>Parents</h3>
     {% for parent in parents %}
-        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">{{parent.parent.id}}, {{parent.parent.given_name}} {{parent.parent.surname}}<br></a>
+        {{parent.parent.id}}, {{parent.parent.given_name}} {{parent.parent.surname}} 
+        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">Open</a> <a href="{% url 'update_adult' adult_id=parent.parent.id %}">Edit</a><br>
     {% endfor %}
     <h3>Children</h3>
     {% for child in children %}
-        <a href="{% url 'child_detail' child_id=child.child.id %}">{{child.child.id}}, {{child.child.given_name}} {{child.child.surname}}<br></a>
+        {{child.child.id}}, {{child.child.given_name}} {{child.child.surname}} 
+        <a href="{% url 'child_detail' child_id=child.child.id %}">Update</a>
+        <a href="{% url 'update_child' child_id=child.child.id %}">Edit</a><br>
     {% endfor %}
-    <a href="{% url 'delete_family' family_id=family.id %}">Delete {{family.id}}</a>
-    <a href="{% url 'update_family' family_id=family.id %}">Update {{family.id}}</a>
+    <h3>Manage</h3>
+    <a href="{% url 'delete_family' family_id=family.id %}">Delete {{family}}</a><br>
+    <a href="{% url 'update_family' family_id=family.id %}">Update {{family}}</a>
 {% endblock %}

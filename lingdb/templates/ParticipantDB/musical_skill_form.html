@@ -3,7 +3,7 @@
     <h2>New Musical Skill</h2>
     <form method="post">
         {% csrf_token %}
-        {{form}}
+        Skill Name: {{form.skill}}<br>
         <input type="submit" value="Save">
     </form>
 {% endblock %}
