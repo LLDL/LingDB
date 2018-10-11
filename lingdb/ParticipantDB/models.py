@@ -27,7 +27,7 @@ class Person(models.Model):
     birth_date = models.DateField(verbose_name = "Birth Date")
     gender = models.CharField(max_length = 100, default='')
     def __str__(self):
-        return '%s %s' % (self.given_name, self.surname) 
+        return '%s - %s %s' % (self.id, self.given_name, self.surname) 
 
     class Meta:
         abstract = True
@@ -91,7 +91,7 @@ class Family(models.Model):
     parents = models.ManyToManyField('Adult', through='IsParentIn')
     children = models.ManyToManyField('Child', through='IsChildIn')
     def __str__(self):
-        return 'Parents: %s, Children: %s' % (self.parents, self.children) 
+        return '%s' % (self.id) 
 
 class Experiment(models.Model):
     experiment_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Experiment Name")

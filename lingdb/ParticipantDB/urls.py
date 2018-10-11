@@ -9,7 +9,7 @@ urlpatterns = [
     # family
     path('family/add/', views.add_family, name='add_family'),   
     path('family/<int:family_id>/', views.family_detail, name='family_detail'),
-    # path('family/<int:family_id>/update/', views.update_family, name='update_family'),
+    path('family/<int:family_id>/update/', views.update_family, name='update_family'),
     path('family/<int:family_id>/delete/', views.delete_family, name='delete_family'),
 
     # adult

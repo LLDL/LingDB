@@ -18,7 +18,6 @@ class ParentForm(ModelForm):
 ParentFormSet = modelformset_factory(
     IsParentIn,
     form = ParentForm,
-    fields = ('parent',),
     can_delete = True
 )
 
@@ -41,7 +40,6 @@ class ChildInFamilyForm(ModelForm):
 ChildInFamilyFormSet = modelformset_factory(
     IsChildIn,
     form = ChildInFamilyForm,
-    fields = ('child',),
     can_delete = True
 )
 

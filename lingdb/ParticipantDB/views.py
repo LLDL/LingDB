@@ -27,9 +27,14 @@ def index(request):
             try: 
                 Child.objects.get(pk=person)
                 return redirect(reverse('child_detail', kwargs={'child_id': person}))
-            #neither exist
+            #Child doesn't exist, try with family
             except Child.DoesNotExist:
-                raise Http404("No Adult or Child matches id " + person)
+                try:
+                    Family.objects.get(pk=person)
+                    return redirect(reverse('family_detail', kwargs={'family_id': person}))
+                #Family doesn't exist, invalid pk
+                except Family.DoesNotExist:
+                    raise Http404("No Adult, Child, or Family matches ID#" + person)
     else:
         # Standard Visit to Index
         return render(request, 'ParticipantDB/index.html')
@@ -88,6 +93,61 @@ def delete_family(request, family_id):
     except Family.DoesNotExist:
         raise Http404("No family with id" + family_id)
     
+@login_required
+def update_family(request, family_id):
+    try:
+        family_inst = Family.objects.get(pk=family_id)
+    except Family.DoesNotExist:
+        Http404("No Family with id " + family_id)
+
+    child_forms = ChildInFamilyInlineFormSet(
+        queryset = IsChildIn.objects.filter(family=family_inst),
+        prefix = 'children'
+    )
+    parent_forms = ParentInlineFormSet(
+        queryset = IsParentIn.objects.filter(family=family_inst),
+        prefix = 'parents'
+    )
+    if request.method == "POST":
+        family_form = FamilyForm(request.POST, instance = family_inst)
+        child_forms = ChildInFamilyInlineFormSet(request.POST, request.FILES, prefix='children')
+        parent_forms = ParentInlineFormSet(request.POST, request.FILES, prefix='parents')
+        
+        if family_form.is_valid() and parent_forms.is_valid() and child_forms.is_valid():
+            family = family_form.save(commit=False)
+            family.save()
+
+            for parent_form in parent_forms:                    
+                if parent_form.cleaned_data.get('DELETE'):
+                    toDelete = parent_form.cleaned_data.get('parent')
+                    print(toDelete)
+                    IsParentIn.objects.filter(parent=toDelete, family=family_inst).delete()
+                elif parent_form.cleaned_data.get('parent'):
+                    inst = parent_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
+            
+            for child_form in child_forms:
+                if child_form.cleaned_data.get('DELETE'):
+                    toDelete = child_form.cleaned_data.get('child')
+                    print(toDelete)
+                    IsChildIn.objects.filter(child=toDelete, family=family_inst).delete()
+                elif child_form.cleaned_data.get('child'):
+                    inst = child_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
+
+            return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
+
+    else:
+        family_form = FamilyForm(instance = family_inst)
+
+    return render(request, "ParticipantDB/family_form_update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
+
+
+
+
+
 
 # Adult Views ------------------------------------------------------------------
 
