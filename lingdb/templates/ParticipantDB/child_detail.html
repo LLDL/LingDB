@@ -106,9 +106,28 @@
 		</table>
 	{% endif %}
 
-	{% if child_in %}
+	{% if family %}
 		<h3>Family</h3>
-		<a href="{% url 'family_detail' family_id=child_in.family.id %}">View Family ({{child_in.family.id}})</a>
+		<a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
+		</a><br>
+		{% if parents.count > 0 %}
+			<h4>Parent(s)</h4>
+			{% for parent in parents %}
+				<a href="{% url 'adult_detail' adult_id=parent.parent.id %}">  
+					{{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}
+				</a><br>
+			{% endfor %}
+		{% endif %}
+		{% if children.count > 1 %}}
+			<h4>Siblings</h4>
+			{% for currChild in children %}
+				{% if currChild.child.id != child.id %}
+					<a href="{% url 'child_detail' child_id=currChild.child.id %}">  
+						{{currChild.child.id}} - {{currChild.child.given_name}} {{currChild.child.surname}}
+					</a><br>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
 	{% endif %}
 	
 	<h3>Manage</h3>

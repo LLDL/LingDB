@@ -254,6 +254,8 @@ def adult_detail(request, adult_id):
     family = Family.objects.get(pk=parent_in.family.id)
     all_parents = IsParentIn.objects.filter(family = family)
     all_children = IsChildIn.objects.filter(family = family)
+
+
     return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children})
 
 @login_required
@@ -327,7 +329,10 @@ def child_detail(request, child_id):
     child = get_object_or_404(Child, pk=child_id)
     languages_exposed_to = IsExposedTo.objects.filter(child = child)
     child_in = IsChildIn.objects.get(child = child)
-    return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'child_in': child_in})
+    family = Family.objects.get(pk=child_in.family.id)
+    all_parents = IsParentIn.objects.filter(family = family)
+    all_children = IsChildIn.objects.filter(family = family)
+    return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
 
 
 @login_required

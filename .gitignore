@@ -2,3 +2,4 @@ lingdb/lingdb/settings/settingsSensitive.py
 inst.txt
 *.pyc
 lingdb/.vscode/
+.vscode/settings.json

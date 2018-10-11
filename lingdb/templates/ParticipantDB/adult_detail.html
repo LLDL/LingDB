@@ -104,21 +104,29 @@
             <h3>Family</h3>
             <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
             </a><br>
-            <h4>Spouse</h4>
-            {% for parent in parents %}
-                {% if parent.parent.id != adult.id %}
-                    {{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}<br>
-                {% endif %}
-            {% endfor %}
-            <h4>Child(ren)</h4>
-            {% for child in children %}
-                {{child.child.id}} - {{child.child.given_name}} {{child.child.surname}}<br>
-            {% endfor %}
+            {% if parents.count > 1 %}
+                <h4>Spouse</h4>
+                {% for parent in parents %}
+                    {% if parent.parent.id != adult.id %}
+                        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">  
+                            {{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}
+                        </a><br>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if children.count > 0 %}
+                <h4>Child(ren)</h4>
+                {% for child in children %}
+                    <a href="{% url 'child_detail' child_id=child.child.id %}">  
+                        {{child.child.id}} - {{child.child.given_name}} {{child.child.surname}}
+                    </a><br>
+                {% endfor %}
+            {% endif%}
         {% endif %}
 
         <h3>Manage</h3>
-        <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult.id}}</a><br>
-        <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult.id}}</a>
+        <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult}}</a><br>
+        <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult}}</a>
 
         
     </div>
