@@ -116,31 +116,7 @@ class Experiment_Section(models.Model):
         ('inactive', 'Inactive'),
     )
     status = models.CharField(max_length = 10, choices = STATUS_CHOICES)
-    section_of = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-    
-    flex_1_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_1_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_1_max_value = models.SmallIntegerField(blank = True, null = True)
-    
-    flex_2_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_2_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_2_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_3_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_3_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_3_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_4_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_4_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_4_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_5_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_5_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_5_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_6_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_6_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_6_max_value = models.SmallIntegerField(blank = True, null = True)
+    part_of = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s: %s of %s' % (self.status, self.experiment_section_name, self.section_of) 
@@ -149,18 +125,27 @@ class Experiment_Section_Run(models.Model):
     class Meta:
         verbose_name = "Experiment Section Run"
         verbose_name_plural = "Experiment Section Runs"
-    adult_participant = models.ForeignKey(Adult, on_delete = models.CASCADE)
-    child_participant = models.ForeignKey(Child, on_delete = models.CASCADE)
+    participant = models.ForeignKey(Adult, on_delete = models.CASCADE)
     experiment_section = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     date = models.DateField()
     notes = models.TextField(max_length=1000)
-    assessor = models.TextField(max_length=100)
-    flex_1_score = models.SmallIntegerField(blank = True, null = True)
-    flex_2_score = models.SmallIntegerField(blank = True, null = True)
-    flex_3_score = models.SmallIntegerField(blank = True, null = True)
-    flex_4_score = models.SmallIntegerField(blank = True, null = True)
-    flex_5_score = models.SmallIntegerField(blank = True, null = True)
-    flex_6_score = models.SmallIntegerField(blank = True, null = True)
+    assessor = models.TextField(max_length=100) 
+    # todo: change assessor to existing DB users
+
+class Experiment_Section_Flex_Field(models.Model):
+    field_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Field Name")
+    field_of = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
+    TYPE_OPTIONS = (
+        ('num', 'Numeric'),
+        ('passfail', 'Pass/Fail'),
+        ('text', 'Text'),
+    )
+    type = models.CharField(max_length = 8, choices = TYPE_OPTIONS)
+
+class Experiment_Run_Field_Score(models.Model):
+    experiment_run = models.ForeignKey(Experiment_Section_Run, on_delete = models.CASCADE)
+    experiment_field = models.ForeignKey(Experiment_Section_Flex_Field, on_delete = models.CASCADE)
+    score = models.TextField(max_length=100) 
 
 
 class Assessment(models.Model):
