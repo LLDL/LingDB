@@ -152,30 +152,6 @@ class Assessment(models.Model):
     assessment_name = models.CharField(max_length = 100, primary_key = True)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
-    flex_1_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_1_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_1_max_value = models.SmallIntegerField(blank = True, null = True)
-    
-    flex_2_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_2_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_2_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_3_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_3_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_3_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_4_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_4_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_4_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_5_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_5_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_5_max_value = models.SmallIntegerField(blank = True, null = True)
-
-    flex_6_name = models.CharField(max_length = 100, blank = True, null = True)
-    flex_6_min_value = models.SmallIntegerField(blank = True, null = True)
-    flex_6_max_value = models.SmallIntegerField(blank = True, null = True)
-
     def __str__(self):
         return '%s (%s)' % (self.assessment_name, self.lab) 
 
@@ -184,18 +160,28 @@ class Assessment_Run(models.Model):
     class Meta:
         verbose_name = "Assessment Run"
         verbose_name_plural = "Assessment Runs"
-    adult_participant = models.ForeignKey(Adult, on_delete = models.CASCADE)
-    child_participant = models.ForeignKey(Child, on_delete = models.CASCADE)
+    participant = models.ForeignKey(Adult, on_delete = models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE)
     date = models.DateField()
     notes = models.TextField(max_length=1000)
     assessor = models.TextField(max_length=100)
-    flex_1_score = models.SmallIntegerField(blank = True, null = True)
-    flex_2_score = models.SmallIntegerField(blank = True, null = True)
-    flex_3_score = models.SmallIntegerField(blank = True, null = True)
-    flex_4_score = models.SmallIntegerField(blank = True, null = True)
-    flex_5_score = models.SmallIntegerField(blank = True, null = True)
-    flex_6_score = models.SmallIntegerField(blank = True, null = True)
+
+class Assessment_Flex_Field(models.Model):
+    field_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Field Name")
+    field_of = models.ForeignKey(Assessment, on_delete = models.CASCADE)
+    TYPE_OPTIONS = (
+        ('num', 'Numeric'),
+        ('passfail', 'Pass/Fail'),
+        ('text', 'Text'),
+    )
+    type = models.CharField(max_length = 8, choices = TYPE_OPTIONS)
+
+class Assessment_Run_Field_Score(models.Model):
+    assessment_run = models.ForeignKey(Assessment_Run, on_delete = models.CASCADE)
+    assessment_field = models.ForeignKey(Assessment_Flex_Field, on_delete = models.CASCADE)
+    score = models.TextField(max_length=100) 
+
+
 
 class IsExposedTo(models.Model):
     class Meta:
