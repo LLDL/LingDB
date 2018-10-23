@@ -1,0 +1,10 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>New Assessment</h2>
+    <form method="post">
+        {% csrf_token %}
+        Assessment Name: {{form.assessment_name}}<br>
+        Lab: {{form.lab}}<br>
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 
 # Project Imports ---------------------------------------------------------------
-from .forms import AdultForm, ChildForm, ExposureForm, ExposureInlineFormSet, FamilyForm, LanguageForm, MusicalExperienceForm, MusicalExperienceFormSet, MusicalExperienceInlineFormSet, MusicalSkillForm, SpeaksForm, SpeaksFormSet, SpeaksInlineFormSet, ParentForm, ParentFormSet, ParentInlineFormSet, ChildInFamilyForm, ChildInFamilyFormSet, ChildInFamilyInlineFormSet
+from .forms import AdultForm, ChildForm, ExposureForm, ExposureInlineFormSet, FamilyForm, LanguageForm, MusicalExperienceForm, MusicalExperienceFormSet, MusicalExperienceInlineFormSet, MusicalSkillForm, SpeaksForm, SpeaksFormSet, SpeaksInlineFormSet, ParentForm, ParentFormSet, ParentInlineFormSet, ChildInFamilyForm, ChildInFamilyFormSet, ChildInFamilyInlineFormSet, AssessmentForm
 from .models import *
 from .utils import make_unique_id
 
@@ -411,4 +411,16 @@ def add_musical_experience(request, adult_id):
     else:
         form = MusicalExperienceForm(initial = {'person': adult})
     return render(request, "ParticipantDB/musical_experience_form.html", {'form': form})
-    
+
+
+# Assessment Views --------------------------------------------------------------
+@login_required
+def add_assessment(request):
+    if request.method == "POST":
+        form = AssessmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('index'))
+    else:
+        form = AssessmentForm()
+        return render(request, "ParticipantDB/assessment_form.html", {'form': form})

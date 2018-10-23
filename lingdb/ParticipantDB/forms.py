@@ -2,7 +2,7 @@
 from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory
 
 # Project Imports ---------------------------------------------------------------
-from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience, IsParentIn, IsChildIn
+from .models import Adult, Language, Family, Child, MusicalSkill, Speaks, IsExposedTo, MusicalExperience, IsParentIn, IsChildIn, Assessment, Assessment_Run, Assessment_Flex_Field, Assessment_Run_Field_Score
 
 # Family Forms ------------------------------------------------------------------
 class FamilyForm(ModelForm):
@@ -156,3 +156,11 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     min_num = 0,
     validate_min = False,
 )
+
+# Assessment Forms
+
+class AssessmentForm(ModelForm):
+    class Meta:
+        model = Assessment
+        fields = ('assessment_name', 'lab',)
+    

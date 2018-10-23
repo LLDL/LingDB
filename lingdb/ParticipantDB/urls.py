@@ -31,6 +31,13 @@ urlpatterns = [
     # music
     path('musical_skill/add/', views.add_musical_skill, name='add_musical_skill'),   
     path('adult/<int:adult_id>/musical_experience/', views.add_musical_experience, name='add_musical_experience'),
+
+    # assessments
+    path('assessment/add', views.add_assessment, name='add_assessment'),
+    # path('assessments/<int:assessment_name', views.assessment_detail, name='assessment_detail'),
+    # path('assessments/<int:assessment_name/update/', views.update_assessment, name='update_assessment'),
+    # path('assessments/<int:assessment_name/delete/', views.delete_assessment, name='delete_assessment'),
+
 ]
 
     
