@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 
 # Project Imports ---------------------------------------------------------------
-from .forms import AdultForm, ChildForm, ExposureForm, ExposureInlineFormSet, FamilyForm, LanguageForm, MusicalExperienceForm, MusicalExperienceFormSet, MusicalExperienceInlineFormSet, MusicalSkillForm, SpeaksForm, SpeaksFormSet, SpeaksInlineFormSet, ParentForm, ParentFormSet, ParentInlineFormSet, ChildInFamilyForm, ChildInFamilyFormSet, ChildInFamilyInlineFormSet, AssessmentForm
+from .forms import *
 from .models import *
 from .utils import make_unique_id
 
@@ -416,11 +416,73 @@ def add_musical_experience(request, adult_id):
 # Assessment Views --------------------------------------------------------------
 @login_required
 def add_assessment(request):
+    assessment_field_forms = AssessmentFlexFieldInlineFormSet(
+        queryset = Assessment_Flex_Field.objects.none(),
+        prefix = 'assessment_flex_fields'
+    )
+
     if request.method == "POST":
-        form = AssessmentForm(request.POST)
-        if form.is_valid():
-            form.save()
+        assessment_form = AssessmentForm(request.POST)
+        assessment_field_forms = AssessmentFlexFieldInlineFormSet(request.POST, prefix = 'assessment_flex_fields') 
+        if assessment_form.is_valid() and assessment_field_forms.is_valid():
+            assessment = assessment_form.save(commit = False)
+            assessment.save()
+
+            for assessment_field_form in assessment_field_forms:
+                if assessment_field_form.is_valid() and assessment_field_form.cleaned_data.get('assessment_name'):
+                    inst = assessment_field_form.save(commit=False)
+                    inst.field_of = assessment
+                    inst.save()
+
             return redirect(reverse('index'))
     else:
-        form = AssessmentForm()
-        return render(request, "ParticipantDB/assessment_form.html", {'form': form})
+        assessment_form = AssessmentForm()
+    
+    return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
+
+@login_required
+def add_assessment_flex_field(request, assessment_name):
+    assessment = Assessment.objects.get(pk=assessment_name)
+    if request.method == "POST":
+        form = AssessmentFlexFieldForm(request.POST, instance = assessment)
+        if form.is_valid():
+            assessment_mod = form.save(commit=False)
+            assessment_mod.save()
+            assessmentField = Assessment_Flex_Field()
+            assessmentField.field_of = assessment
+            assessmentField.field_name = form.cleaned_data['field_name']
+            assessmentField.type = form.cleaned_data['type']
+            assessmentField.save()
+            return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment_name}))
+    else:
+        form = AssessmentFlexFieldForm(initial = {'assessment_name': assessment_name})
+    return render(request, "ParticipantDB/speaks_form.html", {'form': form})
+
+
+
+
+def add_adult(request):
+    musical_experience_forms = MusicalExperienceInlineFormSet(
+        queryset = MusicalExperience.objects.none(), 
+        prefix = 'musical_experiences'
+    )
+    if request.method == "POST":
+        adult_form = AdultForm(request.POST)
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, prefix = 'musical_experiences')
+        
+        if adult_form.is_valid() and musical_experience_forms.is_valid():   
+            adult = adult_form.save(commit=False)
+            adult.save()
+            
+            for musical_experience_form in musical_experience_forms:
+                if musical_experience_form.is_valid() and musical_experience_form.cleaned_data.get('experience'):
+                    inst = musical_experience_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()
+
+            return redirect(reverse('adult_detail', kwargs={'adult_id': adult.id}))
+        
+    else:
+        adult_form = AdultForm(initial={'id': make_unique_id()})
+
+    return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})

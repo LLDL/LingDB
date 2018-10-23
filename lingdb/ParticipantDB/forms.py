@@ -164,3 +164,27 @@ class AssessmentForm(ModelForm):
         model = Assessment
         fields = ('assessment_name', 'lab',)
     
+
+
+class AssessmentFlexFieldForm(ModelForm):
+    class Meta:
+        model = Assessment_Flex_Field
+        fields = ('field_name', 'type',)
+
+
+AssessmentFlexFieldFormSet = modelformset_factory(
+    Assessment_Flex_Field,
+    form = AssessmentFlexFieldForm,
+    can_delete = True
+)
+
+AssessmentFlexFieldInlineFormSet = inlineformset_factory(
+    Assessment,
+    Assessment_Flex_Field,
+    fields = ('field_name', 'type',),
+    formset = AssessmentFlexFieldFormSet,
+    extra = 5,
+    max_num = 5,
+    min_num = 1,
+    validate_min = True
+)
