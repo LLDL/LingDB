@@ -36,8 +36,8 @@ urlpatterns = [
     path('assessment/add/', views.add_assessment, name='add_assessment'),
     path('assessment/<str:assessment_name>/', views.assessment_detail, name='assessment_detail'),
     path('assessment/<str:assessment_name>/field/', views.add_assessment_flex_field, name='add_assessment_flex_field'),
-    # path('assessments/<int:assessment_name/update/', views.update_assessment, name='update_assessment'),
-    # path('assessments/<int:assessment_name/delete/', views.delete_assessment, name='delete_assessment'),
+    # path('assessments/<str:assessment_name>/update/', views.update_assessment, name='update_assessment'),
+    path('assessments/<str:assessment_name>/delete/', views.delete_assessment, name='delete_assessment'),
 
 ]
 

@@ -1,6 +1,36 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
     <h2>
-        {{ assessment.assessment_name }} Assessment
+        {{ assessment.assessment_name }} Assessment ({{assessment.lab}})
     </h2>
+    <div>
+        {% if assessment_fields.count > 0 %}
+            <h3>Fields</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Name</th>
+                        <th class="field_name">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment_field in assessment_fields %}
+                        <tr>
+                            <td class="field_value">{{assessment_field.field_name}}</td>
+                            <td class="field_value">{{assessment_field.type}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <h3>Manage</h3>
+
+
+            <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}">Delete {{Assessment}}</a><br>
+        {% comment %}
+            <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
+        {% endcomment %}
+
+    </div>
 {% endblock %}

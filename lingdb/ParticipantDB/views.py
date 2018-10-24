@@ -466,10 +466,10 @@ def assessment_detail(request, assessment_name):
 
     return render(request, 'ParticipantDB/assessment_detail.html', {'assessment': assessment, 'assessment_fields': assessment_fields})
 
-# @login_required
-# def delete_adult(request, adult_id):
-#     try:
-#         Adult.objects.get(pk=adult_id).delete()
-#         return redirect(reverse('index'))
-#     except Adult.DoesNotExist:
-#         raise Http404("No adult with id" + adult_id)
+@login_required
+def delete_assessment(request, assessment_name):
+    try:
+        Assessment.objects.get(pk=assessment_name).delete()
+        return redirect(reverse('index'))
+    except Assessment.DoesNotExist:
+        raise Http404("No assessment named " + assessment_name)
