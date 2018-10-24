@@ -181,10 +181,11 @@ AssessmentFlexFieldFormSet = modelformset_factory(
 AssessmentFlexFieldInlineFormSet = inlineformset_factory(
     Assessment,
     Assessment_Flex_Field,
-    fields = ('field_name', 'type',),
+    fields = ('field_name', 'type'),
     formset = AssessmentFlexFieldFormSet,
     extra = 5,
     max_num = 5,
     min_num = 1,
     validate_min = True
 )
+

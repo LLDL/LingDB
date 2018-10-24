@@ -473,3 +473,38 @@ def delete_assessment(request, assessment_name):
         return redirect(reverse('index'))
     except Assessment.DoesNotExist:
         raise Http404("No assessment named " + assessment_name)
+
+@login_required
+def update_assessment(request, assessment_name):
+    try:
+        assessment_inst = Assessment.objects.get(pk=assessment_name)
+    except Assessment.DoesNotExist:
+        raise Http404("No assessment named " + assessment_name)
+
+    assessment_field_forms = AssessmentFlexFieldInlineFormSet(
+        prefix = 'assessment_flex_fields',
+        queryset = Assessment_Flex_Field.objects.filter(field_of=assessment_inst),
+    )
+
+    if request.method == "POST":
+        assessment_form = AssessmentForm(request.POST, request.FILES, instance=assessment_inst)
+        assessment_field_forms = AssessmentFlexFieldInlineFormSet(  request.POST, request.FILES, prefix = 'assessment_flex_fields')
+        if assessment_form.is_valid():
+            assessment = assessment_form.save(commit=False)
+            assessment.save()
+            if assessment_field_forms.is_valid():
+                for field_form in assessment_field_forms:
+                    if field_form.cleaned_data.get('DELETE'):
+                        toDelete = field_form.cleaned_data.get('field_name')
+                        Assessment_Flex_Field.objects.filter(field_of=assessment_inst, field_name=toDelete).delete()
+                        # delete
+                    elif field_form.cleaned_data.get('field_name'):
+                        inst = field_form.save(commit=False)
+                        inst.field_of = assessment
+                        inst.save()
+
+                return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment_name}))
+    else:
+        assessment_form = AssessmentForm(instance = assessment_inst)
+    
+    return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment': assessment_form, 'assessment_field_formset': assessment_field_forms})

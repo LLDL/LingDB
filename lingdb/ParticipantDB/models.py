@@ -135,6 +135,7 @@ class Experiment_Section_Run(models.Model):
     # todo: change assessor to existing DB users
 
 class Experiment_Section_Flex_Field(models.Model):
+    # id = models.IntegerField(primary_key = True, verbose_name = "ID")
     field_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Field Name")
     field_of = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     TYPE_OPTIONS = (
@@ -169,6 +170,7 @@ class Assessment_Run(models.Model):
     assessor = models.TextField(max_length=100)
 
 class Assessment_Flex_Field(models.Model):
+    
     field_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Field Name")
     field_of = models.ForeignKey(Assessment, on_delete = models.CASCADE)
     TYPE_OPTIONS = (

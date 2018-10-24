@@ -1,0 +1,43 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>Update {{assessment_name}} Assessment</h2>
+    <form  action="{% url 'update_assessment' assessment_name %}"  method="post">
+        {% csrf_token %}
+        <h3>Basic Info</h3>
+        <table id="new_assessment_table">
+            {{assessment_form.as_table}}
+        </table>
+
+        <h3>Fields</h3>
+        {{ assessment_field_formset.management_form }}
+        {% if assessment_field_formset.errors %}
+            {{ assessment_field_formset.errors }}
+        {% endif %}
+        {% if assessment_field_formset.non_form_errors %}
+            {{ assessment_field_formset.non_form_errors }}
+        {% endif %}
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Name</th>
+                    <th class="field_name">Type</th>
+                    <th class="field name">Delete?</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for assessment_field_form in assessment_field_formset %}
+                    {{assessment_field_form.id}}
+                    <tr>            
+                        <td class="field_value">{{assessment_field_form.field_name}}</td>  
+                        <td class="field_value">{{assessment_field_form.type}}</td>   
+                        <td class="field_value_input">{{assessment_field_form.DELETE}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}
