@@ -459,3 +459,17 @@ def add_assessment_flex_field(request, assessment_name):
     return render(request, "ParticipantDB/speaks_form.html", {'form': form})
 
 
+@login_required
+def assessment_detail(request, assessment_name):
+    assessment = get_object_or_404(Assessment, pk=assessment_name)
+    assessment_fields = Assessment_Flex_Field.objects.filter(field_of = assessment)
+
+    return render(request, 'ParticipantDB/assessment_detail.html', {'assessment': assessment, 'assessment_fields': assessment_fields})
+
+# @login_required
+# def delete_adult(request, adult_id):
+#     try:
+#         Adult.objects.get(pk=adult_id).delete()
+#         return redirect(reverse('index'))
+#     except Adult.DoesNotExist:
+#         raise Http404("No adult with id" + adult_id)

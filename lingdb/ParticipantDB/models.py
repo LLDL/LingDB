@@ -177,6 +177,8 @@ class Assessment_Flex_Field(models.Model):
         ('text', 'Text'),
     )
     type = models.CharField(max_length = 8, choices = TYPE_OPTIONS)
+    def __str__(self):
+        return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
 
 class Assessment_Run_Field_Score(models.Model):
     assessment_run = models.ForeignKey(Assessment_Run, on_delete = models.CASCADE)
