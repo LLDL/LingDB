@@ -3,3 +3,4 @@ inst.txt
 *.pyc
 lingdb/.vscode/
 .vscode/settings.json
+lingdb/dasd

@@ -416,14 +416,14 @@ def add_musical_experience(request, adult_id):
 # Assessment Views --------------------------------------------------------------
 @login_required
 def add_assessment(request):
-    assessment_field_forms = AssessmentFlexFieldInlineFormSet(
-        queryset = Assessment_Flex_Field.objects.none(),
-        prefix = 'assessment_flex_fields'
+    assessment_field_forms = AssessmentFieldInlineFormSet(
+        queryset = Assessment_Field.objects.none(),
+        prefix = 'assessment_fields'
     )
 
     if request.method == "POST":
         assessment_form = AssessmentForm(request.POST)
-        assessment_field_forms = AssessmentFlexFieldInlineFormSet(request.POST, prefix = 'assessment_flex_fields') 
+        assessment_field_forms = AssessmentFieldInlineFormSet(request.POST, prefix = 'assessment_fields') 
         if assessment_form.is_valid() and assessment_field_forms.is_valid():
             assessment = assessment_form.save(commit=False)
             assessment.save()
@@ -441,28 +441,28 @@ def add_assessment(request):
     return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
 
 @login_required
-def add_assessment_flex_field(request, assessment_name):
+def add_assessment_field(request, assessment_name):
     assessment = Assessment.objects.get(pk=assessment_name)
     if request.method == "POST":
-        form = AssessmentFlexFieldForm(request.POST, instance = assessment)
+        form = AssessmentFieldForm(request.POST, instance = assessment)
         if form.is_valid():
             assessment_mod = form.save(commit=False)
             assessment_mod.save()
-            assessmentField = Assessment_Flex_Field()
+            assessmentField = Assessment_Field()
             assessmentField.field_of = assessment
             assessmentField.field_name = form.cleaned_data['field_name']
             assessmentField.type = form.cleaned_data['type']
             assessmentField.save()
             return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment_name}))
     else:
-        form = AssessmentFlexFieldForm(initial = {'assessment_name': assessment_name})
+        form = AssessmenFieldForm(initial = {'assessment_name': assessment_name})
     return render(request, "ParticipantDB/speaks_form.html", {'form': form})
 
 
 @login_required
 def assessment_detail(request, assessment_name):
     assessment = get_object_or_404(Assessment, pk=assessment_name)
-    assessment_fields = Assessment_Flex_Field.objects.filter(field_of = assessment)
+    assessment_fields = Assessment_Field.objects.filter(field_of = assessment)
 
     return render(request, 'ParticipantDB/assessment_detail.html', {'assessment': assessment, 'assessment_fields': assessment_fields})
 
@@ -481,14 +481,14 @@ def update_assessment(request, assessment_name):
     except Assessment.DoesNotExist:
         raise Http404("No assessment named " + assessment_name)
 
-    assessment_field_forms = AssessmentFlexFieldInlineFormSet(
-        prefix = 'assessment_flex_fields',
-        queryset = Assessment_Flex_Field.objects.filter(field_of=assessment_inst),
+    assessment_field_forms = AssessmentFieldInlineFormSet(
+        prefix = 'assessment_fields',
+        queryset = Assessment_Field.objects.filter(field_of=assessment_inst),
     )
 
     if request.method == "POST":
         assessment_form = AssessmentForm(request.POST, request.FILES, instance=assessment_inst)
-        assessment_field_forms = AssessmentFlexFieldInlineFormSet(  request.POST, request.FILES, prefix = 'assessment_flex_fields')
+        assessment_field_forms = AssessmentFieldInlineFormSet(request.POST, request.FILES, prefix = 'assessment_fields')
         if assessment_form.is_valid():
             assessment = assessment_form.save(commit=False)
             assessment.save()
@@ -496,7 +496,7 @@ def update_assessment(request, assessment_name):
                 for field_form in assessment_field_forms:
                     if field_form.cleaned_data.get('DELETE'):
                         toDelete = field_form.cleaned_data.get('field_name')
-                        Assessment_Flex_Field.objects.filter(field_of=assessment_inst, field_name=toDelete).delete()
+                        Assessment_Field.objects.filter(field_of=assessment_inst, field_name=toDelete).delete()
                         # delete
                     elif field_form.cleaned_data.get('field_name'):
                         inst = field_form.save(commit=False)
@@ -507,4 +507,4 @@ def update_assessment(request, assessment_name):
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
     
-    return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment': assessment_form, 'assessment_field_formset': assessment_field_forms})
+    return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})

@@ -134,9 +134,8 @@ class Experiment_Section_Run(models.Model):
     assessor = models.TextField(max_length=100) 
     # todo: change assessor to existing DB users
 
-class Experiment_Section_Flex_Field(models.Model):
-    # id = models.IntegerField(primary_key = True, verbose_name = "ID")
-    field_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Field Name")
+class Experiment_Section_Field(models.Model):
+    field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
     field_of = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     TYPE_OPTIONS = (
         ('num', 'Numeric'),
@@ -147,7 +146,7 @@ class Experiment_Section_Flex_Field(models.Model):
 
 class Experiment_Run_Field_Score(models.Model):
     experiment_run = models.ForeignKey(Experiment_Section_Run, on_delete = models.CASCADE)
-    experiment_field = models.ForeignKey(Experiment_Section_Flex_Field, on_delete = models.CASCADE)
+    experiment_field = models.ForeignKey(Experiment_Section_Field, on_delete = models.CASCADE)
     score = models.TextField(max_length=100) 
 
 
@@ -169,9 +168,8 @@ class Assessment_Run(models.Model):
     notes = models.TextField(max_length=1000)
     assessor = models.TextField(max_length=100)
 
-class Assessment_Flex_Field(models.Model):
-    
-    field_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Field Name")
+class Assessment_Field(models.Model):
+    field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
     field_of = models.ForeignKey(Assessment, on_delete = models.CASCADE)
     TYPE_OPTIONS = (
         ('num', 'Numeric'),
@@ -184,7 +182,7 @@ class Assessment_Flex_Field(models.Model):
 
 class Assessment_Run_Field_Score(models.Model):
     assessment_run = models.ForeignKey(Assessment_Run, on_delete = models.CASCADE)
-    assessment_field = models.ForeignKey(Assessment_Flex_Field, on_delete = models.CASCADE)
+    assessment_field = models.ForeignKey(Assessment_Field, on_delete = models.CASCADE)
     score = models.TextField(max_length=100) 
 
 
