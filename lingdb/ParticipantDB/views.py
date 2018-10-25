@@ -502,8 +502,11 @@ def update_assessment(request, assessment_name):
                         inst = field_form.save(commit=False)
                         inst.field_of = assessment
                         inst.save()
+            if(assessment_form.cleaned_data.get('assessment_name') != assessment_name):
+                print('{} != {}'.format(assessment_form.cleaned_data.get('assessment_name'), assessment_name))
+                Assessment.objects.get(pk=assessment_name).delete()
 
-                return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment_name}))
+            return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
     

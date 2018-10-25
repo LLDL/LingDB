@@ -184,7 +184,7 @@ AssessmentFieldInlineFormSet = inlineformset_factory(
     fields = ('field_name', 'type'),
     formset = AssessmentFieldFormSet,
     extra = 5,
-    max_num = 5,
+    max_num = 10,
     min_num = 1,
     validate_min = True
 )
