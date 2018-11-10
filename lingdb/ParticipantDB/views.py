@@ -511,3 +511,41 @@ def update_assessment(request, assessment_name):
         assessment_form = AssessmentForm(instance = assessment_inst)
     
     return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
+
+
+# Assessment Run Views --------------------------------
+@login_required 
+def add_assessment_run(request, assessment_name):
+    assessment = Assessment.objects.get(pk=assessment_name)
+    assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
+        queryset = Assessment_Run_Field_Score.objects.none(),
+        prefix = 'assessment_field_scores'
+    )
+    if request.method == "POST":
+        assessment_run_form = AssessmentRunForm(request.POST)
+        assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
+            request.POST,
+            prefix = 'assessment_field_scores'
+        )
+        if assessment_run_form.is_valid() and assessment_run_field_score_forms.is_valid():
+            pass
+    
+    else:
+        assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
+    
+    return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms})
+
+@login_required
+def choose_assessment(request):
+    if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)):
+        assessment_name = request.GET.get('chooseAssessmentField', None)
+        try:
+            Assessment.objects.get(pk=assessment_name)
+            return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name}))
+        except Assessment.DoesNotExist:
+            raise Http404("No Assessment with name " + assessment_name)
+    else:
+        assessments = Assessment.objects.all()
+    return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
+    
+

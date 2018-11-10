@@ -189,3 +189,32 @@ AssessmentFieldInlineFormSet = inlineformset_factory(
     validate_min = True
 )
 
+# Assessment Run Forms
+
+class ChooseAssessmentForm(ModelForm):
+    class Meta: 
+        model = Assessment
+        fields = ('assessment_name',)
+
+class AssessmentRunForm(ModelForm):
+    class Meta: 
+        model = Assessment_Run
+        fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor',)
+    
+class AssessmentRunFieldScoreForm(ModelForm):
+    class Meta:
+        model = Assessment_Run_Field_Score
+        fields = ('score',)
+        
+AssessmentRunFieldScoreFormSet = modelformset_factory(
+    Assessment_Run_Field_Score,
+    form = AssessmentRunFieldScoreForm,
+    can_delete = True
+)
+AssessmentRunFieldScoreInlineFormSet = inlineformset_factory(
+    Assessment_Run,
+    Assessment_Run_Field_Score,
+    fields = ('score',),
+    formset = AssessmentRunFieldScoreFormSet,
+    extra = 5,
+)

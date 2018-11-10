@@ -1,0 +1,16 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <div>
+        <form id="chooseAssessment" action="." method="get" accept-charset="utf-8">
+            <!-- <input id="chooseAssessmentField" name="chooseAssessmentField" type="text"> -->
+            
+            <select id="chooseAssessmentField" name="chooseAssessmentField">
+                {% for assessment in assessments %}
+                    <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" id="chooseAssessmentButton" value="Add Run">
+        </form>
+    </div>
+        
+{% endblock  %}
