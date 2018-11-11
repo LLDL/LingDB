@@ -54,8 +54,9 @@
         <h3>Manage</h3>
 
 
+            <a href="{% url 'delete_assessment_run' assessment_run_id=assessment_run.id %}">Delete {{Assessment}}</a><br>
+            
         {% comment %}
-            <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}">Delete {{Assessment}}</a><br>
             <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
         {% endcomment %}
 

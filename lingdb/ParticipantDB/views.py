@@ -504,3 +504,11 @@ def assessment_run_detail(request, assessment_run_id):
     assessment_run = get_object_or_404(Assessment_Run, pk=assessment_run_id)
     assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_run)
     return render(request, 'ParticipantDB/assessment_run_detail.html', {'assessment_run': assessment_run, 'assessment_run_fields': assessment_run_fields})
+
+@login_required
+def delete_assessment_run(request, assessment_run_id):
+    try:
+        Assessment_Run.objects.get(pk=assessment_run_id).delete()
+        return redirect(reverse('index'))
+    except Assessment_Run.DoesNotExist:
+        raise Http404("No assessment_run with id " + assessment_run_id)

@@ -39,6 +39,8 @@ urlpatterns = [
     path('assessment_run/add/', views.choose_assessment, name='choose_assessment'),
     path('assessment_run/add/<str:assessment_name>/<str:participant_type>/', views.add_assessment_run, name='add_assessment_run'),
     path('assessment_run/<int:assessment_run_id>/', views.assessment_run_detail, name='assessment_run_detail'),
+    path('assessment_run/<str:assessment_run_id>/delete/', views.delete_assessment_run, name='delete_assessment_run'),
+
 ]
 
     
