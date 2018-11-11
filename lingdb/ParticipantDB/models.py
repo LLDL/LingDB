@@ -162,13 +162,16 @@ class Assessment_Run(models.Model):
     class Meta:
         verbose_name = "Assessment Run"
         verbose_name_plural = "Assessment Runs"
-    participantAdult = models.ForeignKey(Adult, on_delete = models.CASCADE, null=True)
-    participantChild = models.ForeignKey(Child, on_delete = models.CASCADE, null=True)
+    participantAdult = models.ForeignKey(Adult, on_delete = models.CASCADE, null=True, blank=True)
+    participantChild = models.ForeignKey(Child, on_delete = models.CASCADE, null=True, blank=True)
     assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE)
 
     date = models.DateField()
     notes = models.TextField(max_length=1000)
     assessor = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return '%s took %s' % (self.participantAdult or self.participantChild, self.assessment)
 
 class Assessment_Field(models.Model):
     field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
@@ -187,6 +190,8 @@ class Assessment_Run_Field_Score(models.Model):
     assessment_field = models.ForeignKey(Assessment_Field, on_delete = models.CASCADE)
     score = models.CharField(max_length=100) 
 
+    def __str__(self):
+        return 'Score of [%s] for field [%s] of run [%s]' % (self.score, self.assessment_field, self.assessment_run)
 
 
 class IsExposedTo(models.Model):

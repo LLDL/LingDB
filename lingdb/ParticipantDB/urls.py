@@ -26,21 +26,19 @@ urlpatterns = [
     
     # languages
     path('language/add/', views.add_language, name='add_language'),   
-    path('adult/<int:adult_id>/speaks/', views.add_speaks, name='add_speaks'),
 
     # music
     path('musical_skill/add/', views.add_musical_skill, name='add_musical_skill'),   
-    path('adult/<int:adult_id>/musical_experience/', views.add_musical_experience, name='add_musical_experience'),
 
     # assessments
     path('assessment/add/', views.add_assessment, name='add_assessment'),
     path('assessment/<str:assessment_name>/', views.assessment_detail, name='assessment_detail'),
     path('assessment/<str:assessment_name>/update/', views.update_assessment, name='update_assessment'),
     path('assessment/<str:assessment_name>/delete/', views.delete_assessment, name='delete_assessment'),
-    # path('assessment/<str:assessment_name>/field/', views.add_assessment_flex_field, name='add_assessment_flex_field'),
 
     path('assessment_run/add/', views.choose_assessment, name='choose_assessment'),
     path('assessment_run/add/<str:assessment_name>/<str:participant_type>/', views.add_assessment_run, name='add_assessment_run'),
+    path('assessment_run/<int:assessment_run_id>/', views.assessment_run_detail, name='assessment_run_detail'),
 ]
 
     

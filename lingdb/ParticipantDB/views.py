@@ -144,11 +144,6 @@ def update_family(request, family_id):
 
     return render(request, "ParticipantDB/family_form_update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
 
-
-
-
-
-
 # Adult Views ------------------------------------------------------------------
 
 @login_required
@@ -250,13 +245,14 @@ def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
-    parent_in = IsParentIn.objects.get(parent = adult)
-    family = Family.objects.get(pk=parent_in.family.id)
-    all_parents = IsParentIn.objects.filter(family = family)
-    all_children = IsChildIn.objects.filter(family = family)
-
-
-    return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children})
+    try:
+        parent_in = IsParentIn.objects.get(parent = adult)
+        family = Family.objects.get(pk=parent_in.family.id)
+        all_parents = IsParentIn.objects.filter(family = family)
+        all_children = IsChildIn.objects.filter(family = family)
+        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children})
+    except IsParentIn.DoesNotExist:
+         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})   
 
 @login_required
 def delete_adult(request, adult_id):
@@ -357,28 +353,6 @@ def add_language(request):
         form = LanguageForm()
         return render(request, "ParticipantDB/language_form.html", {'form': form})
 
-@login_required
-def add_speaks(request, adult_id):
-    adult = Adult.objects.get(pk=adult_id)
-    if request.method == "POST":
-        form = SpeaksForm(request.POST, instance = adult)
-        if form.is_valid():
-            adult_mod = form.save(commit=False)
-            adult_mod.save()
-            speaksLanguage = Speaks()
-            speaksLanguage.person = adult
-            speaksLanguage.lang = form.cleaned_data['lang']
-            speaksLanguage.is_native = form.cleaned_data['is_native']
-            speaksLanguage.nth_most_dominant = form.cleaned_data['nth_most_dominant']
-            speaksLanguage.age_learning_started = form.cleaned_data['age_learning_started']
-            speaksLanguage.age_learning_ended = form.cleaned_data['age_learning_ended']
-            speaksLanguage.save()
-            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
-            # return redirect('/adult/' + str(adult_id))
-    else:
-        form = SpeaksForm(initial = {'person': adult})
-    return render(request, "ParticipantDB/speaks_form.html", {'form': form})
-
 # Musical Views ------------------------------------------------------------------
 @login_required
 def add_musical_skill(request):
@@ -390,28 +364,6 @@ def add_musical_skill(request):
     else:
         form = MusicalSkillForm()
         return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
-  
-@login_required
-def add_musical_experience(request, adult_id):
-    adult = Adult.objects.get(pk=adult_id)
-    if request.method == "POST":
-        form = MusicalExperienceForm(request.POST, instance = adult)
-        if form.is_valid():
-            adult_mod = form.save(commit=False)
-            adult_mod.save()
-            hasMusicalExperience = MusicalExperience()
-            hasMusicalExperience.person = adult
-            hasMusicalExperience.experience = form.cleaned_data['experience']
-            hasMusicalExperience.nth_most_dominant = form.cleaned_data['nth_most_dominant']
-            hasMusicalExperience.age_learning_started = form.cleaned_data['age_learning_started']
-            hasMusicalExperience.age_learning_ended = form.cleaned_data['age_learning_ended']
-            hasMusicalExperience.save()
-            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
-            # return redirect('/adult/' + str(adult_id))
-    else:
-        form = MusicalExperienceForm(initial = {'person': adult})
-    return render(request, "ParticipantDB/musical_experience_form.html", {'form': form})
-
 
 # Assessment Views --------------------------------------------------------------
 @login_required
@@ -439,24 +391,6 @@ def add_assessment(request):
         assessment_form = AssessmentForm()
     
     return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
-
-@login_required
-def add_assessment_field(request, assessment_name):
-    assessment = Assessment.objects.get(pk=assessment_name)
-    if request.method == "POST":
-        form = AssessmentFieldForm(request.POST, instance = assessment)
-        if form.is_valid():
-            assessment_mod = form.save(commit=False)
-            assessment_mod.save()
-            assessmentField = Assessment_Field()
-            assessmentField.field_of = assessment
-            assessmentField.field_name = form.cleaned_data['field_name']
-            assessmentField.type = form.cleaned_data['type']
-            assessmentField.save()
-            return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment_name}))
-    else:
-        form = AssessmenFieldForm(initial = {'assessment_name': assessment_name})
-    return render(request, "ParticipantDB/speaks_form.html", {'form': form})
 
 
 @login_required
@@ -514,6 +448,21 @@ def update_assessment(request, assessment_name):
 
 
 # Assessment Run Views --------------------------------
+@login_required
+def choose_assessment(request):
+    if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)) and (request.GET.get('chooseParticipantField', None)):
+        assessment_name = request.GET.get('chooseAssessmentField', None)
+        participant_type = request.GET.get('chooseParticipantField', None)
+        try:
+            Assessment.objects.get(pk=assessment_name)
+            return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
+        except Assessment.DoesNotExist:
+            raise Http404("No Assessment with name " + assessment_name)
+    else:
+        assessments = Assessment.objects.all()
+    return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
+
+
 @login_required 
 def add_assessment_run(request, assessment_name, participant_type):
     assessment = Assessment.objects.get(pk=assessment_name)
@@ -529,7 +478,19 @@ def add_assessment_run(request, assessment_name, participant_type):
             prefix = 'assessment_field_scores'
         )
         if assessment_run_form.is_valid() and assessment_run_field_score_forms.is_valid():
-            pass
+            assessment_run = assessment_run_form.save(commit=False)
+            assessment_run.assessment = assessment
+            print(assessment_run.participantAdult)
+            print(assessment_run.participantChild)
+            assessment_run.save()
+            for field, form in zip(assessment_fields, assessment_run_field_score_forms):
+                inst = form.save(commit=False)
+                inst.assessment_run = assessment_run
+                inst.assessment_field = field
+                inst.save()
+            
+            return redirect(reverse('assessment_run_detail', kwargs={'assessment_run_id': assessment_run.id}))
+            
     
     else:
         assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
@@ -537,18 +498,9 @@ def add_assessment_run(request, assessment_name, participant_type):
     field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
     return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
 
-@login_required
-def choose_assessment(request):
-    if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)) and (request.GET.get('chooseParticipantField', None)):
-        assessment_name = request.GET.get('chooseAssessmentField', None)
-        participant_type = request.GET.get('chooseParticipantField', None)
-        try:
-            Assessment.objects.get(pk=assessment_name)
-            return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
-        except Assessment.DoesNotExist:
-            raise Http404("No Assessment with name " + assessment_name)
-    else:
-        assessments = Assessment.objects.all()
-    return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
-    
 
+@login_required
+def assessment_run_detail(request, assessment_run_id):
+    assessment_run = get_object_or_404(Assessment_Run, pk=assessment_run_id)
+    assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_run)
+    return render(request, 'ParticipantDB/assessment_run_detail.html', {'assessment_run': assessment_run, 'assessment_run_fields': assessment_run_fields})

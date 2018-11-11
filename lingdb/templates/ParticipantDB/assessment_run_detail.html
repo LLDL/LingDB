@@ -1,0 +1,63 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>
+        Assessment Run # {{assessment_run.id}}
+    </h2>
+    <div>
+        <h3>Basic Info</h3>
+        <table>
+                <tr>
+                    <td class="field_name">Assessment:</td>
+                    <td class="field_value">{{assessment_run.assessment}}</td>
+                </tr> 
+                <tr>
+                    <td class="field_name">Participant:</td>
+                    {% if assessment_run.participantAdult %}
+                        <td class="field_value">{{assessment_run.participantAdult}}</td>
+                    {% else %}
+                        <td class="field_value">{{assessment_run.participantChild}}</td>
+                    {% endif %}
+                </tr> 
+                <tr>
+                        <td class="field_name">Assessor:</td>
+                        <td class="field_value">{{assessment_run.assessor}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Date:</td>
+                        <td class="field_value">{{assessment_run.date}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Notes:</td>
+                        <td class="field_value">{{assessment_run.notes}}</td>
+                </tr>
+        </table>
+        {% if assessment_run_fields.count > 0 %}
+            <h3>Results</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Field</th>
+                        <th class="field_name">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment_run_field in assessment_run_fields %}
+                        <tr>
+                            <td class="field_value">{{assessment_run_field.assessment_field.field_name}}</td>
+                            <td class="field_value">{{assessment_run_field.score}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <h3>Manage</h3>
+
+
+        {% comment %}
+            <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}">Delete {{Assessment}}</a><br>
+            <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
+        {% endcomment %}
+
+    </div>
+{% endblock %}
