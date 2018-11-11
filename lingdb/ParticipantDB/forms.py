@@ -200,6 +200,9 @@ class AssessmentRunForm(ModelForm):
     class Meta: 
         model = Assessment_Run
         fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor',)
+        widgets = {
+            'date': DateInput(attrs={'type': 'date'})
+        }
     
 class AssessmentRunFieldScoreForm(ModelForm):
     class Meta:

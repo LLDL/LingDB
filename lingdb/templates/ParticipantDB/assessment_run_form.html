@@ -1,12 +1,38 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    <h2>New {{assessment_name}} Run</h2>
+    <h2>New {{assessment_name}} Run ({{participant_type|title}})</h2>
     <form method="post">
         {% csrf_token %}
         <h3>Basic Info</h3>
         <table id="new_assessment_run_table">
-            {{assessment_run_form.as_table}}
+            <!-- {{assessment_run_form.as_table}} -->
             <!-- {{assessment_run_form.participantAdult}} -->
+            <tbody>
+                
+                <tr>
+                    <td class="field_name">Participant</td>       
+                    <td>
+                        {% if participant_type == "adult" %}
+                            {{assessment_run_form.participantAdult}}
+                        {% else %}
+                            {{assessment_run_form.participantChild}}
+                        {% endif %}
+                    </td>
+                
+                </tr>
+                <tr>            
+                    <td class="field_name">Run Date</td>  
+                    <td class="field_value">{{assessment_run_form.date}}</td> 
+                </tr>
+                <tr>            
+                        <td class="field_name">Assessor</td>  
+                        <td class="field_value">{{assessment_run_form.assessor}}</td> 
+                    </tr>
+                <tr>            
+                    <td class="field_name">Notes</td>  
+                    <td class="field_value">{{assessment_run_form.notes}}</td> 
+                </tr>
+            </tbody>
         </table>
 
         <h3>Fields</h3>
@@ -21,17 +47,20 @@
             <thead>
                 <tr>
                     <th class="field_name">Field</th>
+                    <th class="field_name">Type</th>
                     <th class="field_name">Score</th>
                 </tr>
                 
             </thead>
             <tbody>
-                {% for assessment_run_field_score in assessment_run_field_score_formset %}
+                {% for field, score in field_score_pairs %}
                     <tr>            
-                        <td class="field_value">{{assessment_run_field_score.assessment_field}}</td>  
-                        <td class="field_value">{{assessment_run_field_score.score}}</td> 
+                        <td class="field_value">{{field.field_name}}</td>
+                        <td class="field_value">{{field.type|upper}}</td>
+                        <td class="field_value">{{score.score}}</td>
                     </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
 

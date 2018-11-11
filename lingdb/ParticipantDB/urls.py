@@ -40,7 +40,7 @@ urlpatterns = [
     # path('assessment/<str:assessment_name>/field/', views.add_assessment_flex_field, name='add_assessment_flex_field'),
 
     path('assessment_run/add/', views.choose_assessment, name='choose_assessment'),
-    path('assessment_run/add/<str:assessment_name>/', views.add_assessment_run, name='add_assessment_run'),
+    path('assessment_run/add/<str:assessment_name>/<str:participant_type>/', views.add_assessment_run, name='add_assessment_run'),
 ]
 
     

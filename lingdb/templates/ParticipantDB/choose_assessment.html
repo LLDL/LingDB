@@ -3,13 +3,34 @@
     <div>
         <form id="chooseAssessment" action="." method="get" accept-charset="utf-8">
             <!-- <input id="chooseAssessmentField" name="chooseAssessmentField" type="text"> -->
-            
-            <select id="chooseAssessmentField" name="chooseAssessmentField">
-                {% for assessment in assessments %}
-                    <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" id="chooseAssessmentButton" value="Add Run">
+            <table>
+                <tr>
+                    <td>
+                        Assessment
+                    </td>
+                    <td>
+                        <select id="chooseAssessmentField" name="chooseAssessmentField">
+                            {% for assessment in assessments %}
+                            <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Participant Type
+                    </td>
+                    <td>
+                        <select id="chooseParticipantField" name="chooseParticipantField">
+                            <option value="adult">Adult</option>
+                            <option value="child">Child</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+                
+                
+                <input type="submit" id="chooseAssessmentButton" value="Add Run">
         </form>
     </div>
         

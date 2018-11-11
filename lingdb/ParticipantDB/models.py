@@ -168,7 +168,7 @@ class Assessment_Run(models.Model):
 
     date = models.DateField()
     notes = models.TextField(max_length=1000)
-    assessor = models.TextField(max_length=100)
+    assessor = models.CharField(max_length=100)
 
 class Assessment_Field(models.Model):
     field_name = models.CharField(max_length = 100, verbose_name = "Field Name")

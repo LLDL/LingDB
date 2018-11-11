@@ -515,12 +515,13 @@ def update_assessment(request, assessment_name):
 
 # Assessment Run Views --------------------------------
 @login_required 
-def add_assessment_run(request, assessment_name):
+def add_assessment_run(request, assessment_name, participant_type):
     assessment = Assessment.objects.get(pk=assessment_name)
     assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
         queryset = Assessment_Run_Field_Score.objects.none(),
         prefix = 'assessment_field_scores'
     )
+    assessment_fields = Assessment_Field.objects.filter(field_of=assessment)
     if request.method == "POST":
         assessment_run_form = AssessmentRunForm(request.POST)
         assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
@@ -533,15 +534,17 @@ def add_assessment_run(request, assessment_name):
     else:
         assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
     
-    return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms})
+    field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
+    return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
 
 @login_required
 def choose_assessment(request):
-    if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)):
+    if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)) and (request.GET.get('chooseParticipantField', None)):
         assessment_name = request.GET.get('chooseAssessmentField', None)
+        participant_type = request.GET.get('chooseParticipantField', None)
         try:
             Assessment.objects.get(pk=assessment_name)
-            return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name}))
+            return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
         except Assessment.DoesNotExist:
             raise Http404("No Assessment with name " + assessment_name)
     else:
