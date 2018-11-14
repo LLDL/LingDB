@@ -245,14 +245,27 @@ def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
+    assessment_participations = Assessment_Run.objects.filter(participantAdult = adult)
+
+    # all_scores = {}
+    # for assessment_participation in assessment_participations:
+    #     assessment_scores = {}
+    #     score_query = Assessment_Run_Field_Score.objects.filter(assessment_run =  assessment_participation)
+    #     for score in score_query:
+    #         assessment_scores[score.assessment_field] = score
+    #     all_scores[assessment_participation] = assessment_scores
+    all_scores = {}
+    for assessment_participation in assessment_participations:
+        assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
+        all_scores[assessment_participation.id] = assessment_run_fields
     try:
         parent_in = IsParentIn.objects.get(parent = adult)
         family = Family.objects.get(pk=parent_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children})
+        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores})
     except IsParentIn.DoesNotExist:
-         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps})   
+         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores})   
 
 @login_required
 def delete_adult(request, adult_id):
