@@ -4,17 +4,16 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-
+from itertools import chain
 # Project Imports ---------------------------------------------------------------
 from .forms import *
 from .models import *
-from .utils import make_unique_id
+from .utils import make_unique_id, get_user_groups
 
 # Index Views -------------------------------------------------------------------
 
 @login_required
 def index(request):
-    
     if (request.method == 'GET') and (request.GET.get('searchPeopleField', None)):
         # Open by ID Handling
         person = request.GET.get('searchPeopleField', None)
@@ -472,7 +471,23 @@ def choose_assessment(request):
         except Assessment.DoesNotExist:
             raise Http404("No Assessment with name " + assessment_name)
     else:
-        assessments = Assessment.objects.all()
+        user_groups = get_user_groups(request)  
+        assessments = []
+        assessments_all = Assessment.objects.all()
+        for assessment in assessments_all:
+            print(assessment)
+            for user_group in user_groups:
+                print(user_group)
+                if assessment.lab.group.id == user_group:
+                    assessments.append(assessment)
+            
+        # if user_groups.count() > 1:
+        #     for user_group in user_groups:
+        #         print("Group: ", (user_group))
+        #         assessment_querysets.append(Assessment.objects.filter(lab__group__id = user_group))
+        #     assessments = list(chain([assessment_queryset for assessment_queryset in assessment_querysets]))
+        # else:
+        #     assessments = assessment_querysets
     return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
 
 

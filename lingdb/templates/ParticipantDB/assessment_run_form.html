@@ -53,7 +53,7 @@
                 {% for field, score in field_score_pairs %}
                     <tr>            
                         <td class="field_value">{{field.field_name}}</td>
-                        <td class="field_value">{{field.type|upper}}</td>
+                        <td class="field_value">{{field.type}}</td>
                         <td class="field_value">{{score.score}}</td>
                     </tr>
                 {% endfor %}

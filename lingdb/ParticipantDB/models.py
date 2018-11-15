@@ -1,8 +1,12 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
+from django.contrib.auth.models import Group
 
 class Language(models.Model):
+    class Meta:
+        verbose_name = "Language"
+        verbose_name_plural = "Languages"
     language_name = models.CharField(max_length = 100, primary_key = True)
     def __str__(self):
         return '%s' % (self.language_name) 
@@ -17,7 +21,11 @@ class MusicalSkill(models.Model):
         return '%s' % (self.skill) 
 
 class Lab(models.Model):
+    class Meta:
+        verbose_name = "Lab"
+        verbose_name_plural = "Labs"
     lab_name = models.CharField(max_length = 100, primary_key = True)
+    group = models.ForeignKey(Group, null= True, blank= True, on_delete = models.SET_NULL)
     def __str__(self):
         return '%s' % (self.lab_name) 
 
@@ -35,6 +43,9 @@ class Person(models.Model):
         abstract = True
     
 class Adult(Person):
+    class Meta:
+        verbose_name = "Adult"
+        verbose_name_plural = "Adults"
     sfu_id = models.IntegerField(blank = True, null = True, verbose_name = "SFU ID")
     address = models.CharField(max_length=200)
     years_of_education = models.SmallIntegerField(
@@ -72,6 +83,7 @@ class Adult(Person):
 
 class Child(Person):
     class Meta:
+        verbose_name = "Child"
         verbose_name_plural = "Children"
     gestation_length_weeks = models.SmallIntegerField(blank = True, null = True, verbose_name = "Gestation Length (Weeks)")
     was_full_term = models.BooleanField(blank = True, null = True, verbose_name = "Was Full Term?")
@@ -96,6 +108,9 @@ class Family(models.Model):
         return 'Family # %s' % (self.id) 
 
 class Experiment(models.Model):
+    class Meta:
+        verbose_name = "Experiment"
+        verbose_name_plural = "Experiments"
     experiment_name = models.CharField(max_length = 100, primary_key = True, verbose_name = "Experiment Name")
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     STATUS_CHOICES = (
@@ -135,14 +150,17 @@ class Experiment_Section_Run(models.Model):
     assessor = models.TextField(max_length=100) 
 
 class Experiment_Section_Field(models.Model):
+    class Meta:
+        verbose_name = "Experiment Section Run"
+        verbose_name_plural = "Experiment Section Runs"
     field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
     field_of = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     TYPE_OPTIONS = (
-        ('num', 'Numeric'),
-        ('passfail', 'Pass/Fail'),
-        ('text', 'Text'),
+        ('Numeric', 'Numeric'),
+        ('Pass/Fail', 'Pass/Fail'),
+        ('Text', 'Text'),
     )
-    type = models.CharField(max_length = 8, choices = TYPE_OPTIONS)
+    type = models.CharField(max_length = 9, choices = TYPE_OPTIONS)
     def __str__(self):
         return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
 
@@ -177,18 +195,24 @@ class Assessment_Run(models.Model):
         return '%s took %s' % (self.participantAdult or self.participantChild, self.assessment)
 
 class Assessment_Field(models.Model):
+    class Meta:
+        verbose_name = "Assessment Field"
+        verbose_name_plural = "Assessment Fields"
     field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
     field_of = models.ForeignKey(Assessment, on_delete = models.CASCADE)
     TYPE_OPTIONS = (
-        ('num', 'Numeric'),
-        ('passfail', 'Pass/Fail'),
-        ('text', 'Text'),
+        ('Numeric', 'Numeric'),
+        ('Pass/Fail', 'Pass/Fail'),
+        ('Text', 'Text'),
     )
-    type = models.CharField(max_length = 8, choices = TYPE_OPTIONS)
+    type = models.CharField(max_length = 9, choices = TYPE_OPTIONS)
     def __str__(self):
         return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
 
 class Assessment_Run_Field_Score(models.Model):
+    class Meta:
+        verbose_name = "Assessment Run Field Score"
+        verbose_name_plural = "Assessment Run Field Scores"
     assessment_run = models.ForeignKey(Assessment_Run, on_delete = models.CASCADE)
     assessment_field = models.ForeignKey(Assessment_Field, on_delete = models.CASCADE)
     score = models.CharField(max_length=100) 
@@ -199,7 +223,8 @@ class Assessment_Run_Field_Score(models.Model):
 
 class IsExposedTo(models.Model):
     class Meta:
-        verbose_name_plural = "Is Exposed To"
+        verbose_name = "Is Exposed To"
+        verbose_name_plural = "Are Exposed To"
     child = models.ForeignKey(Child, on_delete = models.CASCADE, default = None)
     lang = models.ForeignKey(Language, on_delete = models.CASCADE, default = None)
     percentage_exposure = models.SmallIntegerField(

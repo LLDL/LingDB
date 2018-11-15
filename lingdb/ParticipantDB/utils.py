@@ -1,5 +1,6 @@
 from random import randint
 from .models import Adult, Child, Family
+import django.contrib.auth.models
 
 def make_unique_id():
     potentially_random = randint(100000, 999999)
@@ -14,3 +15,8 @@ def make_unique_id():
         else:
             isUnique = True
     return str(potentially_random)
+
+def get_user_groups(request):
+    groups = request.user.groups.values_list('id', flat=True)
+    print(groups)
+    return groups
