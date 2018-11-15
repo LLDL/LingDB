@@ -20,3 +20,20 @@ def get_user_groups(request):
     groups = request.user.groups.values_list('id', flat=True)
     print(groups)
     return groups
+
+def get_user_queryset(request, full_queryset):
+    groups = request.user.groups.values_list('id', flat=True)
+    user_queryset = []
+    for obj in full_queryset:
+        for group in groups:
+            if obj.lab.group.id == group:
+                user_queryset.append(obj)
+                break
+    return user_queryset
+
+def check_user_groups(request, obj):
+    groups = request.user.groups.values_list('id', flat=True)
+    for group in groups:
+        if obj.lab.group.id == group:
+            return True
+    return False

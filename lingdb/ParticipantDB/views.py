@@ -1,14 +1,14 @@
 # Django Imports ----------------------------------------------------------------
 from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from itertools import chain
 # Project Imports ---------------------------------------------------------------
 from .forms import *
 from .models import *
-from .utils import make_unique_id, get_user_groups
+from .utils import make_unique_id, get_user_groups, get_user_queryset, check_user_groups
 
 # Index Views -------------------------------------------------------------------
 
@@ -471,29 +471,18 @@ def choose_assessment(request):
         except Assessment.DoesNotExist:
             raise Http404("No Assessment with name " + assessment_name)
     else:
-        user_groups = get_user_groups(request)  
-        assessments = []
         assessments_all = Assessment.objects.all()
-        for assessment in assessments_all:
-            print(assessment)
-            for user_group in user_groups:
-                print(user_group)
-                if assessment.lab.group.id == user_group:
-                    assessments.append(assessment)
-            
-        # if user_groups.count() > 1:
-        #     for user_group in user_groups:
-        #         print("Group: ", (user_group))
-        #         assessment_querysets.append(Assessment.objects.filter(lab__group__id = user_group))
-        #     assessments = list(chain([assessment_queryset for assessment_queryset in assessment_querysets]))
-        # else:
-        #     assessments = assessment_querysets
+        assessments = get_user_queryset(request, assessments_all)
+        
     return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
 
 
 @login_required 
 def add_assessment_run(request, assessment_name, participant_type):
     assessment = Assessment.objects.get(pk=assessment_name)
+    user_can_add = check_user_groups(request, assessment)
+    if not user_can_add:
+        return HttpResponseForbidden()
     assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
         queryset = Assessment_Run_Field_Score.objects.none(),
         prefix = 'assessment_field_scores'
