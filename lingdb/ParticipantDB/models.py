@@ -127,12 +127,12 @@ class Experiment_Section_Run(models.Model):
     class Meta:
         verbose_name = "Experiment Section Run"
         verbose_name_plural = "Experiment Section Runs"
-    participant = models.ForeignKey(Adult, on_delete = models.CASCADE)
+    participantAdult = models.ForeignKey(Adult, on_delete = models.CASCADE, null=True, blank=True)
+    participantChild = models.ForeignKey(Child, on_delete = models.CASCADE, null=True, blank=True)
     experiment_section = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     date = models.DateField()
     notes = models.TextField(max_length=1000)
     assessor = models.TextField(max_length=100) 
-    # todo: change assessor to existing DB users
 
 class Experiment_Section_Field(models.Model):
     field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
@@ -143,12 +143,15 @@ class Experiment_Section_Field(models.Model):
         ('text', 'Text'),
     )
     type = models.CharField(max_length = 8, choices = TYPE_OPTIONS)
+    def __str__(self):
+        return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
 
-class Experiment_Run_Field_Score(models.Model):
+class Experiment_Section_Run_Field_Score(models.Model):
     experiment_run = models.ForeignKey(Experiment_Section_Run, on_delete = models.CASCADE)
     experiment_field = models.ForeignKey(Experiment_Section_Field, on_delete = models.CASCADE)
     score = models.TextField(max_length=100) 
-
+    def __str__(self):
+        return 'Score of [%s] for field [%s] of run [%s]' % (self.score, self.experiment_field, self.experiment_run)
 
 class Assessment(models.Model):
     assessment_name = models.CharField(max_length = 100, primary_key = True)
