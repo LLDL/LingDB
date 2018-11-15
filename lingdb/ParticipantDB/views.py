@@ -8,7 +8,7 @@ from itertools import chain
 # Project Imports ---------------------------------------------------------------
 from .forms import *
 from .models import *
-from .utils import make_unique_id, get_user_groups, get_user_queryset, check_user_groups
+from .utils import make_unique_id, get_user_groups, get_user_authed_list, check_user_groups
 
 # Index Views -------------------------------------------------------------------
 
@@ -244,15 +244,9 @@ def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
-    assessment_participations = Assessment_Run.objects.filter(participantAdult = adult)
+    all_assessment_participations = Assessment_Run.objects.filter(participantAdult = adult)
+    assessment_participations = get_user_authed_list(request, all_assessment_participations, "assessment")
 
-    # all_scores = {}
-    # for assessment_participation in assessment_participations:
-    #     assessment_scores = {}
-    #     score_query = Assessment_Run_Field_Score.objects.filter(assessment_run =  assessment_participation)
-    #     for score in score_query:
-    #         assessment_scores[score.assessment_field] = score
-    #     all_scores[assessment_participation] = assessment_scores
     all_scores = {}
     for assessment_participation in assessment_participations:
         assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)

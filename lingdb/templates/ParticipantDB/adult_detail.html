@@ -99,7 +99,7 @@
                 </tbody>
             </table>
         {% endif %}
-        {% if assessment_participations.count > 0 %}
+        {% if assessment_participations|length > 0 %}
             <h3>Assessments</h3>
             <table>
                 <thead>
@@ -123,14 +123,13 @@
                             <td class="field_value">{{participation.date}}</td>
                             <td class="field_value">{{participation.notes}}</td>                          
                             <td class="field_value">
-                            {% for part in all_scores.items %}
-                                    {% comment %} {{part}} {% endcomment %}
-                                {% if part.0 == participation.id %}
-                                    {% for field in part.1%}
-                                        {{field.assessment_field.field_name}}: {{field.score}}<br>
-                                    {% endfor %}
-                                {% endif %}
-                            {%endfor%}
+                                {% for part in all_scores.items %}
+                                    {% if part.0 == participation.id %}
+                                        {% for field in part.1%}
+                                            {{field.assessment_field.field_name}}: {{field.score}}<br>
+                                        {% endfor %}
+                                    {% endif %}
+                                {%endfor%}
                             </td>   
                             <td class="field_value"><a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}">Delete</a></td>    
                         </tr>
@@ -138,7 +137,6 @@
                 </tbody>
             </table>
         {% endif %}
-
         {% if family %}
             <h3>Family</h3>
             <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})

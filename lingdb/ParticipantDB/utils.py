@@ -1,6 +1,7 @@
 from random import randint
 from .models import Adult, Child, Family
 import django.contrib.auth.models
+from operator import attrgetter
 
 def make_unique_id():
     potentially_random = randint(100000, 999999)
@@ -21,15 +22,28 @@ def get_user_groups(request):
     print(groups)
     return groups
 
-def get_user_queryset(request, full_queryset):
+def get_user_authed_list(request, full_queryset, sub_of=""):
+    print(full_queryset)
     groups = request.user.groups.values_list('id', flat=True)
-    user_queryset = []
-    for obj in full_queryset:
-        for group in groups:
-            if obj.lab.group.id == group:
-                user_queryset.append(obj)
-                break
-    return user_queryset
+    user_authed_list = []
+    if sub_of:
+        sub_of += ".lab.group.id"
+        for obj in full_queryset:
+            print(obj)
+            parent = attrgetter(sub_of)(obj)
+            print("Assessment Group: ", parent)
+            for group in groups:
+                print("Curr Group: ", group)
+                if parent == group:
+                    user_authed_list.append(obj)
+    else:
+        for obj in full_queryset:
+            for group in groups:
+                if obj.lab.group.id == group:
+                    user_authed_list.append(obj)
+                    break
+    print(user_authed_list)
+    return user_authed_list
 
 def check_user_groups(request, obj):
     groups = request.user.groups.values_list('id', flat=True)
