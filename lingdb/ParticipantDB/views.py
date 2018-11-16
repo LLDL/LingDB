@@ -466,7 +466,7 @@ def choose_assessment(request):
             raise Http404("No Assessment with name " + assessment_name)
     else:
         assessments_all = Assessment.objects.all()
-        assessments = get_user_queryset(request, assessments_all)
+        assessments = get_user_authed_list(request, assessments_all)
         
     return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
 
