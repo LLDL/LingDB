@@ -1,0 +1,40 @@
+{% extends "ParticipantDB/header.html" %}
+{% block content %}
+    <h2>New Experiment</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Basic Info</h3>
+        <table id="new_assessment_Table">
+            {{experiment_form.as_table}}
+        </table>
+
+        <h3>Fields</h3>
+        {{ experiment_section_formset.management_form }}
+        {% if experiment_section_formset.errors %}
+            {{ experiment_section_formset.errors }}
+        {% endif %}
+        {% if experiment_section_formset.non_form_errors %}
+            {{ experiment_section_formset.non_form_errors }}
+        {% endif %}
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Name</th>
+                    <th class="field_name">Type</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for experiment_section_form in experiment_section_formset %}
+                    <tr>            
+                        <td class="field_value">{{experiment_section_form.experiment_section_name}}</td>  
+                        <td class="field_value">{{experiment_section_form.status}}</td> 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

@@ -41,6 +41,9 @@ urlpatterns = [
     path('assessment_run/<int:assessment_run_id>/', views.assessment_run_detail, name='assessment_run_detail'),
     path('assessment_run/<str:assessment_run_id>/delete/', views.delete_assessment_run, name='delete_assessment_run'),
 
+    # experiments
+    path('experiment/add/', views.add_experiment, name='add_experiment'),
+
 ]
 
     

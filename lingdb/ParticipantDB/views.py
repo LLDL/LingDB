@@ -523,3 +523,31 @@ def delete_assessment_run(request, assessment_run_id):
         return redirect(reverse('index'))
     except Assessment_Run.DoesNotExist:
         raise Http404("No assessment_run with id " + assessment_run_id)
+
+
+# Experiment Views --------------------------------------------------------------
+@login_required
+def add_experiment(request):
+    experiment_section_forms = ExperimentSectionInlineFormSet(
+        queryset = Experiment_Section.objects.none(),
+        prefix = 'experiment_section'
+    )
+
+    if request.method == "POST":
+        experiment_form = ExperimentForm(request.POST)
+        experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_section') 
+        if experiment_form.is_valid() and experiment_section_forms.is_valid():
+            experiment = experiment_form.save(commit=False)
+            experiment.save()
+
+            for experiment_section_form in experiment_section_forms:
+                if experiment_section_form.is_valid() and experiment_section_form.cleaned_data.get('experiment_section_name'):
+                    inst = experiment_section_form.save(commit=False)
+                    inst.part_of = experiment
+                    inst.save()
+
+            return redirect(reverse('index'))
+    else:
+        experiment_form = ExperimentForm()
+    
+    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
