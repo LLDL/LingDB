@@ -4,11 +4,11 @@
     <form method="post">
         {% csrf_token %}
         <h3>Basic Info</h3>
-        <table id="new_assessment_Table">
+        <table id="new_assessment_table">
             {{experiment_form.as_table}}
         </table>
 
-        <h3>Fields</h3>
+        <h3>Sections</h3>
         {{ experiment_section_formset.management_form }}
         {% if experiment_section_formset.errors %}
             {{ experiment_section_formset.errors }}
@@ -20,7 +20,7 @@
             <thead>
                 <tr>
                     <th class="field_name">Name</th>
-                    <th class="field_name">Type</th>
+                    <th class="field_name">Section Status</th>
                 </tr>
                 
             </thead>
@@ -28,7 +28,7 @@
                 {% for experiment_section_form in experiment_section_formset %}
                     <tr>            
                         <td class="field_value">{{experiment_section_form.experiment_section_name}}</td>  
-                        <td class="field_value">{{experiment_section_form.status}}</td> 
+                        <td class="field_value">{{experiment_section_form.section_status}}</td> 
                     </tr>
                 {% endfor %}
             </tbody>

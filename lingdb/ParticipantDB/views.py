@@ -530,24 +530,33 @@ def delete_assessment_run(request, assessment_run_id):
 def add_experiment(request):
     experiment_section_forms = ExperimentSectionInlineFormSet(
         queryset = Experiment_Section.objects.none(),
-        prefix = 'experiment_section'
+        prefix = 'experiment_sections'
     )
-
+    
     if request.method == "POST":
         experiment_form = ExperimentForm(request.POST)
-        experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_section') 
+        experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
         if experiment_form.is_valid() and experiment_section_forms.is_valid():
             experiment = experiment_form.save(commit=False)
             experiment.save()
 
             for experiment_section_form in experiment_section_forms:
                 if experiment_section_form.is_valid() and experiment_section_form.cleaned_data.get('experiment_section_name'):
+                    print("getting data")
                     inst = experiment_section_form.save(commit=False)
-                    inst.part_of = experiment
+                    inst.experiment = experiment
                     inst.save()
-
             return redirect(reverse('index'))
     else:
         experiment_form = ExperimentForm()
     
     return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
+
+def add_experiment_section_fields(request, experiment_name):
+    experiment = Experiment.objects.get(pk=experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(part_of=experiment)
+    experiment_section_field_forms = ExperimentSectionFieldInlineFormSet(
+        queryset = Experiment_Section_Field.objects.none(),
+        prefix = 'experiment_section_fields'
+    )
+    pass
