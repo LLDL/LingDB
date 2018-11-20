@@ -542,7 +542,6 @@ def add_experiment(request):
 
             for experiment_section_form in experiment_section_forms:
                 if experiment_section_form.is_valid() and experiment_section_form.cleaned_data.get('experiment_section_name'):
-                    print("getting data")
                     inst = experiment_section_form.save(commit=False)
                     inst.experiment = experiment
                     inst.save()
@@ -564,12 +563,17 @@ def add_experiment_section_fields(request, experiment_name):
             prefix = section_prefix
         )
         fields[section.id] = section_fields
-    # all_scores = {}
-    # for assessment_participation in assessment_participations:
-    #     assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
-    #     all_scores[assessment_participation.id] = assessment_run_fields
-
-
     if request.method == "POST":
-        pass
+        for section in experiment_sections:
+            section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+            section_fields = ExperimentSectionFieldInlineFormSet(
+                request.POST,
+                prefix = section_prefix,
+            )
+            for section_field in section_fields:
+                if section_field.is_valid() and section_field.cleaned_data.get('field_name'):
+                    inst = section_field.save(commit = False)
+                    inst.field_of = section
+                    inst.save()
+        return redirect(reverse('index'))           
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})

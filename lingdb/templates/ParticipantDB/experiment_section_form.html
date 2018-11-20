@@ -4,7 +4,6 @@
     <form method="post">
         {% csrf_token %}
         
-        {{ fields.management_form }}
         {% if fields.errors %}
             {{ fields.errors }}
         {% endif %}
@@ -22,8 +21,9 @@
                 </thead>
                 <tbody>
                 {% for field in fields.items %}
-                    
                     {% if field.0 == experiment_section.id %}
+                    
+                        {{field.1.management_form}}
                         {% for item in field.1 %}
                         <tr>
                             <td class="field_value">{{item.field_name}}</td>
