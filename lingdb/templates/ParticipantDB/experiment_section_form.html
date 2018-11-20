@@ -1,6 +1,6 @@
 {% extends "ParticipantDB/header.html" %}
 {% block content %}
-    <h2>Experiment Section Fields</h2>
+    <h2>Fields for Sections of Experiment {{experiment.experiment_name}}</h2>
     <form method="post">
         {% csrf_token %}
         
@@ -12,16 +12,28 @@
             {{ fields.non_form_errors }}
         {% endif %}
         {% for experiment_section in experiment_sections %}
-            <h3>{{experiment_section.experiment_section_name}}</h3>
-            {% for field in fields.items %}
-                {% if field.0 == experiment_section.id %}
-                    {% for item in field.1 %}
-                        FieldName: {{item.field_name}}
-                        FieldType: {{item.type}}
-                        <br>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+            <h3>Section: {{experiment_section.experiment_section_name}}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Field Name</th>
+                        <th class="field_name">Field Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for field in fields.items %}
+                    
+                    {% if field.0 == experiment_section.id %}
+                        {% for item in field.1 %}
+                        <tr>
+                            <td class="field_value">{{item.field_name}}</td>
+                            <td class="field_value">{{item.type}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>    
         {% endfor %}
 
 
