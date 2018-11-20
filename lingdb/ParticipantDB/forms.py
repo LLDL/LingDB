@@ -210,32 +210,32 @@ ExperimentSectionInlineFormSet = inlineformset_factory(
     fields = ('experiment_section_name', 'section_status'),
     formset = ExperimentSectionFormSet,
     extra = 5,
-    max_num = 10,
+    max_num = 5,
     min_num = 1,
     validate_min = True
 ) 
 
-# class ExperimentSectionFieldForm(ModelForm):
-#     class Meta:
-#         model = Experiment_Section_Field
-#         fields = ('field_name', 'type', )
+class ExperimentSectionFieldForm(ModelForm):
+    class Meta:
+        model = Experiment_Section_Field
+        fields = ('field_name', 'type', )
 
-# ExperimentSectionFieldFormSet = modelformset_factory(
-#     Experiment_Section_Field,
-#     form = ExperimentSectionFieldForm,
-#     can_delete = True
-# )
+ExperimentSectionFieldFormSet = modelformset_factory(
+    Experiment_Section_Field,
+    form = ExperimentSectionFieldForm,
+    can_delete = True
+)
 
-# ExperimentSectionFieldInlineFormSet = inlineformset_factory(
-#     Experiment_Section,
-#     Experiment_Section_Field,
-#     fields = ('field_name', 'type'),
-#     formset = ExperimentSectionFieldFormSet,
-#     extra = 5,
-#     max_num = 10,
-#     # min_num = 1,
-#     # validate_min = True
-# ) 
+ExperimentSectionFieldInlineFormSet = inlineformset_factory(
+    Experiment_Section,
+    Experiment_Section_Field,
+    fields = ('field_name', 'type'),
+    formset = ExperimentSectionFieldFormSet,
+    extra = 5,
+    max_num = 10,
+    min_num = 1,
+    validate_min = True
+) 
 
 
 # Assessment Run Forms

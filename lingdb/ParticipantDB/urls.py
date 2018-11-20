@@ -43,7 +43,7 @@ urlpatterns = [
 
     # experiments
     path('experiment/add/', views.add_experiment, name='add_experiment'),
-    path('experiment/sections/add/', views.add_experiment_section_fields, name='add_experiment_section_fields'),
+    path('experiment/<str:experiment_name>/sections/add/', views.add_experiment_section_fields, name='add_experiment_section_fields'),
 ]
 
     

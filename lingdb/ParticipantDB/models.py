@@ -146,20 +146,20 @@ class Experiment_Section(models.Model):
 #     notes = models.TextField(max_length=1000)
 #     assessor = models.TextField(max_length=100) 
 
-# class Experiment_Section_Field(models.Model):
-#     class Meta:
-#         verbose_name = "Experiment Section Field"
-#         verbose_name_plural = "Experiment Section Fields"
-#     field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
-#     field_of = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
-#     TYPE_OPTIONS = (
-#         ('Numeric', 'Numeric'),
-#         ('Pass/Fail', 'Pass/Fail'),
-#         ('Text', 'Text'),
-#     )
-#     type = models.CharField(max_length = 9, choices = TYPE_OPTIONS)
-#     def __str__(self):
-#         return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
+class Experiment_Section_Field(models.Model):
+    class Meta:
+        verbose_name = "Experiment Section Field"
+        verbose_name_plural = "Experiment Section Fields"
+    field_name = models.CharField(max_length = 100, verbose_name = "Field Name")
+    field_of = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
+    TYPE_OPTIONS = (
+        ('Numeric', 'Numeric'),
+        ('Pass/Fail', 'Pass/Fail'),
+        ('Text', 'Text'),
+    )
+    type = models.CharField(max_length = 9, choices = TYPE_OPTIONS)
+    def __str__(self):
+        return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
 
 # class Experiment_Section_Run_Field_Score(models.Model):
 #     experiment_run = models.ForeignKey(Experiment_Section_Run, on_delete = models.CASCADE)

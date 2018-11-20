@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from itertools import chain
+import operator
 # Project Imports ---------------------------------------------------------------
 from .forms import *
 from .models import *
@@ -532,7 +533,6 @@ def add_experiment(request):
         queryset = Experiment_Section.objects.none(),
         prefix = 'experiment_sections'
     )
-    
     if request.method == "POST":
         experiment_form = ExperimentForm(request.POST)
         experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
@@ -546,17 +546,30 @@ def add_experiment(request):
                     inst = experiment_section_form.save(commit=False)
                     inst.experiment = experiment
                     inst.save()
-            return redirect(reverse('index'))
+            return redirect(reverse('add_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))
     else:
         experiment_form = ExperimentForm()
     
     return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
 
+@login_required
 def add_experiment_section_fields(request, experiment_name):
     experiment = Experiment.objects.get(pk=experiment_name)
-    experiment_sections = Experiment_Section.objects.filter(part_of=experiment)
-    experiment_section_field_forms = ExperimentSectionFieldInlineFormSet(
-        queryset = Experiment_Section_Field.objects.none(),
-        prefix = 'experiment_section_fields'
-    )
-    pass
+    experiment_sections = sorted(Experiment_Section.objects.filter(experiment=experiment), key=operator.attrgetter('experiment_section_name'))
+    fields = {}
+    for section in experiment_sections:
+        section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+        section_fields = ExperimentSectionFieldInlineFormSet(
+            queryset = Experiment_Section_Field.objects.none(),
+            prefix = section_prefix
+        )
+        fields[section.id] = section_fields
+    # all_scores = {}
+    # for assessment_participation in assessment_participations:
+    #     assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
+    #     all_scores[assessment_participation.id] = assessment_run_fields
+
+
+    if request.method == "POST":
+        pass
+    return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
