@@ -116,7 +116,7 @@ td{
     overflow-y: auto;
     padding: 20px;
     /* background-color: #A6192E; */
-    border-right: solid #707070 1px;
+    border-right: solid #595959 1px;
 }
 
 #main-box{
@@ -136,7 +136,7 @@ td{
     padding: .25em 1em .25em 1em;
     font-size: 1.25em;
     font-weight: bold;
-    color: #707070;
+    color: #595959;
     text-decoration: none;
 }
 .sidebar-link:hover{
@@ -148,7 +148,7 @@ td{
     line-height: 1.5;
     font-size: 1.1em;
     padding: .25em 1em 0 0;
-    color: #707070;
+    color: #595959;
 }
 
 

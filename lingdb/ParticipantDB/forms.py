@@ -1,5 +1,5 @@
 # Django Imports ----------------------------------------------------------------
-from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory
+from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError
 
 # Project Imports ---------------------------------------------------------------
 from .models import *
@@ -82,6 +82,12 @@ class LanguageForm(ModelForm):
     class Meta:
         model = Language
         fields = ('language_name',)
+    def clean(self):
+        if Language.objects.filter(language_name=self.cleaned_data['language_name'].capitalize()).count() != 0:
+            raise ValidationError('This language already exists.')
+    def clean_language_name(self):
+        return self.cleaned_data['language_name'].capitalize()
+        
 
 class SpeaksForm(ModelForm):
     class Meta:
@@ -135,7 +141,12 @@ class MusicalSkillForm(ModelForm):
     class Meta:
         model = MusicalSkill
         fields = ('skill',)
-
+    def clean(self):
+        if MusicalSkill.objects.filter(skill=self.cleaned_data['skill'].capitalize()).count() != 0:
+            raise ValidationError('This skill already exists.')
+    def clean_skill(self):
+        return self.cleaned_data['skill'].capitalize()
+        
 class MusicalExperienceForm(ModelForm):
     class Meta:
         model = MusicalExperience

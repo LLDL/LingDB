@@ -1,9 +1,0 @@
-{% extends "ParticipantDB/sidebar.html" %}
-{% block content %}
-    <h2>Musical Experiences {{form.initial.person.given_name}} {{form.initial.person.surname}} (#{{form.initial.person.id}}) Has</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{form}}
-        <input type="submit" value="Save">
-    </form>
-{% endblock %}

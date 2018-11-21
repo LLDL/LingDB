@@ -3,6 +3,20 @@
     <h2>New Language</h2>
     <form method="post">
         {% csrf_token %}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="error">
+                        {{error}}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="error">
+                    {{error}}
+                </div>
+            {% endfor %}
+        {% endif %}
         Language Name: {{form.language_name}}<br>
         <input type="submit" value="Save">
     </form>

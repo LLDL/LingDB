@@ -3,6 +3,20 @@
     <h2>New Musical Skill</h2>
     <form method="post">
         {% csrf_token %}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="error">
+                        {{error}}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="error">
+                    {{error}}
+                </div>
+            {% endfor %}
+        {% endif %}
         Skill Name: {{form.skill}}<br>
         <input type="submit" value="Save">
     </form>

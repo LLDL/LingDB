@@ -358,7 +358,7 @@ def add_language(request):
             return redirect(reverse('index'))
     else:
         form = LanguageForm()
-        return render(request, "ParticipantDB/language_form.html", {'form': form})
+    return render(request, "ParticipantDB/language_form.html", {'form': form})
 
 # Musical Views ------------------------------------------------------------------
 @login_required
@@ -370,7 +370,7 @@ def add_musical_skill(request):
             return redirect(reverse('index'))
     else:
         form = MusicalSkillForm()
-        return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
+    return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
 
 # Assessment Views --------------------------------------------------------------
 @login_required
