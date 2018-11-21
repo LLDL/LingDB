@@ -2,53 +2,60 @@
 <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
 
 <div id="sidebar" class="column">
-    <a href="/">SFU Department of Linguistics</a><br>
-    <span class="sidebar-category">People</span><br>
+    <a href="/">SFU Department<br>of Linguistics<br>Participant Database</a><br>
+
+    <form type="get" id="searchPeople" action="/search" accept-charset="utf-8">
+        <input class="searchField" id="search_box" name="search_box" type="text" placeholder="⌕ Search">
+        <input type="submit" id="search_submit" value="Open" hidden>
+    </form>
+
+
+    <span class="sidebar-category">People</span>
     <a href="/query" class="sidebar-link">
         <span>? Query</span>
-    </a><br>
+    </a>
     <a href="/adult/add" class="sidebar-link">
         <span>+ Adult</span>
-    </a><br>
+    </a>
     <a href="/child/add" class="sidebar-link">
         <span>+ Child</span>
-    </a><br>
+    </a>
     <a href="/family/add" class="sidebar-link">
         <span>+ Family</span>
-    </a><br>
+    </a>
 
 
-    <span class="sidebar-category">Participation</span><br>
+    <span class="sidebar-category">Participation</span>
     <a href="/experiment_section_run/add" class="sidebar-link">
         <span>+ Experiment Run</span>
-    </a><br>
+    </a>
     <a href="/assessment_run/add" class="sidebar-link">
         <span>+ Assessment Run</span>
-    </a><br>
+    </a>
 
-    <span class="sidebar-category">Lab</span><br>
+    <span class="sidebar-category">Lab</span>
     <a href="/experiment/add" class="sidebar-link">
         <span>+ Experiment</span>
-    </a><br>
+    </a>
     <a href="/assessment/add" class="sidebar-link">
         <span>+ Assessment</span>
-    </a><br>
+    </a>
 
-    <span class="sidebar-category">Skills</span><br>
+    <span class="sidebar-category">Skills</span>
     <a href="/musical_skill/add" class="sidebar-link">
         <span>+ Music</span>
-    </a><br>
+    </a>
     <a href="/language/add" class="sidebar-link">
         <span>+ Language</span>
-    </a><br><br>
+    </a>
 
-    <span class="sidebar-category">Account</span><br>
+    <span class="sidebar-category">Account</span>
     <a href="/accounts/logout/?logout=Log+Out" class="sidebar-link">
         <span>← Logout</span>
-    </a><br>
+    </a>
     <a href="/admin" class="sidebar-link">
         <span>→ Admin</span>
-    </a><br>
+    </a>
 </div>
 <div id="main-box" class="column">
 {% block content %}

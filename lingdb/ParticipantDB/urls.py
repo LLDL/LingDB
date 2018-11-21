@@ -3,6 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # search
+    path('search/', views.search, name='search'),
     # index
     path('', views.index, name='index'),
 

@@ -1,44 +1,4 @@
 {% extends "ParticipantDB/sidebar.html" %}
 {% block content %}
-    <div id="index-container" class="index-container">
-        <!-- <div class="index-cat"></div> -->
-        <div id="index-people" class="index-cat">
-            
-            <h2 class="index-header">People</h2>
-            <ul class="index-ul">
-                <li class="search-li"><a href="/people/query">Query ?</a></li>
-                <li class="search-li"> 
-                    <form id="searchPeople" action="." method="get" accept-charset="utf-8">
-                        <input class="searchField" id="searchPeopleField" name="searchPeopleField" type="text" placeholder="Open By ID">
-                        <input type="submit" id="SearchPeopleButton" value="Open" hidden>
-                    </form>
-                </li>
-                <li><a href="/adult/add">Adult +</a></li>
-                <li><a href="/child/add">Child +</a></li>
-                <li><a href="/family/add">Family +</a></li>
-            </ul>
-        </div>
-        <div id="index-participation" class="index-cat">
-            
-            <h2 class="index-header">Participation</h2>
-            <ul class="index-ul">
-                <li class="search-li"><a href="/participation/query">Query</a></li>
-                <li><a href="/experiment_section_run/add">Experiment Run +</a></li>
-                <li><a href="/assessment_run/add">Assessment Run +</a></li>
-            </ul>
-        </div>
-        <div id="index-reference" class="index-cat">
-            
-            <h2 class="index-header">Reference</h2>
-            <ul class="index-ul">
-                <li><a href="/musical_skill/add">Musical Skill +</a></li>
-                <li><a href="/language/add">Language +</a></li>
-                <li><a href="/experiment/add">Experiment +</a></li>
-                <li><a href="/experiment_section/add">Experiment Section +</a></li>
-                <li><a href="/assessment/add">Assessment +</a></li>
-            </ul>
-        </div>
-        <!-- <div class="index-cat"></div> -->
-    </div>
         
 {% endblock  %}

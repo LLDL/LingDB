@@ -1,15 +1,6 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
 
-<h1>
-    <a href="/" id="home"> SFU Linguistics Participant Database</a>
-    <form action="/accounts/logout" method="get" id="logoutForm">
-        <input type="submit" name="logout" id="logout" value="Log Out"/>
-    </form>
-    <form action="/admin" method="get" id="adminPageForm">
-        <input type="submit" name="adminPageButton" id="adminPageButton" value="Admin"/>
-    </form>
-</h1>
 <div id="main-content">
 {% block content %}
 {% endblock %}

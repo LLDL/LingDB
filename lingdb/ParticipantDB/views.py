@@ -11,33 +11,55 @@ from .forms import *
 from .models import *
 from .utils import make_unique_id, get_user_groups, get_user_authed_list, check_user_groups
 
+
+# Search View -------------------------------------------------------------------
+@login_required
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('search_box', None)
+    try:
+        Adult.objects.get(pk=query)
+        return redirect(reverse('adult_detail', kwargs={'adult_id': query}))
+    # Adult doesn't exist, try with child
+    except Adult.DoesNotExist:
+        try: 
+            Child.objects.get(pk=query)
+            return redirect(reverse('child_detail', kwargs={'child_id': query}))
+        #Child doesn't exist, try with family
+        except Child.DoesNotExist:
+            try:
+                Family.objects.get(pk=query)
+                return redirect(reverse('family_detail', kwargs={'family_id': query}))
+            #Family doesn't exist, invalid pk
+            except Family.DoesNotExist:
+                raise Http404("No Adult, Child, or Family matches ID#" + query)
 # Index Views -------------------------------------------------------------------
 
 @login_required
 def index(request):
-    if (request.method == 'GET') and (request.GET.get('searchPeopleField', None)):
-        # Open by ID Handling
-        person = request.GET.get('searchPeopleField', None)
-        # If adult exists, open that adult's details
-        try:
-            Adult.objects.get(pk=person)
-            return redirect(reverse('adult_detail', kwargs={'adult_id': person}))
-        # Adult doesn't exist, try with child
-        except Adult.DoesNotExist:
-            try: 
-                Child.objects.get(pk=person)
-                return redirect(reverse('child_detail', kwargs={'child_id': person}))
-            #Child doesn't exist, try with family
-            except Child.DoesNotExist:
-                try:
-                    Family.objects.get(pk=person)
-                    return redirect(reverse('family_detail', kwargs={'family_id': person}))
-                #Family doesn't exist, invalid pk
-                except Family.DoesNotExist:
-                    raise Http404("No Adult, Child, or Family matches ID#" + person)
-    else:
-        # Standard Visit to Index
-        return render(request, 'ParticipantDB/index.html')
+    # if (request.method == 'GET') and (request.GET.get('searchPeopleField', None)):
+    #     # Open by ID Handling
+    #     person = request.GET.get('searchPeopleField', None)
+    #     # If adult exists, open that adult's details
+    #     try:
+    #         Adult.objects.get(pk=person)
+    #         return redirect(reverse('adult_detail', kwargs={'adult_id': person}))
+    #     # Adult doesn't exist, try with child
+    #     except Adult.DoesNotExist:
+    #         try: 
+    #             Child.objects.get(pk=person)
+    #             return redirect(reverse('child_detail', kwargs={'child_id': person}))
+    #         #Child doesn't exist, try with family
+    #         except Child.DoesNotExist:
+    #             try:
+    #                 Family.objects.get(pk=person)
+    #                 return redirect(reverse('family_detail', kwargs={'family_id': person}))
+    #             #Family doesn't exist, invalid pk
+    #             except Family.DoesNotExist:
+    #                 raise Http404("No Adult, Child, or Family matches ID#" + person)
+    # else:
+    #     # Standard Visit to Index
+    return render(request, 'ParticipantDB/index.html')
 
 # Family Views -----------------------------------------------------------------
 
