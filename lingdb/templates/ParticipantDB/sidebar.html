@@ -1,0 +1,56 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
+
+<div id="sidebar" class="column">
+    <a href="/">SFU Department of Linguistics</a><br>
+    <span class="sidebar-category">People</span><br>
+    <a href="/query" class="sidebar-link">
+        <span>? Query</span>
+    </a><br>
+    <a href="/adult/add" class="sidebar-link">
+        <span>+ Adult</span>
+    </a><br>
+    <a href="/child/add" class="sidebar-link">
+        <span>+ Child</span>
+    </a><br>
+    <a href="/family/add" class="sidebar-link">
+        <span>+ Family</span>
+    </a><br>
+
+
+    <span class="sidebar-category">Participation</span><br>
+    <a href="/experiment_section_run/add" class="sidebar-link">
+        <span>+ Experiment Run</span>
+    </a><br>
+    <a href="/assessment_run/add" class="sidebar-link">
+        <span>+ Assessment Run</span>
+    </a><br>
+
+    <span class="sidebar-category">Lab</span><br>
+    <a href="/experiment/add" class="sidebar-link">
+        <span>+ Experiment</span>
+    </a><br>
+    <a href="/assessment/add" class="sidebar-link">
+        <span>+ Assessment</span>
+    </a><br>
+
+    <span class="sidebar-category">Skills</span><br>
+    <a href="/musical_skill/add" class="sidebar-link">
+        <span>+ Music</span>
+    </a><br>
+    <a href="/language/add" class="sidebar-link">
+        <span>+ Language</span>
+    </a><br><br>
+
+    <span class="sidebar-category">Account</span><br>
+    <a href="/accounts/logout/?logout=Log+Out" class="sidebar-link">
+        <span>← Logout</span>
+    </a><br>
+    <a href="/admin" class="sidebar-link">
+        <span>→ Admin</span>
+    </a><br>
+</div>
+<div id="main-box" class="column">
+{% block content %}
+{% endblock %}
+</div>

@@ -1,4 +1,4 @@
-{% extends "ParticipantDB/header.html" %}
+{% extends "ParticipantDB/sidebar.html" %}
 {% block content %}
     <h2>Update {{assessment_name}} Assessment</h2>
     <form  action="{% url 'update_assessment' assessment_name %}"  method="post">
