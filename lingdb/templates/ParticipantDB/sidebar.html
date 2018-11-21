@@ -5,13 +5,13 @@
     <a href="/">SFU Department<br>of Linguistics<br>Participant Database</a><br>
 
     <form type="get" id="searchPeople" action="/search" accept-charset="utf-8">
-        <input class="searchField" id="search_box" name="search_box" type="text" placeholder="⌕ Search">
+        <input class="searchField" id="search_box" name="search_box" type="text" placeholder="⌕ Search" size=15>
         <input type="submit" id="search_submit" value="Open" hidden>
     </form>
 
 
     <span class="sidebar-category">People</span>
-    <a href="/query" class="sidebar-link">
+    <a href="/people/query" class="sidebar-link">
         <span>? Query</span>
     </a>
     <a href="/adult/add" class="sidebar-link">
@@ -26,6 +26,9 @@
 
 
     <span class="sidebar-category">Participation</span>
+    <a href="/participation/query" class="sidebar-link">
+        <span>? Query</span>
+    </a>
     <a href="/experiment_section_run/add" class="sidebar-link">
         <span>+ Experiment Run</span>
     </a>

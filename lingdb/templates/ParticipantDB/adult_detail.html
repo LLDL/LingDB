@@ -52,7 +52,7 @@
         </table>
         {% if speaksLanguages.count > 0 %}
             <h3>Languages Spoken</h3>
-            <table>
+            <table class="showBorders">
                 <thead>
                     <tr>
                         <th class="field_name">Language</th>
@@ -99,8 +99,8 @@
                 </tbody>
             </table>
         {% endif %}
+        <h3>Assessments</h3>
         {% if assessment_participations|length > 0 %}
-            <h3>Assessments</h3>
             <table>
                 <thead>
                     <tr>
@@ -137,6 +137,17 @@
                 </tbody>
             </table>
         {% endif %}
+        <form method="get" id="assessment_run" action="/assessment_run/add/" accept-charset="utf-8">
+        <h4>Add Assessment Run</h4>
+        <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
+        <input id="participantID" name="participantID" type="hidden" value="{{adult.id}}">
+        <select id="chooseAssessmentField" name="chooseAssessmentField">
+            {% for assessment in eligible_assessments %}
+                <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" id="chooseAssessmentButton" value="Add Assessment Run">
+        </form>
         {% if family %}
             <h3>Family</h3>
             <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})

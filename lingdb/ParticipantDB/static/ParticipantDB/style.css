@@ -106,12 +106,12 @@ h3{
     margin-bottom: 0em;
 }
 input[type="submit"]{
-    margin-bottom:20px;
+    margin-bottom:2em;
+    margin-top: 1em;
 }
 input[type="checkbox"]{
     padding: 0;
     margin: 0;
-    text-align: left;
 }
 input, select{
     height: 2em;
@@ -119,10 +119,14 @@ input, select{
 #search_box{
     height: 2em;
     font-size: 1.25em;
-    padding: .25em .25em .25em 1em;
+    padding: .25em 0 .25em 0;
     border: 0px;
     border-bottom: 1px solid black;
     color: #000000;
+    font-family: Roboto, sans-serif;
+}
+.field_value_input input{
+    width: 100%;
 }
 @media only screen and (max-width: 800px){
     .index-container{

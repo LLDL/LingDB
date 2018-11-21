@@ -37,28 +37,7 @@ def search(request):
 
 @login_required
 def index(request):
-    # if (request.method == 'GET') and (request.GET.get('searchPeopleField', None)):
-    #     # Open by ID Handling
-    #     person = request.GET.get('searchPeopleField', None)
-    #     # If adult exists, open that adult's details
-    #     try:
-    #         Adult.objects.get(pk=person)
-    #         return redirect(reverse('adult_detail', kwargs={'adult_id': person}))
-    #     # Adult doesn't exist, try with child
-    #     except Adult.DoesNotExist:
-    #         try: 
-    #             Child.objects.get(pk=person)
-    #             return redirect(reverse('child_detail', kwargs={'child_id': person}))
-    #         #Child doesn't exist, try with family
-    #         except Child.DoesNotExist:
-    #             try:
-    #                 Family.objects.get(pk=person)
-    #                 return redirect(reverse('family_detail', kwargs={'family_id': person}))
-    #             #Family doesn't exist, invalid pk
-    #             except Family.DoesNotExist:
-    #                 raise Http404("No Adult, Child, or Family matches ID#" + person)
-    # else:
-    #     # Standard Visit to Index
+
     return render(request, 'ParticipantDB/index.html')
 
 # Family Views -----------------------------------------------------------------
@@ -269,7 +248,8 @@ def adult_detail(request, adult_id):
     musical_exps = MusicalExperience.objects.filter(person = adult)
     all_assessment_participations = Assessment_Run.objects.filter(participantAdult = adult)
     assessment_participations = get_user_authed_list(request, all_assessment_participations, "assessment")
-
+    all_assessments = Assessment.objects.all()
+    eligible_assessments = get_user_authed_list(request, all_assessments)
     all_scores = {}
     for assessment_participation in assessment_participations:
         assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
@@ -279,9 +259,9 @@ def adult_detail(request, adult_id):
         family = Family.objects.get(pk=parent_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores})
+        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
     except IsParentIn.DoesNotExist:
-         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores})   
+         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})   
 
 @login_required
 def delete_adult(request, adult_id):
@@ -482,9 +462,13 @@ def choose_assessment(request):
     if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)) and (request.GET.get('chooseParticipantField', None)):
         assessment_name = request.GET.get('chooseAssessmentField', None)
         participant_type = request.GET.get('chooseParticipantField', None)
+        participant = request.GET.get('participantID', None)
         try:
             Assessment.objects.get(pk=assessment_name)
-            return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
+            if participant:
+                return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type, 'participant': participant}))
+            else:
+                return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
         except Assessment.DoesNotExist:
             raise Http404("No Assessment with name " + assessment_name)
     else:
@@ -495,7 +479,7 @@ def choose_assessment(request):
 
 
 @login_required 
-def add_assessment_run(request, assessment_name, participant_type):
+def add_assessment_run(request, assessment_name, participant_type, participant=None):
     assessment = Assessment.objects.get(pk=assessment_name)
     user_can_add = check_user_groups(request, assessment)
     if not user_can_add:
@@ -527,7 +511,14 @@ def add_assessment_run(request, assessment_name, participant_type):
             
     
     else:
-        assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
+        if participant and participant_type == "adult":
+            adult = Adult.objects.get(pk=participant)
+            assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment, 'participantAdult': adult})
+        elif participant:
+            child = Child.objects.get(pk=participant)
+            assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment, 'participantChild': child})
+        else:
+            assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
     
     field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
     return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
