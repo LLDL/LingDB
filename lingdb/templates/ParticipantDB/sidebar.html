@@ -56,9 +56,11 @@
     <a href="/accounts/logout/?logout=Log+Out" class="sidebar-link">
         <span>← Logout</span>
     </a>
-    <a href="/admin" class="sidebar-link">
-        <span>→ Admin</span>
-    </a>
+    {% if request.user.is_staff %}
+        <a href="/admin" class="sidebar-link">
+            <span>→ Admin</span>
+        </a>
+    {% endif %}
 </div>
 <div id="main-box" class="column">
 {% block content %}
