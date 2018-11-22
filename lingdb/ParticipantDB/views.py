@@ -12,7 +12,7 @@ from .models import *
 from .utils import make_unique_id, get_user_groups, get_user_authed_list, check_user_groups
 
 
-# Search View -------------------------------------------------------------------
+# Search -------------------------------------------------------------------
 @login_required
 def search(request):
     if request.method == 'GET':
@@ -43,25 +43,17 @@ def search(request):
                 Experiment.objects.get(experiment_name=query)
                 return redirect(reverse('experiment_detail', kwargs={'experiment_name': query}))
             except Experiment.DoesNotExist:
-                try:
-                    Experiment_Section.objects.get(experiment_section_name=query)
-                    return redirect(reverse('experiment_section_detail', kwargs={'experiment_section_name': query}))
-                except Experiment_Section.DoesNotExist:
-                    raise Http404("No Assessment, Experiment, Experiment Section, Adult, Child, or Family matches " + query)
+                    raise Http404("No Assessment, Experiment, Adult, Child, or Family matches " + query)
         except ValueError:
             raise Http404("Invalid query " + query)
 
-
-
-
-# Index Views -------------------------------------------------------------------
+# Index -------------------------------------------------------------------
 
 @login_required
 def index(request):
-
     return render(request, 'ParticipantDB/index.html')
 
-# Family Views -----------------------------------------------------------------
+# Family -----------------------------------------------------------------
 
 @login_required
 def add_family(request):
@@ -166,7 +158,7 @@ def update_family(request, family_id):
 
     return render(request, "ParticipantDB/family_form_update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
 
-# Adult Views ------------------------------------------------------------------
+# Adult ------------------------------------------------------------------
 
 @login_required
 def add_adult(request):
@@ -205,7 +197,6 @@ def add_adult(request):
         adult_form = AdultForm(initial={'id': make_unique_id()})
 
     return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
-
 
 @login_required
 def update_adult(request, adult_id):
@@ -292,8 +283,7 @@ def delete_adult(request, adult_id):
     except Adult.DoesNotExist:
         raise Http404("No adult with id" + adult_id)
     
-
-# Child Views ------------------------------------------------------------------
+# Child ------------------------------------------------------------------
 
 @login_required
 def add_child(request):
@@ -360,7 +350,6 @@ def child_detail(request, child_id):
     all_children = IsChildIn.objects.filter(family = family)
     return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
 
-
 @login_required
 def delete_child(request, child_id):
     try:
@@ -369,8 +358,7 @@ def delete_child(request, child_id):
     except Child.DoesNotExist:
         raise Http404("No child with id" + child_id)
 
-
-# Language Views ------------------------------------------------------------------
+# Language ------------------------------------------------------------------
 
 @login_required
 def add_language(request):
@@ -383,7 +371,7 @@ def add_language(request):
         form = LanguageForm()
     return render(request, "ParticipantDB/language_form.html", {'form': form})
 
-# Musical Views ------------------------------------------------------------------
+# Musical ------------------------------------------------------------------
 @login_required
 def add_musical_skill(request):
     if request.method == "POST":
@@ -395,7 +383,7 @@ def add_musical_skill(request):
         form = MusicalSkillForm()
     return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
 
-# Assessment Views --------------------------------------------------------------
+# Assessment --------------------------------------------------------------
 @login_required
 def add_assessment(request):
     assessment_field_forms = AssessmentFieldInlineFormSet(
@@ -421,7 +409,6 @@ def add_assessment(request):
         assessment_form = AssessmentForm()
     
     return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
-
 
 @login_required
 def assessment_detail(request, assessment_name):
@@ -476,8 +463,7 @@ def update_assessment(request, assessment_name):
     
     return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
 
-
-# Assessment Run Views --------------------------------
+# Assessment Run -----------------------------------------------------------
 @login_required
 def choose_assessment(request):
     if (request.method == 'GET') and (request.GET.get('chooseAssessmentField', None)) and (request.GET.get('chooseParticipantField', None)):
@@ -497,7 +483,6 @@ def choose_assessment(request):
         assessments = get_user_authed_list(request, assessments_all)
         
     return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
-
 
 @login_required 
 def add_assessment_run(request, assessment_name, participant_type, participant=None):
@@ -544,7 +529,6 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
     field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
     return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
 
-
 @login_required
 def assessment_run_detail(request, assessment_run_id):
     assessment_run = get_object_or_404(Assessment_Run, pk=assessment_run_id)
@@ -559,8 +543,7 @@ def delete_assessment_run(request, assessment_run_id):
     except Assessment_Run.DoesNotExist:
         raise Http404("No assessment_run with id " + assessment_run_id)
 
-
-# Experiment Views --------------------------------------------------------------
+# Experiment --------------------------------------------------------------
 @login_required
 def add_experiment(request):
     experiment_section_forms = ExperimentSectionInlineFormSet(
@@ -609,7 +592,7 @@ def add_experiment_section_fields(request, experiment_name):
                     inst = section_field.save(commit = False)
                     inst.field_of = section
                     inst.save()
-        return redirect(reverse('index'))           
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment}))       
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
@@ -617,6 +600,7 @@ def experiment_detail(request, experiment_name):
     experiment = get_object_or_404(Experiment, pk=experiment_name)
     experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
     return render(request, 'ParticipantDB/experiment_detail.html', {'experiment': experiment, 'experiment_sections': experiment_sections})
+
 @login_required
 def delete_experiment(request, experiment_name):
     try:
@@ -629,17 +613,23 @@ def delete_experiment(request, experiment_name):
 def update_experiment(request, experiment_name):
     pass
 
+@login_required
+def experiment_section_detail(request, experiment_name, experiment_section_name):
+    experiment = Experiment.objects.get(experiment_name = experiment_name)
+    try:
+        experiment_section = Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment)
+    except Experiment_Section.DoesNotExist:
+        raise Http404("No Experiment Section '{}' in Experiment '{}'".format(experiment_name, experiment_section_name))
+    experiment_section_fields = Experiment_Section_Field.objects.filter(field_of = experiment_section)
 
+    return render(request, 'ParticipantDB/experiment_section_detail.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
 
 @login_required
-def experiment_section_detail(request, experiment_section_name):
+def delete_experiment_section(request, experiment_name, experiment_section_name):
     pass
-@login_required
-def delete_experiment_section(request, experiment_section_name):
-    pass
 
 @login_required
-def update_experiment_section(request, experiment_section_name):
+def update_experiment_section(request, experiment_name, experiment_section_name):
     pass
 
 # Experiment Section Run Views -----------------------------------------------------
@@ -654,7 +644,6 @@ def add_experiment_section_run(request, experiment_name, participant_type, parti
 @login_required
 def experiment_section_run_detail(request, experiment_section_run_id):
     pass
-
 
 @login_required
 def delete_experiment_section_run(request, experiment_section_run_id):

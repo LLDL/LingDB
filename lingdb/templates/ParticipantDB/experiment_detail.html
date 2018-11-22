@@ -11,6 +11,7 @@
                     <tr>
                         <th class="field_name">Name</th>
                         <th class="field_name">Status</th>
+                        <th class="field_name">Open</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,6 +19,9 @@
                         <tr>
                             <td class="field_value">{{experiment_section.experiment_section_name}}</td>
                             <td class="field_value">{{experiment_section.section_status}}</td>
+                            <td class="field_value">
+                                <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Open</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

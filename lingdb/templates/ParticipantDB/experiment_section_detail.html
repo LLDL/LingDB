@@ -1,0 +1,34 @@
+{% extends "ParticipantDB/sidebar.html" %}
+{% block content %}
+    <h2>
+        Section "{{ experiment_section.experiment_section_name }}" of Experiment "{{experiment.experiment_name}}" ({{experiment.lab}})
+    </h2>
+    <div>
+        {% if experiment_section_fields.count > 0 %}
+            <h3>Fields</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Name</th>
+                        <th class="field_name">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for field in experiment_section_fields %}
+                        <tr>
+                            <td class="field_value">{{field.field_name}}</td>
+                            <td class="field_value">{{field.type}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <h3>Manage</h3>
+
+
+            <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Delete {{experiment_section}}</a><br>
+            <a href="{% url 'update_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Update {{experiment_section}}</a>
+
+    </div>
+{% endblock %}

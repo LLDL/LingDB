@@ -62,9 +62,9 @@ urlpatterns = [
     path('experiment/<str:experiment_name>/delete/', views.delete_experiment, name='delete_experiment'),
 
 
-    path('experiment_section/<str:experiment_section_name>/', views.experiment_section_detail, name='experiment_section_detail'),
-    path('experiment_section/<str:experiment_section_name>/update/', views.update_experiment_section, name='update_experiment_section'),
-    path('experiment_section/<str:experiment_section_name>/delete/', views.delete_experiment_section, name='delete_experiment_section'),
+    path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/', views.experiment_section_detail, name='experiment_section_detail'),
+    path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/update/', views.update_experiment_section, name='update_experiment_section'),
+    path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/delete/', views.delete_experiment_section, name='delete_experiment_section'),
 
 
     path('experiment_section_run/add/', views.choose_experiment_section, name='choose_experiment_section'),
