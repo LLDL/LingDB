@@ -33,6 +33,27 @@ def search(request):
             #Family doesn't exist, invalid pk
             except Family.DoesNotExist:
                 raise Http404("No Adult, Child, or Family matches ID#" + query)
+    #Query refers either to an assessment, experiment, or experiment_section
+    except ValueError:
+        try: 
+            Assessment.objects.get(assessment_name=query)
+            return redirect(reverse('assessment_detail', kwargs={'assessment_name': query}))
+        except Assessment.DoesNotExist:
+            try:
+                Experiment.objects.get(experiment_name=query)
+                return redirect(reverse('experiment_detail', kwargs={'experiment_name': query}))
+            except Experiment.DoesNotExist:
+                try:
+                    Experiment_Section.objects.get(experiment_section_name=query)
+                    return redirect(reverse('experiment_section_detail', kwargs={'experiment_section_name': query}))
+                except Experiment_Section.DoesNotExist:
+                    raise Http404("No Assessment, Experiment, Experiment Section, Adult, Child, or Family matches " + query)
+        except ValueError:
+            raise Http404("Invalid query " + query)
+
+
+
+
 # Index Views -------------------------------------------------------------------
 
 @login_required
@@ -606,6 +627,19 @@ def delete_experiment(request, experiment_name):
     
 @login_required
 def update_experiment(request, experiment_name):
+    pass
+
+
+
+@login_required
+def experiment_section_detail(request, experiment_section_name):
+    pass
+@login_required
+def delete_experiment_section(request, experiment_section_name):
+    pass
+
+@login_required
+def update_experiment_section(request, experiment_section_name):
     pass
 
 # Experiment Section Run Views -----------------------------------------------------

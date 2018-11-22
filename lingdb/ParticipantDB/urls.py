@@ -60,6 +60,13 @@ urlpatterns = [
 
     path('experiment/<str:experiment_name>/update/', views.update_experiment, name='update_experiment'),
     path('experiment/<str:experiment_name>/delete/', views.delete_experiment, name='delete_experiment'),
+
+
+    path('experiment_section/<str:experiment_section_name>/', views.experiment_section_detail, name='experiment_section_detail'),
+    path('experiment_section/<str:experiment_section_name>/update/', views.update_experiment_section, name='update_experiment_section'),
+    path('experiment_section/<str:experiment_section_name>/delete/', views.delete_experiment_section, name='delete_experiment_section'),
+
+
     path('experiment_section_run/add/', views.choose_experiment_section, name='choose_experiment_section'),
     path('experiment_section_run/add/<str:experiment_section_name>/<str:participant_type>/<int:participant>', views.add_experiment_section_run, name='add_experiment_section_run'),
     path('experiment_section_run/add/<str:experiment_section_name>/<str:participant_type>/', views.add_experiment_section_run, name='add_experiment_section_run'),
