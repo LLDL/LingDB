@@ -593,11 +593,16 @@ def add_experiment_section_fields(request, experiment_name):
 
 @login_required
 def experiment_detail(request, experiment_name):
-    pass
-
+    experiment = get_object_or_404(Experiment, pk=experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
+    return render(request, 'ParticipantDB/experiment_detail.html', {'experiment': experiment, 'experiment_sections': experiment_sections})
 @login_required
 def delete_experiment(request, experiment_name):
-    pass
+    try:
+        Experiment.objects.get(pk=experiment_name).delete()
+        return redirect(reverse('index'))
+    except Experiment.DoesNotExist:
+        raise Http404("No experiment named " + experiment_name)
     
 @login_required
 def update_experiment(request, experiment_name):
