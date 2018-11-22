@@ -5,7 +5,7 @@ from operator import attrgetter
 
 def make_unique_id():
     potentially_random = randint(100000, 999999)
-    print(potentially_random)
+    # print(potentially_random)
     isUnique = False
     while(isUnique == False):
         adult_exists = Adult.objects.filter(pk=potentially_random).exists()
@@ -19,11 +19,11 @@ def make_unique_id():
 
 def get_user_groups(request):
     groups = request.user.groups.values_list('id', flat=True)
-    print(groups)
+    # print(groups)
     return groups
 
 def get_user_authed_list(request, full_queryset, sub_of=""):
-    print(full_queryset)
+    # print(full_queryset)
     groups = request.user.groups.values_list('id', flat=True)
     user_authed_list = []
     if sub_of:
@@ -42,7 +42,7 @@ def get_user_authed_list(request, full_queryset, sub_of=""):
                 if obj.lab.group.id == group:
                     user_authed_list.append(obj)
                     break
-    print(user_authed_list)
+    # print(user_authed_list)
     return user_authed_list
 
 def check_user_groups(request, obj):

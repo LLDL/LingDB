@@ -1,6 +1,13 @@
 #new_adult_table, #new_child_table, #new_assessment_table, #new_assessment_run_table{
     text-align: left;
 }
+.displayTable{
+    border-collapse: collapse;
+}
+.displayTable, .displayTable td, .displayTable th{
+    border: 1px solid #54585a;
+    padding: .25em;
+}
 .error{
     color: #a6192e;
 }
@@ -58,18 +65,23 @@ textarea{
 #logout:hover, #home:hover, #adminPageButton:hover{
     cursor: pointer
 }
+#logo{
+    width: 150px;
+}
 
 #sidebar{
     flex-shrink: 0;
     overflow-y: auto;
     padding: 20px 20px 40px 20px;
-    border-right: solid #000000 1px;
+    /* border-right: solid #000000 1px; */
+    background: #a6192e;
 }
 
 #main-box{
     flex-grow: 1;
     padding: 20px 20px 40px 20px;
     overflow-y: auto;
+    
 }
 
 .column{
@@ -77,25 +89,32 @@ textarea{
     display: flex;
     flex-direction: column;
 }
-
+#logo-link{
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0 auto;
+    margin: 0 auto;
+}
 .sidebar-link{
     line-height: 1.5;
     padding: .25em 1em .25em 1em;
     font-size: 1.25em;
     font-weight: bold;
-    color: #000000;
+    color: #ffffff;
     text-decoration: none;
 }
 .sidebar-link:hover{
-    background-color:#A6192E;
-    color: #ffffff;
+    background-color:#ffffff;
+    color: #54585a;
     border-radius: 5px;
 }
 .sidebar-category{
     line-height: 1.5;
     font-size: 1.1em;
-    padding: .25em 1em 0 0;
-    color: #000000;
+    padding: .75em 1em 0 0;
+    color: #ffffff;
 }
 h2{
     margin-top: 0;
@@ -121,8 +140,9 @@ input, select{
     font-size: 1.25em;
     padding: .25em 0 .25em 0;
     border: 0px;
-    border-bottom: 1px solid black;
-    color: #000000;
+    border-bottom: 2px solid white;
+    color: #ffffff;
+    background-color: #a6192e;
     font-family: Roboto, sans-serif;
 }
 .field_value_input input{

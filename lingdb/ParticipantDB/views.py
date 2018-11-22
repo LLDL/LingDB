@@ -590,3 +590,33 @@ def add_experiment_section_fields(request, experiment_name):
                     inst.save()
         return redirect(reverse('index'))           
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
+
+@login_required
+def experiment_detail(request, experiment_name):
+    pass
+
+@login_required
+def delete_experiment(request, experiment_name):
+    pass
+    
+@login_required
+def update_experiment(request, experiment_name):
+    pass
+
+# Experiment Section Run Views -----------------------------------------------------
+@login_required
+def choose_experiment_section(request):
+    pass
+
+@login_required
+def add_experiment_section_run(request, experiment_name, participant_type, participant=None):
+    pass
+
+@login_required
+def experiment_section_run_detail(request, experiment_section_run_id):
+    pass
+
+
+@login_required
+def delete_experiment_section_run(request, experiment_section_run_id):
+    pass

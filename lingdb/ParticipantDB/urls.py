@@ -33,20 +33,40 @@ urlpatterns = [
     path('musical_skill/add/', views.add_musical_skill, name='add_musical_skill'),   
 
     # assessments
-    path('assessment/add/', views.add_assessment, name='add_assessment'),
-    path('assessment/<str:assessment_name>/', views.assessment_detail, name='assessment_detail'),
-    path('assessment/<str:assessment_name>/update/', views.update_assessment, name='update_assessment'),
-    path('assessment/<str:assessment_name>/delete/', views.delete_assessment, name='delete_assessment'),
 
+    ## add assessment
+    path('assessment/add/', views.add_assessment, name='add_assessment'),
+    ## view assessment
+    path('assessment/<str:assessment_name>/', views.assessment_detail, name='assessment_detail'),
+    ## update assessment
+    path('assessment/<str:assessment_name>/update/', views.update_assessment, name='update_assessment'),
+    ## delete assessment
+    path('assessment/<str:assessment_name>/delete/', views.delete_assessment, name='delete_assessment'),
+    ## choose assessment to run
     path('assessment_run/add/', views.choose_assessment, name='choose_assessment'),
+    ## add assessment run w/ preselected person
     path('assessment_run/add/<str:assessment_name>/<str:participant_type>/<int:participant>', views.add_assessment_run, name='add_assessment_run'),
+    ## add assessment run
     path('assessment_run/add/<str:assessment_name>/<str:participant_type>/', views.add_assessment_run, name='add_assessment_run'),
+    ## view assessment run detail
     path('assessment_run/<int:assessment_run_id>/', views.assessment_run_detail, name='assessment_run_detail'),
+    ## delete assessment run
     path('assessment_run/<str:assessment_run_id>/delete/', views.delete_assessment_run, name='delete_assessment_run'),
 
     # experiments
     path('experiment/add/', views.add_experiment, name='add_experiment'),
+    path('experiment/<str:experiment_name>/', views.experiment_detail, name='experiment_detail'),
     path('experiment/<str:experiment_name>/sections/add/', views.add_experiment_section_fields, name='add_experiment_section_fields'),
+
+    path('experiment/<str:experiment_name>/update/', views.update_experiment, name='update_experiment'),
+    path('experiment/<str:experiment_name>/delete/', views.delete_experiment, name='delete_experiment'),
+    path('experiment_section_run/add/', views.choose_experiment_section, name='choose_experiment_section'),
+    path('experiment_section_run/add/<str:experiment_section_name>/<str:participant_type>/<int:participant>', views.add_experiment_section_run, name='add_experiment_section_run'),
+    path('experiment_section_run/add/<str:experiment_section_name>/<str:participant_type>/', views.add_experiment_section_run, name='add_experiment_section_run'),
+    path('experiment_section_run/<int:experiment_section_run_id>/', views.experiment_section_run_detail, name='experiment_section_run_detail'),
+
+    path('experiment_section_run/<int:experiment_section_run_id>/delete/', views.delete_experiment_section_run, name='delete_experiment_section_run'),
+
 ]
 
     

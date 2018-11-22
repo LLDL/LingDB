@@ -2,7 +2,10 @@
 <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
 
 <div id="sidebar" class="column">
-    <a href="/">SFU Department<br>of Linguistics<br>Participant Database</a><br>
+    <a href="/" id="logo-link">
+        <img src="{% static 'ParticipantDB/sfu-logo.png' %}" alt="SFU Department of Linguistics Participant Database" id="logo"><br>
+        Department of<br>Linguistics
+    </a><br>
 
     <form type="get" id="searchPeople" action="/search" accept-charset="utf-8">
         <input class="searchField" id="search_box" name="search_box" type="text" placeholder="⌕ Search" size=15>
