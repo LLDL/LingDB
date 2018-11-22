@@ -568,6 +568,17 @@ def add_experiment(request):
         queryset = Experiment_Section.objects.none(),
         prefix = 'experiment_sections'
     )
+    all_labs = Lab.objects.all()
+    auth_groups = get_user_groups(request)
+    auth_labs = []
+    for lab in all_labs:
+        flag = False
+        for group in auth_groups:
+            if lab.group.id == group:
+                flag = True
+        if flag:
+            auth_labs.append(lab)
+    print(auth_labs)
     if request.method == "POST":
         experiment_form = ExperimentForm(request.POST)
         experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
@@ -584,7 +595,7 @@ def add_experiment(request):
     else:
         experiment_form = ExperimentForm()
     
-    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
+    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'labs': auth_labs})
 
 @login_required
 def add_experiment_section_fields(request, experiment_name):
@@ -610,7 +621,7 @@ def add_experiment_section_fields(request, experiment_name):
                     inst = section_field.save(commit = False)
                     inst.field_of = section
                     inst.save()
-        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment}))       
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required

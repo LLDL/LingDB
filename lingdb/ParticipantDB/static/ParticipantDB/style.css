@@ -145,6 +145,19 @@ input, select{
     background-color: #a6192e;
     font-family: Roboto, sans-serif;
 }
+#search_box::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #ffffff;
+    opacity: .8; /* Firefox */
+}
+
+#search_box::-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:#ffffff;
+}
+
+#search_box::-ms-input-placeholder { /* Microsoft Edge */
+    color: #ffffff;
+}
+
 .field_value_input input{
     width: 100%;
 }

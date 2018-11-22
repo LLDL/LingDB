@@ -1,7 +1,7 @@
 {% extends "ParticipantDB/sidebar.html" %}
 {% block content %}
     <h2>
-        Section "{{ experiment_section.experiment_section_name }}" of Experiment "{{experiment.experiment_name}}" ({{experiment.lab}})
+        Section "{{ experiment_section.experiment_section_name }}" of Experiment "{{experiment.experiment_name}}"
     </h2>
     <div>
         {% if experiment_section_fields.count > 0 %}
@@ -27,8 +27,8 @@
         <h3>Manage</h3>
 
 
-            <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Delete {{experiment_section}}</a><br>
-            <a href="{% url 'update_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Update {{experiment_section}}</a>
+            <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Delete {{experiment_section.experiment_section_name}}</a><br>
+            <a href="{% url 'update_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Update {{experiment_section.experiment_section_name}}</a>
 
     </div>
 {% endblock %}

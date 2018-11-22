@@ -166,7 +166,7 @@ class Experiment_Section_Run_Field_Score(models.Model):
     experiment_section_field = models.ForeignKey(Experiment_Section_Field, on_delete = models.CASCADE)
     score = models.CharField(max_length=100) 
     def __str__(self):
-        return 'Score of [%s] for field [%s] of run [%s]' % (self.score, self.experiment_field, self.experiment_run)
+        return 'Score of [%s] for field [%s] of run [%s]' % (self.score, self.experiment_section_field, self.experiment_run)
 
 class Assessment(models.Model):
     assessment_name = models.CharField(max_length = 100, primary_key = True)
