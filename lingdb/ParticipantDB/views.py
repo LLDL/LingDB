@@ -258,6 +258,8 @@ def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
+
+
     all_assessment_participations = Assessment_Run.objects.filter(participantAdult = adult)
     assessment_participations = get_user_authed_list(request, all_assessment_participations, "assessment")
     all_assessments = Assessment.objects.all()
@@ -266,14 +268,27 @@ def adult_detail(request, adult_id):
     for assessment_participation in assessment_participations:
         assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
         all_scores[assessment_participation.id] = assessment_run_fields
+
+    # all_experiment_section_participations = Experiment_Section_Run.objects.filter(participantAdult = adult)
+    # experiment_section_participations = all_experiment_section_participations
+    # # experiment_section_participations = get_user_authed_list(request, all_experiment_section_participations, "experiment")
+    # all_experiment_sections = Experiment_Section.objects.all()
+    # eligible_experiment_sections = get_user_authed_list(request, all_experiment_sections, "experiment")
+    # all_scores_expr = {}
+    # for experiment_section_participation in experiment_section_participations:
+    #     experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_section_participation)
+    #     all_scores_expr[experiment_section_participation.id] = experiment_section_run_fields
+
     try:
         parent_in = IsParentIn.objects.get(parent = adult)
         family = Family.objects.get(pk=parent_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
+        # return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_section_participations, 'all_scores_expr': all_scores_expr, 'eligible_experiment_sections': eligible_experiment_sections})
     except IsParentIn.DoesNotExist:
-         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})   
+        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments}) 
+        # return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_section_participations, 'all_scores_expr': all_scores_expr, 'eligible_experiment_sections': eligible_experiment_sections})   
 
 @login_required
 def delete_adult(request, adult_id):
@@ -414,8 +429,8 @@ def add_assessment(request):
 def assessment_detail(request, assessment_name):
     assessment = get_object_or_404(Assessment, pk=assessment_name)
     assessment_fields = Assessment_Field.objects.filter(field_of = assessment)
-
-    return render(request, 'ParticipantDB/assessment_detail.html', {'assessment': assessment, 'assessment_fields': assessment_fields})
+    assessment_runs = Assessment_Run.objects.filter(assessment = assessment)
+    return render(request, 'ParticipantDB/assessment_detail.html', {'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
 
 @login_required
 def delete_assessment(request, assessment_name):
@@ -543,6 +558,9 @@ def delete_assessment_run(request, assessment_run_id):
     except Assessment_Run.DoesNotExist:
         raise Http404("No assessment_run with id " + assessment_run_id)
 
+@login_required
+def update_assessment_run(request, assessment_run_id):
+    pass
 # Experiment --------------------------------------------------------------
 @login_required
 def add_experiment(request):
@@ -615,18 +633,30 @@ def update_experiment(request, experiment_name):
 
 @login_required
 def experiment_section_detail(request, experiment_name, experiment_section_name):
-    experiment = Experiment.objects.get(experiment_name = experiment_name)
     try:
-        experiment_section = Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment)
-    except Experiment_Section.DoesNotExist:
-        raise Http404("No Experiment Section '{}' in Experiment '{}'".format(experiment_name, experiment_section_name))
+        experiment = Experiment.objects.get(experiment_name = experiment_name)
+        try:
+            experiment_section = Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment)
+        except Experiment_Section.DoesNotExist:
+            raise Http404("No Experiment Section '{}' in Experiment '{}'".format(experiment_name, experiment_section_name))
+    except Experiment.DoesNotExist:
+        raise Http404("No Experiment '{}'".format(experiment_name))
     experiment_section_fields = Experiment_Section_Field.objects.filter(field_of = experiment_section)
 
     return render(request, 'ParticipantDB/experiment_section_detail.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
 
 @login_required
 def delete_experiment_section(request, experiment_name, experiment_section_name):
-    pass
+    try:
+        experiment = Experiment.objects.get(experiment_name = experiment_name)
+        try:
+            Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment).delete()
+            return redirect(reverse('index'))
+        except Experiment_Section.DoesNotExist:
+            raise Http404("Experiment '{}' does not have an experiment section '{}' ".format(experiment_name, experiment_section_name))
+    except Experiment.DoesNotExist:
+        raise Http404("No Experiment '{}'".format(experiment_name))
+
 
 @login_required
 def update_experiment_section(request, experiment_name, experiment_section_name):
@@ -635,15 +665,79 @@ def update_experiment_section(request, experiment_name, experiment_section_name)
 # Experiment Section Run Views -----------------------------------------------------
 @login_required
 def choose_experiment_section(request):
-    pass
+    if (request.method == 'GET') and (request.GET.get('chooseExperimentSectionField', None)) and (request.GET.get('chooseParticipantField', None)):
+        experiment_pair = request.GET.get('chooseExperimentSectionField', None).split("~")
+        experiment_name = experiment_pair[0]
+        experiment_section_name = experiment_pair[1]
+        participant_type = request.GET.get('chooseParticipantField', None)
+        participant = request.GET.get('participantID', None)
+        try:
+            experiment = Experiment.objects.get(experiment_name = experiment_name)
+            experiment_section = Experiment_Section.objects.get(experiment_section_name = experiment_section_name, experiment = experiment)
+            if participant:
+                return redirect(reverse('add_experiment_section_run', kwargs={'experiment_section_name': experiment_section_name, 'experiment_name': experiment_name, 'participant_type': participant_type, 'participant': participant}))
+            else:
+                return redirect(reverse('add_experiment_section_run', kwargs={'experiment_section_name': experiment_section_name, 'experiment_name': experiment_name, 'participant_type': participant_type}))
+        except Experiment_Section.DoesNotExist:
+            raise Http404("No Experiment Section '{}' of Experiment '{}' ".format(experiment_section_name, experiment_name))
+        except Experiment.DoesNotExist:
+            raise Http404("No Experiment '{}'".format(experiment_name))
+    else:
+        experiment_sections_all = Experiment_Section.objects.all()
+        experiment_sections = get_user_authed_list(request, experiment_sections_all, "experiment")
+        
+    return render(request, 'ParticipantDB/choose_experiment_section.html', {'experiment_sections': experiment_sections})
 
 @login_required
-def add_experiment_section_run(request, experiment_name, participant_type, participant=None):
-    pass
+def add_experiment_section_run(request, experiment_section_name, experiment_name, participant_type, participant=None):
+    experiment = Experiment.objects.get(experiment_name=experiment_name)
+    experiment_section = Experiment_Section.objects.get(experiment=experiment, experiment_section_name=experiment_section_name)
+    user_can_add = check_user_groups(request, experiment_section, "experiment")
+    if not user_can_add:
+        return HttpResponseForbidden()
+    experiment_section_run_field_score_forms = ExperimentSectionRunFieldScoreInlineFormSet(
+        queryset = Experiment_Section_Run_Field_Score.objects.none(),
+        prefix = 'experiment_section_field_scores'
+    )
+    experiment_section_fields = Experiment_Section_Field.objects.filter(field_of=experiment_section)
+    if request.method == "POST":
+        experiment_section_run_form = ExperimentSectionRunForm(request.POST)
+        experiment_section_run_field_score_forms = ExperimentSectionRunFieldScoreInlineFormSet(
+            request.POST,
+            prefix = 'experiment_section_field_scores'
+        )
+        if experiment_section_run_form.is_valid() and experiment_section_run_field_score_forms.is_valid():
+            experiment_section_run = experiment_section_run_form.save(commit=False)
+            experiment_section_run.experiment_section = experiment_section
+            experiment_section_run.save()
+            for field, form in zip(experiment_section_fields, experiment_section_run_field_score_forms):
+                inst = form.save(commit=False)
+                inst.experiment_section_run = experiment_section_run
+                inst.experiment_section_field = field
+                inst.save()
+            
+            return redirect(reverse('experiment_section_run_detail', kwargs={'experiment_section_run_id': experiment_section_run.id}))
+            
+    
+    else:
+        if participant and participant_type == "adult":
+            adult = Adult.objects.get(pk=participant)
+            experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section, 'participantAdult': adult})
+        elif participant:
+            child = Child.objects.get(pk=participant)
+            experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section, 'participantChild': child})
+        else:
+            experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section})
+    
+    field_score_pairs = zip(experiment_section_fields, experiment_section_run_field_score_forms)
+    return render(request, "ParticipantDB/experiment_section_run_form.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})
 
 @login_required
 def experiment_section_run_detail(request, experiment_section_run_id):
-    pass
+    experiment_section_run = get_object_or_404(Experiment_Section_Run, pk=experiment_section_run_id)
+    experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_section_run)
+    return render(request, 'ParticipantDB/experiment_section_run_detail.html', {'experiment_section_run': experiment_section_run, 'experiment_section_run_fields': experiment_section_run_fields})
+
 
 @login_required
 def delete_experiment_section_run(request, experiment_section_run_id):

@@ -52,6 +52,8 @@ urlpatterns = [
     path('assessment_run/<int:assessment_run_id>/', views.assessment_run_detail, name='assessment_run_detail'),
     ## delete assessment run
     path('assessment_run/<str:assessment_run_id>/delete/', views.delete_assessment_run, name='delete_assessment_run'),
+    ## update assessment run
+    path('assessment_run/<str:assessment_run_id>/update/', views.update_assessment_run, name='update_assessment_run'),
 
     # experiments
     path('experiment/add/', views.add_experiment, name='add_experiment'),
@@ -68,8 +70,8 @@ urlpatterns = [
 
 
     path('experiment_section_run/add/', views.choose_experiment_section, name='choose_experiment_section'),
-    path('experiment_section_run/add/<str:experiment_section_name>/<str:participant_type>/<int:participant>', views.add_experiment_section_run, name='add_experiment_section_run'),
-    path('experiment_section_run/add/<str:experiment_section_name>/<str:participant_type>/', views.add_experiment_section_run, name='add_experiment_section_run'),
+    path('experiment_section_run/add/<str:experiment_name>/<str:experiment_section_name>/<str:participant_type>/<int:participant>', views.add_experiment_section_run, name='add_experiment_section_run'),
+    path('experiment_section_run/add/<str:experiment_name>/<str:experiment_section_name>/<str:participant_type>/', views.add_experiment_section_run, name='add_experiment_section_run'),
     path('experiment_section_run/<int:experiment_section_run_id>/', views.experiment_section_run_detail, name='experiment_section_run_detail'),
 
     path('experiment_section_run/<int:experiment_section_run_id>/delete/', views.delete_experiment_section_run, name='delete_experiment_section_run'),

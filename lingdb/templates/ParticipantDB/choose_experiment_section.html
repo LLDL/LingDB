@@ -1,0 +1,35 @@
+{% extends "ParticipantDB/sidebar.html" %}
+{% block content %}
+    <div>
+        <form id="chooseExperimentSection" action="." method="get" accept-charset="utf-8">
+            <!-- <input id="chooseAssessmentField" name="chooseAssessmentField" type="text"> -->
+            <table>
+                <tr>
+                    <td>
+                        Experiment Section
+                    </td>
+                    <td>
+                        <select id="chooseExperimentSectionField" name="chooseExperimentSectionField">
+                            {% for experiment_section in experiment_sections %}
+                            <option value="{{experiment_section.experiment.experiment_name}}~{{experiment_section.experiment_section_name}}">Experiment: {{experiment_section.experiment.experiment_name}} Section: {{experiment_section.experiment_section_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Participant Type
+                    </td>
+                    <td>
+                        <select id="chooseParticipantField" name="chooseParticipantField">
+                            <option value="adult">Adult</option>
+                            <option value="child">Child</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+                <input type="submit" id="chooseExperimentSectionButton" value="Add Run">
+        </form>
+    </div>
+        
+{% endblock  %}

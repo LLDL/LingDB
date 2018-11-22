@@ -144,7 +144,7 @@ class Experiment_Section_Run(models.Model):
     experiment_section = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     date = models.DateField()
     notes = models.TextField(max_length=1000)
-    assessor = models.TextField(max_length=100) 
+    assessor = models.CharField(max_length=100) 
 
 class Experiment_Section_Field(models.Model):
     class Meta:
@@ -162,9 +162,9 @@ class Experiment_Section_Field(models.Model):
         return '%s field %s for %s' % (self.type, self.field_name, self.field_of)
 
 class Experiment_Section_Run_Field_Score(models.Model):
-    experiment_run = models.ForeignKey(Experiment_Section_Run, on_delete = models.CASCADE)
-    experiment_field = models.ForeignKey(Experiment_Section_Field, on_delete = models.CASCADE)
-    score = models.TextField(max_length=100) 
+    experiment_section_run = models.ForeignKey(Experiment_Section_Run, on_delete = models.CASCADE)
+    experiment_section_field = models.ForeignKey(Experiment_Section_Field, on_delete = models.CASCADE)
+    score = models.CharField(max_length=100) 
     def __str__(self):
         return 'Score of [%s] for field [%s] of run [%s]' % (self.score, self.experiment_field, self.experiment_run)
 

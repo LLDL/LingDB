@@ -1,0 +1,68 @@
+{% extends "ParticipantDB/sidebar.html" %}
+{% block content %}
+    <h2>
+        Experiment Section Run # {{experiment_section_run.id}}
+    </h2>
+    <div>
+        <h3>Basic Info</h3>
+        <table>
+            <tr>
+                <td class="field_name">Experiment:</td>
+                <td class="field_value">{{experiment_section_run.experiment_section.experiment.experiment_name}}</td>
+            </tr> 
+            <tr>
+                <td class="field_name">Experiment Section:</td>
+                <td class="field_value">{{experiment_section_run.experiment_section.experiment_section_name}}</td>
+            </tr> 
+            <tr>
+                <td class="field_name">Participant:</td>
+                {% if experiment_section_run.participantAdult %}
+                    <td class="field_value">{{experiment_section_run.participantAdult}}</td>
+                {% else %}
+                    <td class="field_value">{{experiment_section_run.participantChild}}</td>
+                {% endif %}
+            </tr> 
+            <tr>
+                    <td class="field_name">Assessor:</td>
+                    <td class="field_value">{{experiment_section_run.assessor}}</td>
+            </tr>
+            <tr>
+                    <td class="field_name">Date:</td>
+                    <td class="field_value">{{experiment_section_run.date}}</td>
+            </tr>
+            <tr>
+                    <td class="field_name">Notes:</td>
+                    <td class="field_value">{{experiment_section_run.notes}}</td>
+            </tr>
+        </table>
+        {% if experiment_section_run_fields.count > 0 %}
+            <h3>Results</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Field</th>
+                        <th class="field_name">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for experiment_section_run_field in experiment_section_run_fields %}
+                        <tr>
+                            <td class="field_value">{{experiment_section_run_field.experiment_section_field.field_name}}</td>
+                            <td class="field_value">{{experiment_section_run_field.score}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <h3>Manage</h3>
+
+
+            {% comment %} <a href="{% url 'delete_assessment_run' assessment_run_id=assessment_run.id %}">Delete {{Assessment}}</a><br> {% endcomment %}
+            
+        {% comment %}
+            <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
+        {% endcomment %}
+
+    </div>
+{% endblock %}

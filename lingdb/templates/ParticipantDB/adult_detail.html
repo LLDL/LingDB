@@ -3,6 +3,8 @@
     <h2>
         Adult # {{ adult.id }}
     </h2>
+    <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete</a>
+    <a href="{% url 'update_adult' adult_id=adult.id %}">Update</a>
     <div>
         <h3>Personal Info</h3>
         <table>
@@ -48,7 +50,6 @@
                     <td class="field_value">{{adult.health_notes}}</td>
             </tr>
             {% endif %}
-
         </table>
         {% if speaksLanguages.count > 0 %}
             <h3>Languages Spoken</h3>
@@ -75,6 +76,7 @@
                 </tbody>
             </table>
         {% endif %}
+        
         {% if musical_exps.count > 0 %}
             <h3>Musical Experiences</h3>
             <table class="displayTable">
@@ -99,6 +101,31 @@
                 </tbody>
             </table>
         {% endif %}
+        {% if family %}
+            <h3>Family</h3>
+            <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
+            </a><br>
+            {% if parents.count > 1 %}
+                <h4>Spouse</h4>
+                {% for parent in parents %}
+                    {% if parent.parent.id != adult.id %}
+                        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">  
+                            {{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}
+                        </a><br>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if children.count > 0 %}
+                <h4>Child(ren)</h4>
+                {% for child in children %}
+                    <a href="{% url 'child_detail' child_id=child.child.id %}">  
+                        {{child.child.id}} - {{child.child.given_name}} {{child.child.surname}}
+                    </a><br>
+                {% endfor %}
+            {% endif%}
+        {% endif %}
+        
+        <h2>Participation</h2>
         <h3>Assessments</h3>
         {% if assessment_participations|length > 0 %}
             <table class="displayTable">
@@ -138,7 +165,7 @@
             </table>
         {% endif %}
         <form method="get" id="assessment_run" action="/assessment_run/add/" accept-charset="utf-8">
-            <h4>Add Assessment Run</h4>
+            <h3>Add Assessment Run</h3>
             <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
             <input id="participantID" name="participantID" type="hidden" value="{{adult.id}}">
             <select id="chooseAssessmentField" name="chooseAssessmentField">
@@ -148,33 +175,56 @@
             </select>
             <input type="submit" id="chooseAssessmentButton" value="Add Assessment Run">
         </form>
-        {% if family %}
-            <h3>Family</h3>
-            <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
-            </a><br>
-            {% if parents.count > 1 %}
-                <h4>Spouse</h4>
-                {% for parent in parents %}
-                    {% if parent.parent.id != adult.id %}
-                        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">  
-                            {{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}
-                        </a><br>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            {% if children.count > 0 %}
-                <h4>Child(ren)</h4>
-                {% for child in children %}
-                    <a href="{% url 'child_detail' child_id=child.child.id %}">  
-                        {{child.child.id}} - {{child.child.given_name}} {{child.child.surname}}
-                    </a><br>
-                {% endfor %}
-            {% endif%}
+        {% comment %} <h3>Experiments</h3>
+        {% if experiment_section_participations|length > 0 %}
+            <table class="displayTable">
+                <thead>
+                    <tr>
+                        <th class="field_name">Experiment</th>
+                        <th class="field_name">Section</th>
+                        <th class="field_name">Lab</th>
+                        <th class="field_name">Assessor</th>
+                        <th class="field_name">Date</th>
+                        <th class="field_name">Notes</th>
+                        <th class="field_name">Results</th>
+                        <th class="field_name">Delete</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for participation in experiment_section_participations %}
+                        <tr>
+                            <td class="field_value">{{participation.experiment.experiment_name}}</td>
+                            <td class="field_value">{{participation.experiment_section_name}}</td>
+                            <td class="field_value">{{participation.assessor}}</td>
+                            <td class="field_value">{{participation.date}}</td>
+                            <td class="field_value">{{participation.notes}}</td>                          
+                            <td class="field_value">
+                                {% for part in all_scores_exp.items %}
+                                    {% if part.0 == participation.id %}
+                                        {% for field in part.1%}
+                                            {{field.assessment_field.field_name}}: {{field.score}}<br>
+                                        {% endfor %}
+                                    {% endif %}
+                                {%endfor%}
+                            </td>   
+                            <td class="field_value"><a href="{% url 'delete_experiment_section_run' experiment_section_run_id=participation.id %}">Delete</a></td>    
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% endif %}
-
-        <h3>Manage</h3>
-        <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete {{adult}}</a><br>
-        <a href="{% url 'update_adult' adult_id=adult.id %}">Update {{adult}}</a>
+        <form method="get" id="chooseExperimentSection" action="/experiment_section_run/add/" accept-charset="utf-8">
+            <h3>Add Experiment Run</h3>
+            <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
+            <input id="participantID" name="participantID" type="hidden" value="{{adult.id}}">
+            <select id="chooseExperimentSectionField" name="chooseExperimentSectionField">
+                {% for experiment_section in experiment_sections %}
+                    <option value="{{experiment_section.experiment.experiment_name}}~{{experiment_section.experiment_section_name}}">Experiment: {{experiment_section.experiment.experiment_name}} Section: {{experiment_section.experiment_section_name}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" id="chooseExperimentSectionButton" value="Add Experiment Section Run">
+        </form> {% endcomment %}
 
         
     </div>

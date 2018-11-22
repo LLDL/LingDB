@@ -45,9 +45,16 @@ def get_user_authed_list(request, full_queryset, sub_of=""):
     # print(user_authed_list)
     return user_authed_list
 
-def check_user_groups(request, obj):
+def check_user_groups(request, obj, sub_of=""):
     groups = request.user.groups.values_list('id', flat=True)
-    for group in groups:
-        if obj.lab.group.id == group:
-            return True
+    if sub_of:
+        sub_of += ".lab.group.id"
+        parent = attrgetter(sub_of)(obj)
+        for group in groups:
+            if group == parent:
+                return True
+    else:
+        for group in groups:
+            if obj.lab.group.id == group:
+                return True
     return False

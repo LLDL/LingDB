@@ -1,0 +1,67 @@
+{% extends "ParticipantDB/sidebar.html" %}
+{% block content %}
+    <h2>New Run of Section '{{experiment_section_name}}' of Experiment '{{experiment_name}}' ({{participant_type|title}})</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Basic Info</h3>
+        <table id="new_experiment_section_run_table">
+            <tbody>
+                <tr>
+                    <td class="field_name">Participant</td>       
+                    <td>
+                        {% if participant_type == "adult" %}
+                            {{experiment_section_run_form.participantAdult}}
+                        {% else %}
+                            {{experiment_section_run_form.participantChild}}
+                        {% endif %}
+                    </td>
+                
+                </tr>
+                <tr>            
+                    <td class="field_name">Run Date</td>  
+                    <td class="field_value">{{experiment_section_run_form.date}}</td> 
+                </tr>
+                <tr>            
+                        <td class="field_name">Assessor</td>  
+                        <td class="field_value">{{experiment_section_run_form.assessor}}</td> 
+                    </tr>
+                <tr>            
+                    <td class="field_name">Notes</td>  
+                    <td class="field_value">{{experiment_section_run_form.notes}}</td> 
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Results</h3>
+        {{ experiment_section_run_field_score_formset.management_form }}
+        {% if experiment_section_run_field_score_formset.errors %}
+            {{ experiment_section_run_field_score_formset.errors }}
+        {% endif %}
+        {% if experiment_section_run_field_score_formset.non_form_errors %}
+            {{ experiment_section_run_field_score_formset.non_form_errors }}
+        {% endif %}
+        <table>
+            <thead>
+                <tr>
+                    <th class="field_name">Field</th>
+                    <th class="field_name">Type</th>
+                    <th class="field_name">Score</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for field, score in field_score_pairs %}
+                    <tr>            
+                        <td class="field_value">{{field.field_name}}</td>
+                        <td class="field_value">{{field.type}}</td>
+                        <td class="field_value">{{score.score}}</td>
+                    </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

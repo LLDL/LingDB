@@ -6,7 +6,7 @@
     <div>
         {% if assessment_fields.count > 0 %}
             <h3>Fields</h3>
-            <table>
+            <table class="displayTable">
                 <thead>
                     <tr>
                         <th class="field_name">Name</th>
@@ -25,10 +25,42 @@
         {% endif %}
         
         <h3>Manage</h3>
-
-
             <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}">Delete {{Assessment}}</a><br>
             <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
-
+        {% if assessment_runs.count > 0%}
+            <h3>Runs</h3>
+            <table class="displayTable">
+                <thead>
+                    <tr>
+                        <th class="field_name">Participant</th>
+                        <th class="field_name">Date</th>
+                        <th class="field_name">Notes</th>
+                        <th class="field_name">Assessor</th>
+                        <th class="field_name">Open</th>
+                        <th class="field_name">Update</th>
+                        <th class="field_name">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for run in assessment_runs %}
+                        <tr>
+                            <td class="field_value">
+                                {% if run.participantAdult%}
+                                    {{run.participantAdult}}
+                                {% else %}
+                                    {{run.participantChild}}
+                                {% endif %}
+                            </td>
+                            <td class="field_value">{{run.date}}</td>
+                            <td class="field_value">{{run.notes}}</td>
+                            <td class="field_value">{{run.assessor}}</td>
+                            <td class="field_value"><a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}">Open</a>
+                            <td class="field_value"><a href="{% url 'update_assessment_run' assessment_run_id=run.id %}">Update</a>
+                            <td class="field_value"><a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}">Delete</a>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 {% endblock %}
