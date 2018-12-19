@@ -1,5 +1,6 @@
 # Django Imports ----------------------------------------------------------------
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.forms import inlineformset_factory
 from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
@@ -85,6 +86,8 @@ def add_family(request):
                     inst.family = family
                     inst.save()
 
+
+            messages.success(request, 'Family was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_family'))
             else:
@@ -106,6 +109,8 @@ def family_detail(request, family_id):
 def delete_family(request, family_id):
     try:
         Family.objects.get(pk=family_id).delete()
+        
+        messages.success(request, 'Family was successfully deleted')
         return redirect(reverse('index'))
     except Family.DoesNotExist:
         raise Http404("No family with id" + family_id)
@@ -154,6 +159,7 @@ def update_family(request, family_id):
                     inst.family = family
                     inst.save()
 
+            messages.success(request, 'Family was successfully updated')
             return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
 
     else:
@@ -193,6 +199,8 @@ def add_adult(request):
                     inst = musical_experience_form.save(commit=False)
                     inst.person = adult
                     inst.save()
+                    
+            messages.success(request, 'Adult was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_adult'))
             else:
@@ -248,9 +256,9 @@ def update_adult(request, adult_id):
                     elif musical_experience_form.cleaned_data.get('experience'):
                         inst = musical_experience_form.save(commit=False)
                         inst.person = adult
-                        inst.save()
-            
-            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
+                        inst.save()          
+                messages.success(request, 'Adult was successfully updated')
+                return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
         
 
     else:
@@ -263,7 +271,6 @@ def adult_detail(request, adult_id):
     adult = get_object_or_404(Adult, pk=adult_id)
     speaks = Speaks.objects.filter(person = adult)
     musical_exps = MusicalExperience.objects.filter(person = adult)
-
 
     all_assessment_participations = Assessment_Run.objects.filter(participantAdult = adult)
     assessment_participations = get_user_authed_list(request, all_assessment_participations, "assessment")
@@ -299,6 +306,8 @@ def adult_detail(request, adult_id):
 def delete_adult(request, adult_id):
     try:
         Adult.objects.get(pk=adult_id).delete()
+        
+        messages.success(request, 'Adult was successfully deleted')
         return redirect(reverse('index'))
     except Adult.DoesNotExist:
         raise Http404("No adult with id" + adult_id)
@@ -322,6 +331,7 @@ def add_child(request):
                     inst.child = child
                     inst.save()
             
+            messages.success(request, 'Child was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_child'))
             else:
@@ -358,7 +368,9 @@ def update_child(request, child_id):
                         inst = exposure_form.save(commit=False)
                         inst.child = child
                         inst.save()
-            return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
+                        
+                messages.success(request, 'Child was successfully updated')
+                return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
     else:
         child_form = ChildForm(instance = child_inst)
 
@@ -381,6 +393,8 @@ def child_detail(request, child_id):
 def delete_child(request, child_id):
     try:
         Child.objects.get(pk=child_id).delete()
+        
+        messages.success(request, 'Child was successfully deleted')
         return redirect(reverse('index'))
     except Child.DoesNotExist:
         raise Http404("No child with id" + child_id)
@@ -393,6 +407,8 @@ def add_language(request):
         form = LanguageForm(request.POST)
         if form.is_valid():
             form.save()
+            
+            messages.success(request, 'Language was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_language'))
             else:
@@ -409,6 +425,7 @@ def add_musical_skill(request):
         if form.is_valid():
             form.save()
             
+            messages.success(request, 'Musical skill was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_musical_skill'))
             else:
@@ -438,6 +455,8 @@ def add_assessment(request):
                     inst.field_of = assessment
                     inst.save()
 
+    
+            messages.success(request, 'Assessment was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_assessment'))
             else:
@@ -458,6 +477,8 @@ def assessment_detail(request, assessment_name):
 def delete_assessment(request, assessment_name):
     try:
         Assessment.objects.get(pk=assessment_name).delete()
+        
+        messages.success(request, 'Assessment was successfully deleted')
         return redirect(reverse('index'))
     except Assessment.DoesNotExist:
         raise Http404("No assessment named " + assessment_name)
@@ -494,6 +515,8 @@ def update_assessment(request, assessment_name):
                 print('{} != {}'.format(assessment_form.cleaned_data.get('assessment_name'), assessment_name))
                 Assessment.objects.get(pk=assessment_name).delete()
 
+            
+            messages.success(request, 'Assessment was successfully updated')
             return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
@@ -551,6 +574,7 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
                 inst.save()
             
 
+            messages.success(request, 'Assessment run was successfully deleted')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
             else:
@@ -580,6 +604,7 @@ def assessment_run_detail(request, assessment_run_id):
 def delete_assessment_run(request, assessment_run_id):
     try:
         Assessment_Run.objects.get(pk=assessment_run_id).delete()
+        messages.success(request, 'Assessment run was successfully deleted')
         return redirect(reverse('index'))
     except Assessment_Run.DoesNotExist:
         raise Http404("No assessment_run with id " + assessment_run_id)
@@ -617,6 +642,8 @@ def add_experiment(request):
                     inst = experiment_section_form.save(commit=False)
                     inst.experiment = experiment
                     inst.save()
+            
+            messages.success(request, 'Experiment was successfully added')
             return redirect(reverse('add_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))
     else:
         experiment_form = ExperimentForm()
@@ -647,6 +674,8 @@ def add_experiment_section_fields(request, experiment_name):
                     inst = section_field.save(commit = False)
                     inst.field_of = section
                     inst.save()
+        
+        messages.success(request, 'Experiment Section Fields were successfully added')
         return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
 
@@ -660,6 +689,7 @@ def experiment_detail(request, experiment_name):
 def delete_experiment(request, experiment_name):
     try:
         Experiment.objects.get(pk=experiment_name).delete()
+        messages.success(request, 'Experiment was successfully deleted')
         return redirect(reverse('index'))
     except Experiment.DoesNotExist:
         raise Http404("No experiment named " + experiment_name)
@@ -688,6 +718,8 @@ def delete_experiment_section(request, experiment_name, experiment_section_name)
         experiment = Experiment.objects.get(experiment_name = experiment_name)
         try:
             Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment).delete()
+            
+            messages.success(request, 'Experiment section was successfully deleted')
             return redirect(reverse('index'))
         except Experiment_Section.DoesNotExist:
             raise Http404("Experiment '{}' does not have an experiment section '{}' ".format(experiment_name, experiment_section_name))
@@ -755,6 +787,7 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
             
 
 
+            messages.success(request, 'Experiment section run was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_experiment_section_run', kwargs={'experiment_section_name': experiment_section_name, 'experiment_name': experiment_name ,'participant_type': participant_type}))
             else:
