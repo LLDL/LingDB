@@ -37,6 +37,22 @@
             </tr>    
             {% endif %}
             <tr>
+                    <td class="field_name">Address:</td>
+                    <td class="field_value">{{adult.address}}</td>
+            </tr>
+            <tr>
+                    <td class="field_name">Years of Education:</td>
+                    <td class="field_value">{{adult.years_of_education}}</td>
+            </tr>
+            <tr>
+                    <td class="field_name">Phone:</td>
+                    <td class="field_value">{{adult.phone}}</td>
+            </tr>
+            <tr>
+                    <td class="field_name">Email:</td>
+                    <td class="field_value">{{adult.email}}</td>
+            </tr>
+            <tr>
                     <td class="field_name">Contact Preference:</td>
                     <td class="field_value">{{adult.get_contact_pref_display}}</td>
             </tr>    
@@ -48,6 +64,12 @@
             <tr>
                     <td class="field_name">Health Notes:</td>
                     <td class="field_value">{{adult.health_notes}}</td>
+            </tr>
+            {% endif %}
+            {% if adult.personal_notes %}
+            <tr>
+                    <td class="field_name">Personal Notes:</td>
+                    <td class="field_value">{{adult.personal_notes}}</td>
             </tr>
             {% endif %}
         </table>

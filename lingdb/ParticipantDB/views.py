@@ -359,11 +359,14 @@ def update_child(request, child_id):
 def child_detail(request, child_id):
     child = get_object_or_404(Child, pk=child_id)
     languages_exposed_to = IsExposedTo.objects.filter(child = child)
-    child_in = IsChildIn.objects.get(child = child)
-    family = Family.objects.get(pk=child_in.family.id)
-    all_parents = IsParentIn.objects.filter(family = family)
-    all_children = IsChildIn.objects.filter(family = family)
-    return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
+    try:
+        child_in = IsChildIn.objects.get(child = child)
+        family = Family.objects.get(pk=child_in.family.id)
+        all_parents = IsParentIn.objects.filter(family = family)
+        all_children = IsChildIn.objects.filter(family = family)
+        return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
+    except IsChildIn.DoesNotExist:
+        return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to})
 
 @login_required
 def delete_child(request, child_id):
@@ -419,7 +422,7 @@ def add_assessment(request):
                     inst.field_of = assessment
                     inst.save()
 
-            return redirect(reverse('index'))
+            return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
     else:
         assessment_form = AssessmentForm()
     

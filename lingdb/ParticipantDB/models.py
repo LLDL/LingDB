@@ -36,6 +36,8 @@ class Person(models.Model):
     surname = models.CharField(max_length = 100, default='', verbose_name = "Surname")
     birth_date = models.DateField(verbose_name = "Birth Date")
     gender = models.CharField(max_length = 100, default='')
+    health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
+    personal_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name="Personal Notes")
     def __str__(self):
         return '%s - %s %s' % (self.id, self.given_name, self.surname) 
 
@@ -48,7 +50,7 @@ class Adult(Person):
         verbose_name_plural = "Adults"
     sfu_id = models.IntegerField(blank = True, null = True, verbose_name = "SFU ID")
     address = models.CharField(max_length=200)
-    years_of_education = models.SmallIntegerField(
+    years_of_education = models.IntegerField(
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(20),
@@ -76,7 +78,6 @@ class Adult(Person):
     )
     pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, default = 'DNC', verbose_name = "Preferred Phone Time")
     
-    health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
     languages = models.ManyToManyField('Language', blank = True, through='Speaks')
     musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')
 
@@ -89,12 +90,9 @@ class Child(Person):
     was_full_term = models.BooleanField(blank = True, null = True, verbose_name = "Was Full Term?")
     birth_weight = models.SmallIntegerField(blank = True, null = True, verbose_name = "Birth Weight (Grams)")
     birth_height = models.SmallIntegerField(blank = True, null = True, verbose_name = "Birth Height (CM)")
-    personal_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name="Personal Notes")
     hx_repeated_ear_infection = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "HX of Repeated Ear Infection")
-    last_ear_infection = models.DateField(blank = True, null = True, verbose_name = "Last Ear Infection")
     hereditary_audio_problems = models.BooleanField(verbose_name = "Hereditary Audio Problems?")
     hereditary_language_pathologies = models.BooleanField(verbose_name = "Hereditary Language Pathologies?")
-    health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
     exposed_to = models.ManyToManyField('Language', through='IsExposedTo', default = None, verbose_name = "Languages Exposed To")
 
 class Family(models.Model):
@@ -143,7 +141,7 @@ class Experiment_Section_Run(models.Model):
     participantChild = models.ForeignKey(Child, on_delete = models.CASCADE, null=True, blank=True)
     experiment_section = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     date = models.DateField()
-    notes = models.TextField(max_length=1000)
+    notes = models.TextField(max_length=1000, null=True, blank=True)
     assessor = models.CharField(max_length=100) 
 
 class Experiment_Section_Field(models.Model):
@@ -253,6 +251,8 @@ class Speaks(models.Model):
     )
 
     age_learning_ended = models.SmallIntegerField(
+        blank=True,
+        null=True,
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),
@@ -280,6 +280,8 @@ class MusicalExperience(models.Model):
     )
 
     age_learning_ended = models.SmallIntegerField(
+        blank=True,
+        null=True,
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(120),

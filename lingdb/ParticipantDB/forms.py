@@ -60,7 +60,7 @@ ChildInFamilyInlineFormSet = inlineformset_factory(
 class AdultForm(ModelForm):
     class Meta:
         model = Adult
-        fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','health_notes')
+        fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
             'birth_date': DateInput(attrs={'type': 'date'})
         }
@@ -70,10 +70,9 @@ class AdultForm(ModelForm):
 class ChildForm(ModelForm):
     class Meta:
         model = Child
-        fields = ('id','given_name','preferred_name','surname','birth_date','gender','gestation_length_weeks','was_full_term','birth_weight','birth_height','personal_notes','hx_repeated_ear_infection','last_ear_infection','hereditary_audio_problems','hereditary_language_pathologies','health_notes')
+        fields = ('id','given_name','preferred_name','surname','birth_date','gender','gestation_length_weeks','was_full_term','birth_weight','birth_height','personal_notes','hx_repeated_ear_infection','hereditary_audio_problems','hereditary_language_pathologies','health_notes')
         widgets = {
             'birth_date': DateInput(attrs={'type': 'date'}),
-            'last_ear_infection': DateInput(attrs={'type': 'date'}),
         }
 
 # Language Forms ----------------------------------------------------------------

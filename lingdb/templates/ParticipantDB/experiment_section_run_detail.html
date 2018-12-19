@@ -37,7 +37,7 @@
         </table>
         {% if experiment_section_run_fields.count > 0 %}
             <h3>Results</h3>
-            <table>
+            <table class="displayTable">
                 <thead>
                     <tr>
                         <th class="field_name">Field</th>
@@ -58,7 +58,7 @@
         <h3>Manage</h3>
 
 
-            {% comment %} <a href="{% url 'delete_assessment_run' assessment_run_id=assessment_run.id %}">Delete {{Assessment}}</a><br> {% endcomment %}
+            <a href="{% url 'delete_experiment_section_run' experiment_section_run_id=experiment_section_run.id %}">Delete {{experiment_section_run.id}}</a><br>
             
         {% comment %}
             <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
