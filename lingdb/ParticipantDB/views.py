@@ -85,7 +85,10 @@ def add_family(request):
                     inst.family = family
                     inst.save()
 
-            return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_family'))
+            else:
+                return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
 
     else:
         family_form = FamilyForm(initial={'id': make_unique_id()})
@@ -190,8 +193,10 @@ def add_adult(request):
                     inst = musical_experience_form.save(commit=False)
                     inst.person = adult
                     inst.save()
-
-            return redirect(reverse('adult_detail', kwargs={'adult_id': adult.id}))
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_adult'))
+            else:
+                return redirect(reverse('adult_detail', kwargs={'adult_id': adult.id}))
         
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
@@ -317,7 +322,11 @@ def add_child(request):
                     inst.child = child
                     inst.save()
             
-            return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_child'))
+            else:
+                return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
+
     else:
         child_form = ChildForm(initial={'id': make_unique_id()})
     return render(request, "ParticipantDB/child_form.html", {'child_form': child_form, 'exposure_forms': exposure_forms})
@@ -384,7 +393,10 @@ def add_language(request):
         form = LanguageForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('index'))
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_language'))
+            else:
+                return redirect(reverse('index'))
     else:
         form = LanguageForm()
     return render(request, "ParticipantDB/language_form.html", {'form': form})
@@ -396,7 +408,11 @@ def add_musical_skill(request):
         form = MusicalSkillForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('index'))
+            
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_musical_skill'))
+            else:
+                return redirect(reverse('index'))
     else:
         form = MusicalSkillForm()
     return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
@@ -422,7 +438,10 @@ def add_assessment(request):
                     inst.field_of = assessment
                     inst.save()
 
-            return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_assessment'))
+            else:
+                return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
     else:
         assessment_form = AssessmentForm()
     
@@ -531,7 +550,11 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
                 inst.assessment_field = field
                 inst.save()
             
-            return redirect(reverse('assessment_run_detail', kwargs={'assessment_run_id': assessment_run.id}))
+
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
+            else:
+                return redirect(reverse('assessment_run_detail', kwargs={'assessment_run_id': assessment_run.id}))
             
     
     else:
@@ -730,7 +753,12 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
                 inst.experiment_section_field = field
                 inst.save()
             
-            return redirect(reverse('experiment_section_run_detail', kwargs={'experiment_section_run_id': experiment_section_run.id}))
+
+
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_experiment_section_run', kwargs={'experiment_section_name': experiment_section_name, 'experiment_name': experiment_name ,'participant_type': participant_type}))
+            else:
+                return redirect(reverse('experiment_section_run_detail', kwargs={'experiment_section_run_id': experiment_section_run.id}))
             
     
     else:
