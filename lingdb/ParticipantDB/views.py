@@ -436,7 +436,8 @@ def add_assessment(request):
         if assessment_form.is_valid() and assessment_field_forms.is_valid():
             assessment = assessment_form.save(commit=False)
             authed_groups = get_user_groups(request)
-            if(assessment.lab.group.name in authed_groups):
+            nameOverload = Experiment.objects.filter(experiment_name=assessment.assessment_name).exists()
+            if(assessment.lab.group.name in authed_groups and not nameOverload):
                 assessment.save()
 
                 for assessment_field_form in assessment_field_forms:
@@ -452,7 +453,10 @@ def add_assessment(request):
                 else:
                     return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
             else:
-                messages.error(request, "You are not authorized to add assessments to {} lab ".format(assessment.lab))
+                if(nameOverload):
+                    messages.error(request, "An experiment already exists with this name, please choose another name")
+                else:
+                    messages.error(request, "You are not authorized to add assessments to {} lab ".format(assessment.lab))
                 return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
     else:
         assessment_form = AssessmentForm()
@@ -505,7 +509,8 @@ def update_assessment(request, assessment_name):
         if assessment_form.is_valid():
             assessment = assessment_form.save(commit=False)
             authed_groups = get_user_groups(request)
-            if(assessment.lab.group.name in authed_groups):
+            nameOverload = Experiment.objects.filter(experiment_name=assessment.assessment_name).exists()
+            if(assessment.lab.group.name in authed_groups and not nameOverload):
                 assessment.save()
                 if assessment_field_forms.is_valid():
                     for field_form in assessment_field_forms:
@@ -525,7 +530,10 @@ def update_assessment(request, assessment_name):
                 messages.success(request, 'Assessment was successfully updated')
                 return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
             else:
-                messages.error(request, "You are not authorized to edit {} lab's assessments ".format(assessment.lab))
+                if(nameOverload):
+                    messages.error(request, "An experiment already exists with this name, please choose another name")
+                else:
+                    messages.error(request, "You are not authorized to edit {} lab's assessments ".format(assessment.lab))
                 return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
