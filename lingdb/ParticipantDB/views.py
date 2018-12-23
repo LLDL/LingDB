@@ -281,26 +281,14 @@ def adult_detail(request, adult_id):
         assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
         all_scores[assessment_participation.id] = assessment_run_fields
 
-    # all_experiment_section_participations = Experiment_Section_Run.objects.filter(participantAdult = adult)
-    # experiment_section_participations = all_experiment_section_participations
-    # # experiment_section_participations = get_user_authed_list(request, all_experiment_section_participations, "experiment")
-    # all_experiment_sections = Experiment_Section.objects.all()
-    # eligible_experiment_sections = get_user_authed_list(request, all_experiment_sections, "experiment")
-    # all_scores_expr = {}
-    # for experiment_section_participation in experiment_section_participations:
-    #     experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_section_participation)
-    #     all_scores_expr[experiment_section_participation.id] = experiment_section_run_fields
-
     try:
         parent_in = IsParentIn.objects.get(parent = adult)
         family = Family.objects.get(pk=parent_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
         return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
-        # return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_section_participations, 'all_scores_expr': all_scores_expr, 'eligible_experiment_sections': eligible_experiment_sections})
     except IsParentIn.DoesNotExist:
-        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments}) 
-        # return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_section_participations, 'all_scores_expr': all_scores_expr, 'eligible_experiment_sections': eligible_experiment_sections})   
+        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
 
 @login_required
 def delete_adult(request, adult_id):
@@ -447,20 +435,25 @@ def add_assessment(request):
         assessment_field_forms = AssessmentFieldInlineFormSet(request.POST, prefix = 'assessment_fields') 
         if assessment_form.is_valid() and assessment_field_forms.is_valid():
             assessment = assessment_form.save(commit=False)
-            assessment.save()
+            authed_groups = get_user_groups(request)
+            if(assessment.lab.group.name in authed_groups):
+                assessment.save()
 
-            for assessment_field_form in assessment_field_forms:
-                if assessment_field_form.is_valid() and assessment_field_form.cleaned_data.get('field_name'):
-                    inst = assessment_field_form.save(commit=False)
-                    inst.field_of = assessment
-                    inst.save()
+                for assessment_field_form in assessment_field_forms:
+                    if assessment_field_form.is_valid() and assessment_field_form.cleaned_data.get('field_name'):
+                        inst = assessment_field_form.save(commit=False)
+                        inst.field_of = assessment
+                        inst.save()
 
-    
-            messages.success(request, 'Assessment was successfully added')
-            if 'save_add_another' in request.POST:
-                return redirect(reverse('add_assessment'))
+        
+                messages.success(request, 'Assessment was successfully added')
+                if 'save_add_another' in request.POST:
+                    return redirect(reverse('add_assessment'))
+                else:
+                    return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
             else:
-                return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
+                messages.error(request, "You are not authorized to add assessments to {} lab ".format(assessment.lab))
+                return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
     else:
         assessment_form = AssessmentForm()
     
@@ -471,14 +464,23 @@ def assessment_detail(request, assessment_name):
     assessment = get_object_or_404(Assessment, pk=assessment_name)
     assessment_fields = Assessment_Field.objects.filter(field_of = assessment)
     assessment_runs = Assessment_Run.objects.filter(assessment = assessment)
-    return render(request, 'ParticipantDB/assessment_detail.html', {'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
+    authed_groups = get_user_groups(request)
+    print(authed_groups)
+    print(assessment.lab.group)
+    canAccess = assessment.lab.group.name in authed_groups
+    return render(request, 'ParticipantDB/assessment_detail.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
 
 @login_required
 def delete_assessment(request, assessment_name):
     try:
-        Assessment.objects.get(pk=assessment_name).delete()
+        assessment = Assessment.objects.get(pk=assessment_name)
+        authed_groups = get_user_groups(request)
+        canAccess = assessment.lab.group.name in authed_groups
+        if canAccess:
+            assessment.delete()
+            messages.success(request, 'Assessment was successfully deleted')
         
-        messages.success(request, 'Assessment was successfully deleted')
+        messages.error(request, 'Assessment was not deleted as you do not have authorization to access it')
         return redirect(reverse('index'))
     except Assessment.DoesNotExist:
         raise Http404("No assessment named " + assessment_name)
@@ -494,34 +496,41 @@ def update_assessment(request, assessment_name):
         prefix = 'assessment_fields',
         queryset = Assessment_Field.objects.filter(field_of=assessment_inst),
     )
+    authed_groups = get_user_groups(request)
+    canAccess = assessment_inst.lab.group.name in authed_groups
 
     if request.method == "POST":
         assessment_form = AssessmentForm(request.POST, request.FILES, instance=assessment_inst)
         assessment_field_forms = AssessmentFieldInlineFormSet(request.POST, request.FILES, prefix = 'assessment_fields')
         if assessment_form.is_valid():
             assessment = assessment_form.save(commit=False)
-            assessment.save()
-            if assessment_field_forms.is_valid():
-                for field_form in assessment_field_forms:
-                    if field_form.cleaned_data.get('DELETE'):
-                        toDelete = field_form.cleaned_data.get('field_name')
-                        Assessment_Field.objects.filter(field_of=assessment_inst, field_name=toDelete).delete()
-                        # delete
-                    elif field_form.cleaned_data.get('field_name'):
-                        inst = field_form.save(commit=False)
-                        inst.field_of = assessment
-                        inst.save()
-            if(assessment_form.cleaned_data.get('assessment_name') != assessment_name):
-                print('{} != {}'.format(assessment_form.cleaned_data.get('assessment_name'), assessment_name))
-                Assessment.objects.get(pk=assessment_name).delete()
+            authed_groups = get_user_groups(request)
+            if(assessment.lab.group.name in authed_groups):
+                assessment.save()
+                if assessment_field_forms.is_valid():
+                    for field_form in assessment_field_forms:
+                        if field_form.cleaned_data.get('DELETE'):
+                            toDelete = field_form.cleaned_data.get('field_name')
+                            Assessment_Field.objects.filter(field_of=assessment_inst, field_name=toDelete).delete()
+                            # delete
+                        elif field_form.cleaned_data.get('field_name'):
+                            inst = field_form.save(commit=False)
+                            inst.field_of = assessment
+                            inst.save()
+                if(assessment_form.cleaned_data.get('assessment_name') != assessment_name):
+                    print('{} != {}'.format(assessment_form.cleaned_data.get('assessment_name'), assessment_name))
+                    Assessment.objects.get(pk=assessment_name).delete()
 
-            
-            messages.success(request, 'Assessment was successfully updated')
-            return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
+                
+                messages.success(request, 'Assessment was successfully updated')
+                return redirect(reverse('assessment_detail', kwargs={'assessment_name': assessment.assessment_name}))
+            else:
+                messages.error(request, "You are not authorized to edit {} lab's assessments ".format(assessment.lab))
+                return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
     
-    return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
+    return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
 
 # Assessment Run -----------------------------------------------------------
 @login_required
@@ -574,7 +583,7 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
                 inst.save()
             
 
-            messages.success(request, 'Assessment run was successfully deleted')
+            messages.success(request, 'Assessment run was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_assessment_run', kwargs={'assessment_name': assessment_name, 'participant_type': participant_type}))
             else:
@@ -625,7 +634,7 @@ def add_experiment(request):
     for lab in all_labs:
         flag = False
         for group in auth_groups:
-            if lab.group.id == group:
+            if lab.group.name == group:
                 flag = True
         if flag:
             auth_labs.append(lab)

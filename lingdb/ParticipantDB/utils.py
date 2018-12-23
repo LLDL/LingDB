@@ -18,8 +18,8 @@ def make_unique_id():
     return str(potentially_random)
 
 def get_user_groups(request):
-    groups = request.user.groups.values_list('id', flat=True)
-    # print(groups)
+    groups = request.user.groups.values_list('name', flat=True)
+    print(groups)
     return groups
 
 def get_user_authed_list(request, full_queryset, sub_of=""):
