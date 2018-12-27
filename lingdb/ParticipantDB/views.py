@@ -646,26 +646,34 @@ def add_experiment(request):
                 flag = True
         if flag:
             auth_labs.append(lab)
-    print(auth_labs)
     if request.method == "POST":
         experiment_form = ExperimentForm(request.POST)
         experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
         if experiment_form.is_valid() and experiment_section_forms.is_valid():
             experiment = experiment_form.save(commit=False)
-            experiment.save()
+            authed_groups = get_user_groups(request)
+            nameOverload = Assessment.objects.filter(assessment_name=experiment.experiment_name).exists()
+            if(experiment.lab.group.name in authed_groups and not nameOverload):
+                experiment.save()
 
-            for experiment_section_form in experiment_section_forms:
-                if experiment_section_form.is_valid() and experiment_section_form.cleaned_data.get('experiment_section_name'):
-                    inst = experiment_section_form.save(commit=False)
-                    inst.experiment = experiment
-                    inst.save()
-            
-            messages.success(request, 'Experiment was successfully added')
-            return redirect(reverse('add_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))
+                for experiment_section_form in experiment_section_forms:
+                    if experiment_section_form.is_valid() and experiment_section_form.cleaned_data.get('experiment_section_name'):
+                        inst = experiment_section_form.save(commit=False)
+                        inst.experiment = experiment
+                        inst.save()
+                
+                messages.success(request, 'Experiment was successfully added')
+                return redirect(reverse('add_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))
+            else:
+                if(nameOverload):
+                    messages.error(request, "An assessment already exists with this name, please choose another name")
+                else:
+                    messages.error(request, "You are not authorized to add experiments to {} lab ".format(experiment.lab))
+                    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
     else:
         experiment_form = ExperimentForm()
     
-    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'labs': auth_labs})
+    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
 
 @login_required
 def add_experiment_section_fields(request, experiment_name):
