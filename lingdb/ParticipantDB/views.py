@@ -735,7 +735,6 @@ def delete_experiment_section(request, experiment_name, experiment_section_name)
         experiment = Experiment.objects.get(experiment_name = experiment_name)
         try:
             Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment).delete()
-            
             messages.success(request, 'Experiment section was successfully deleted')
             return redirect(reverse('index'))
         except Experiment_Section.DoesNotExist:

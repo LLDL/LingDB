@@ -1,5 +1,5 @@
 # Django Imports ----------------------------------------------------------------
-from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError
+from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect
 
 # Project Imports ---------------------------------------------------------------
 from .models import *
@@ -73,6 +73,9 @@ class ChildForm(ModelForm):
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','gestation_length_weeks','was_full_term','birth_weight','birth_height','personal_notes','hx_repeated_ear_infection','hereditary_audio_problems','hereditary_language_pathologies','health_notes')
         widgets = {
             'birth_date': DateInput(attrs={'type': 'date'}),
+            'gestation_length_weeks': TextInput(attrs={'min': 0, 'max': 50, 'type': 'number'}),
+            'birth_weight': TextInput(attrs={'min': 0, 'max': 10000, 'type': 'number'}),
+            'birth_height': TextInput(attrs={'min': 0, 'max': 100, 'type': 'number'}),
         }
 
 # Language Forms ----------------------------------------------------------------
@@ -92,8 +95,6 @@ class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
         fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
-        widgets = {
-        }
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -103,7 +104,7 @@ class ExposureForm(ModelForm):
 SpeaksFormSet = modelformset_factory(
     Speaks,
     form = SpeaksForm,
-    can_delete = True
+    can_delete = True,
 )
 
 ExposureFormSet = modelformset_factory(
@@ -120,7 +121,12 @@ SpeaksInlineFormSet = inlineformset_factory(
     extra = 5,
     max_num = 5,
     min_num = 1,
-    validate_min = True
+    validate_min = True,
+    widgets = {
+        'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
+    }
 )
 
 ExposureInlineFormSet = inlineformset_factory(
@@ -132,6 +138,9 @@ ExposureInlineFormSet = inlineformset_factory(
     max_num = 5,
     min_num = 1,
     validate_min = True,
+    widgets = {
+        'percentage_exposure': TextInput(attrs={'min': 1, 'max': 100, 'type': 'number'}),
+    }
 )
 
 # Musical Forms -----------------------------------------------------------------
@@ -165,6 +174,11 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     max_num = 5,
     min_num = 0,
     validate_min = False,
+    widgets = {
+        'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
+    }
 )
 
 # Assessment Forms

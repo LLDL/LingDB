@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 
 class Language(models.Model):
     class Meta:
@@ -142,7 +142,7 @@ class Experiment_Section_Run(models.Model):
     experiment_section = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     date = models.DateField()
     notes = models.TextField(max_length=1000, null=True, blank=True)
-    assessor = models.CharField(max_length=100) 
+    assessor = models.ForeignKey(User, null= True, blank= True, on_delete = models.SET_NULL)
 
 class Experiment_Section_Field(models.Model):
     class Meta:
@@ -184,7 +184,7 @@ class Assessment_Run(models.Model):
 
     date = models.DateField()
     notes = models.TextField(max_length=1000)
-    assessor = models.CharField(max_length=100)
+    assessor = models.ForeignKey(User, null= True, blank= True, on_delete = models.SET_NULL)
     
     def __str__(self):
         return '%s took %s' % (self.participantAdult or self.participantChild, self.assessment)
