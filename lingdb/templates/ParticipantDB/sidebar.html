@@ -1,6 +1,12 @@
+<html>
+<head>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
-
+<script src="{% static 'ParticipantDB/js/jquery-3.3.1.js' %}"></script>
+{% block extraHead %}
+{% endblock %}
+</head>
+<body>
 <div id="sidebar" class="column">
     <a href="/" id="logo-link">
         <img src="{% static 'ParticipantDB/sfu-logo.png' %}" alt="SFU Department of Linguistics Participant Database" id="logo"><br>
@@ -76,3 +82,5 @@
 {% block content %}
 {% endblock %}
 </div>
+</body>
+</html>

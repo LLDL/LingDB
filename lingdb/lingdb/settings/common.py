@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ParticipantDB.apps.ParticipantDBConfig'
+    'ParticipantDB.apps.ParticipantDBConfig',
+    'django_select2'
 ]
 
 MIDDLEWARE = [

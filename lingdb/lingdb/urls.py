@@ -19,7 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('ParticipantDB.urls')),
     path('admin/', admin.site.urls),
-]
-urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
+    path('select2/', include('django_select2.urls')),
 ]

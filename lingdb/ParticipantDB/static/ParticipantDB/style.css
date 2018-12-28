@@ -132,9 +132,9 @@ input[type="checkbox"]{
     padding: 0;
     margin: 0;
 }
-input, select{
+/* input, select{
     height: 2em;
-}
+} */
 #search_box{
     height: 2em;
     font-size: 1.25em;

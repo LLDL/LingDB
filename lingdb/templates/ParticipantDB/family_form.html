@@ -1,4 +1,10 @@
 {% extends "ParticipantDB/sidebar.html" %}
+{% load static %}
+{% block extraHead %}
+    {{ parent_forms.media.css }}
+    {{ child_forms.media.css}}
+{% endblock %}
+
 {% block content %}
     <h2>New Family</h2>
     <form method="post">
@@ -21,7 +27,7 @@
             <tbody>
                 {% for parent_form in parent_forms %}
                     <tr>
-                        <td class="field_value">
+                        <td>
                             {{parent_form.parent}}
                         </td> 
                     </tr>
@@ -57,4 +63,8 @@
         <input type="submit" name="save" value="Save">
         <input type="submit" name="save_add_another" value="Save & Add Another">
     </form>
+
+{{ parent_forms.media.js}}
+
+{{ child_forms.media.js}}
 {% endblock %}

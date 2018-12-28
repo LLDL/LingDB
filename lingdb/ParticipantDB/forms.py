@@ -1,6 +1,9 @@
 # Django Imports ----------------------------------------------------------------
 from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect
 
+from django_select2.forms import Select2Widget
+
+
 # Project Imports ---------------------------------------------------------------
 from .models import *
 
@@ -29,7 +32,10 @@ ParentInlineFormSet = inlineformset_factory(
     extra = 1,
     max_num = 2,
     min_num = 1,
-    validate_min = True
+    validate_min = True,
+    widgets = {
+        'parent': Select2Widget()
+    }
 )
 
 class ChildInFamilyForm(ModelForm):
@@ -51,7 +57,10 @@ ChildInFamilyInlineFormSet = inlineformset_factory(
     extra = 9,
     max_num = 10,
     min_num = 1,
-    validate_min = True
+    validate_min = True,
+    widgets = {
+        'child': Select2Widget()
+    }
 )
 
 
