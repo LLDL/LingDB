@@ -124,14 +124,14 @@ h3{
     margin-top: .5em;
     margin-bottom: 0em;
 }
-input[type="submit"]{
+/* input[type="submit"]{
     margin-bottom:2em;
     margin-top: 1em;
 }
 input[type="checkbox"]{
     padding: 0;
     margin: 0;
-}
+} */
 /* input, select{
     height: 2em;
 } */
@@ -158,9 +158,14 @@ input[type="checkbox"]{
     color: #ffffff;
 }
 
+.select2-container {
+    width: 100% !important;
+}
+
+/* 
 .field_value_input input{
     width: 100%;
-}
+} */
 @media only screen and (max-width: 800px){
     .index-container{
         display: block !important;

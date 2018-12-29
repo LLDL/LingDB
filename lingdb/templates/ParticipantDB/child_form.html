@@ -1,4 +1,8 @@
 {% extends "ParticipantDB/sidebar.html" %}
+{% block extraHead %}
+    {{ child_form.media.css}}
+    {{ exposure_forms.media.css }}
+{% endblock %}
 {% block content %}
     <h2>New Child</h2>
     <form method="post">
@@ -37,4 +41,7 @@
         <input type="submit" name="save" value="Save">
         <input type="submit" name="save_add_another" value="Save & Add Another">
     </form>
+    
+    {{ child_form.media.js}}
+    {{ exposure_forms.media.js }}
 {% endblock %}

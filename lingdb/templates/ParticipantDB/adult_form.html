@@ -1,4 +1,12 @@
 {% extends "ParticipantDB/sidebar.html" %}
+{% load static %}
+{% block extraHead %}
+
+    {{ adult_form.media.css }}
+    {{ speaks_formset.media.css }}
+    {{ musical_experience_formset.media.css}}
+{% endblock %}
+
 {% block content %}
     <h2>New Adult</h2>
     
@@ -74,4 +82,8 @@
         <input type="submit" name="save" value="Save">
         <input type="submit" name="save_add_another" value="Save & Add Another">
     </form>
+    
+    {{ adult_form.media.js }}
+    {{ speaks_formset.media.js }}
+    {{ musical_experience_formset.media.js}}
 {% endblock %}

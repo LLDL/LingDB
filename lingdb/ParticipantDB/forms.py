@@ -1,7 +1,7 @@
 # Django Imports ----------------------------------------------------------------
 from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect
 
-from django_select2.forms import Select2Widget
+from django_select2.forms import Select2Widget, Select2MultipleWidget
 
 
 # Project Imports ---------------------------------------------------------------
@@ -71,7 +71,9 @@ class AdultForm(ModelForm):
         model = Adult
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
-            'birth_date': DateInput(attrs={'type': 'date'})
+            'birth_date': DateInput(attrs={'type': 'date'}),
+            'pref_phone_time': Select2Widget(),
+            'contact_pref': Select2Widget(),
         }
 
 # Child Forms -------------------------------------------------------------------
@@ -104,6 +106,7 @@ class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
         fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+        
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -135,6 +138,7 @@ SpeaksInlineFormSet = inlineformset_factory(
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
+        'lang': Select2Widget()
     }
 )
 
@@ -149,6 +153,7 @@ ExposureInlineFormSet = inlineformset_factory(
     validate_min = True,
     widgets = {
         'percentage_exposure': TextInput(attrs={'min': 1, 'max': 100, 'type': 'number'}),
+        'lang': Select2Widget()
     }
 )
 
@@ -187,6 +192,7 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
+        'experience': Select2Widget()
     }
 )
 
@@ -282,6 +288,8 @@ class AssessmentRunForm(ModelForm):
     class Meta: 
         model = Assessment_Run
         fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor',)
+        # fields = ('participantAdult', 'participantChild', 'date', 'notes',)
+
         widgets = {
             'date': DateInput(attrs={'type': 'date'})
         }
@@ -314,7 +322,8 @@ class ChooseExperimentSectionForm(ModelForm):
 class ExperimentSectionRunForm(ModelForm):
     class Meta:
         model = Experiment_Section_Run
-        fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor', )
+        fields = ('participantAdult', 'participantChild', 'date', 'notes', )
+        # fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor', )
         widgets = {
             'date': DateInput(attrs={'type': 'date'})
         }

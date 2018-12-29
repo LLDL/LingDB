@@ -1,4 +1,8 @@
 {% extends "ParticipantDB/sidebar.html" %}
+{% block extraHead %}
+    {{ child_form.media.css}}
+    {{ exposure_forms.media.css }}
+{% endblock %}
 {% block content %}
     <h2>Update Child # {{child_id}}</h2>
     <form action="{% url 'update_child' child_id %}" method="post">
@@ -39,4 +43,6 @@
 
         <input type="submit" value="Save">
     </form>
+    {{ child_form.media.js}}
+    {{ exposure_forms.media.js }}
 {% endblock %}
