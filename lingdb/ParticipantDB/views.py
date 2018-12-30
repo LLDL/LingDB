@@ -677,8 +677,11 @@ def add_experiment(request):
 
 @login_required
 def add_experiment_section_fields(request, experiment_name):
-    experiment = Experiment.objects.get(pk=experiment_name)
-    experiment_sections = sorted(Experiment_Section.objects.filter(experiment=experiment), key=operator.attrgetter('experiment_section_name'))
+    try:
+        experiment = Experiment.objects.get(pk=experiment_name)
+    except Experiment.DoesNotExist:
+        Http404("No experiment with name " + experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
     fields = {}
     for section in experiment_sections:
         section_prefix = 'experiment_section_fields_' + section.experiment_section_name
@@ -701,14 +704,51 @@ def add_experiment_section_fields(request, experiment_name):
                     inst.save()
         
         messages.success(request, 'Experiment Section Fields were successfully added')
-        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
+        return redirect(reverse('add_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))       
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
+
+@login_required
+def update_experiment_section_fields(request, experiment_name): 
+    try:
+        experiment_inst = Experiment.objects.get(pk=experiment_name)
+    except Experiment.DoesNotExist:
+        Http404("No experiment with name " + experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(experiment=experiment_inst)
+    fields = {}
+    for section in experiment_sections:
+        section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+        section_fields = ExperimentSectionFieldInlineFormSet(
+            queryset = Experiment_Section_Field.objects.filter(field_of = section),
+            prefix = section_prefix
+        )
+        fields[section.id] = section_fields
+    
+    if request.method == "POST":
+        for section in experiment_sections:
+            section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+            section_fields = ExperimentSectionFieldInlineFormSet(
+                request.POST,
+                prefix = section_prefix,
+            )
+            for section_field in section_fields:
+                if section_field.is_valid() and section_field.cleaned_data.get('field_name'):
+                    inst = section_field.save(commit = False)
+                    inst.field_of = section
+                    inst.save()
+        
+        messages.success(request, 'Experiment Section Fields were successfully updated')
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
+    return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
 def experiment_detail(request, experiment_name):
     experiment = get_object_or_404(Experiment, pk=experiment_name)
     experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
-    return render(request, 'ParticipantDB/experiment_detail.html', {'experiment': experiment, 'experiment_sections': experiment_sections})
+    authed_groups = get_user_groups(request)
+    print(authed_groups)
+    print(experiment.lab.group)
+    canAccess = experiment.lab.group.name in authed_groups
+    return render(request, 'ParticipantDB/experiment_detail.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
 
 @login_required
 def delete_experiment(request, experiment_name):
@@ -730,22 +770,24 @@ def update_experiment(request, experiment_name):
         queryset = Experiment_Section.objects.filter(experiment = experiment_inst),
         prefix = 'experiment_sections'
     )
-    all_labs = Lab.objects.all()
-    auth_groups = get_user_groups(request)
-    auth_labs = []
-    for lab in all_labs:
-        flag = False
-        for group in auth_groups:
-            if lab.group.name == group:
-                flag = True
-        if flag:
-            auth_labs.append(lab)
+    
+    authed_groups = get_user_groups(request)
+    canAccess = experiment_inst.lab.group.name in authed_groups
+    # all_labs = Lab.objects.all()
+    # auth_groups = get_user_groups(request)
+    # auth_labs = []
+    # for lab in all_labs:
+    #     flag = False
+    #     for group in auth_groups:
+    #         if lab.group.name == group:
+    #             flag = True
+    #     if flag:
+    #         auth_labs.append(lab)
     if request.method == "POST":
         experiment_form = ExperimentForm(request.POST, instance=experiment_inst)
         experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
         if experiment_form.is_valid():
             experiment = experiment_form.save(commit=False)
-            authed_groups = get_user_groups(request)
             nameOverload = Assessment.objects.filter(assessment_name=experiment.experiment_name).exists()
             if(experiment.lab.group.name in authed_groups and not nameOverload):
                 if experiment_section_forms.is_valid():
@@ -760,7 +802,7 @@ def update_experiment(request, experiment_name):
                             inst.save()
                
                     messages.success(request, 'Experiment was successfully updated')
-                return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))
+                    return redirect(reverse('update_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))       
             else:
                 if(nameOverload):
                     messages.error(request, "An assessment already exists with this name, please choose another name")
@@ -769,8 +811,8 @@ def update_experiment(request, experiment_name):
                     return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name})
     else:
         experiment_form = ExperimentForm(instance = experiment_inst)
-    
-    return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name})
+
+    return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name, 'canAccess': canAccess})
 
 @login_required
 def experiment_section_detail(request, experiment_name, experiment_section_name):

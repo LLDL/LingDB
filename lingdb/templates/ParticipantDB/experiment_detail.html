@@ -3,34 +3,40 @@
     <h2>
         {{ experiment.experiment_name }} Experiment ({{experiment.lab}})
     </h2>
-    <div>
-        {% if experiment_sections.count > 0 %}
-            <h3>Sections</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="field_name">Name</th>
-                        <th class="field_name">Status</th>
-                        <th class="field_name">Open</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for experiment_section in experiment_sections %}
+    {% if canAccess %}
+        <div>
+            {% if experiment_sections.count > 0 %}
+                <h3>Sections</h3>
+                <table>
+                    <thead>
                         <tr>
-                            <td class="field_value">{{experiment_section.experiment_section_name}}</td>
-                            <td class="field_value">{{experiment_section.section_status}}</td>
-                            <td class="field_value">
-                                <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Open</a>
-                            </td>
+                            <th class="field_name">Name</th>
+                            <th class="field_name">Status</th>
+                            <th class="field_name">Open</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-        
-        <h3>Manage</h3>
-            <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}">Delete {{Experiment}}</a><br>
-            <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}">Update {{Experiment}}</a>
+                    </thead>
+                    <tbody>
+                        {% for experiment_section in experiment_sections %}
+                            <tr>
+                                <td class="field_value">{{experiment_section.experiment_section_name}}</td>
+                                <td class="field_value">{{experiment_section.section_status}}</td>
+                                <td class="field_value">
+                                    <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Open</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            
+            <h3>Manage</h3>
+                <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}">Delete {{Experiment}}</a><br>
+                <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}">Update {{Experiment}}</a>
 
-    </div>
+        </div>
+    {% else %}
+        <div>
+            <h3>You are not authorized to access this experiment. Please contact the {{experiment.lab}} lab for access.</h3>
+        </div>
+    {% endif %}
 {% endblock %}

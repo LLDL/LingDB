@@ -59,6 +59,7 @@ urlpatterns = [
     path('experiment/add/', views.add_experiment, name='add_experiment'),
     path('experiment/<str:experiment_name>/', views.experiment_detail, name='experiment_detail'),
     path('experiment/<str:experiment_name>/sections/add/', views.add_experiment_section_fields, name='add_experiment_section_fields'),
+    path('experiment/<str:experiment_name>/sections/update/', views.update_experiment_section_fields, name='update_experiment_section_fields'),
 
     path('experiment/<str:experiment_name>/update/', views.update_experiment, name='update_experiment'),
     path('experiment/<str:experiment_name>/delete/', views.delete_experiment, name='delete_experiment'),
