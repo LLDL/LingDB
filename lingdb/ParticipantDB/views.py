@@ -721,7 +721,56 @@ def delete_experiment(request, experiment_name):
     
 @login_required
 def update_experiment(request, experiment_name):
-    pass
+    try:
+        experiment_inst = Experiment.objects.get(pk=experiment_name)
+    except Experiment.DoesNotExist:
+        Http404("No experiment with name " + experiment_name)
+    
+    experiment_section_forms = ExperimentSectionInlineFormSet(
+        queryset = Experiment_Section.objects.filter(experiment = experiment_inst),
+        prefix = 'experiment_sections'
+    )
+    all_labs = Lab.objects.all()
+    auth_groups = get_user_groups(request)
+    auth_labs = []
+    for lab in all_labs:
+        flag = False
+        for group in auth_groups:
+            if lab.group.name == group:
+                flag = True
+        if flag:
+            auth_labs.append(lab)
+    if request.method == "POST":
+        experiment_form = ExperimentForm(request.POST, instance=experiment_inst)
+        experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
+        if experiment_form.is_valid():
+            experiment = experiment_form.save(commit=False)
+            authed_groups = get_user_groups(request)
+            nameOverload = Assessment.objects.filter(assessment_name=experiment.experiment_name).exists()
+            if(experiment.lab.group.name in authed_groups and not nameOverload):
+                if experiment_section_forms.is_valid():
+                    experiment.save()
+                    for form in experiment_section_forms:
+                        if form.cleaned_data.get('DELETE'):
+                            toDelete = form.cleaned_data.get('experiment_section_name')
+                            Experiment_Section.objects.filter(experiment = experiment_inst, experiment_section_name=toDelete).delete()
+                        elif form.cleaned_data.get('experiment_section_name'):
+                            inst = form.save(commit=False)
+                            inst.experiment = experiment
+                            inst.save()
+               
+                    messages.success(request, 'Experiment was successfully updated')
+                return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))
+            else:
+                if(nameOverload):
+                    messages.error(request, "An assessment already exists with this name, please choose another name")
+                else:
+                    messages.error(request, "You are not authorized to update this experiment")
+                    return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name})
+    else:
+        experiment_form = ExperimentForm(instance = experiment_inst)
+    
+    return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name})
 
 @login_required
 def experiment_section_detail(request, experiment_name, experiment_section_name):
