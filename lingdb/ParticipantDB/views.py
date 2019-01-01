@@ -1,19 +1,25 @@
-# Django Imports ----------------------------------------------------------------
+# Imports ---------------------------------------------------------------
+# Django
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.forms import inlineformset_factory
 from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+
+# Python
 from itertools import chain
 import operator
-# Project Imports ---------------------------------------------------------------
+
+# Project
 from .forms import *
 from .models import *
 from .utils import make_unique_id, get_user_groups, get_user_authed_list, check_user_groups
 
 
-# Search -------------------------------------------------------------------
+
+
+# Singular -----------------------------------------------------------------
 @login_required
 def search(request):
     if request.method == 'GET':
@@ -48,128 +54,46 @@ def search(request):
         except ValueError:
             raise Http404("Invalid query " + query)
 
-# Index -------------------------------------------------------------------
-
 @login_required
 def index(request):
     return render(request, 'ParticipantDB/index.html')
 
-# Family -----------------------------------------------------------------
-
 @login_required
-def add_family(request):
-    child_forms = ChildInFamilyInlineFormSet(
-        queryset = IsChildIn.objects.none(),
-        prefix = 'children'
-    )
-    parent_forms = ParentInlineFormSet(
-        queryset = IsParentIn.objects.none(),
-        prefix = 'parents'
-    )
+def add_language(request):
     if request.method == "POST":
-        family_form = FamilyForm(request.POST)
-        child_forms = ChildInFamilyInlineFormSet(request.POST, prefix='children')
-        parent_forms = ParentInlineFormSet(request.POST, prefix='parents')
-        if family_form.is_valid() and child_forms.is_valid() and parent_forms.is_valid():
-            family = family_form.save(commit=False)
-            family.save()
+        form = LanguageForm(request.POST)
+        if form.is_valid():
+            form.save()
             
-            for parent_form in parent_forms:
-                if parent_form.cleaned_data.get('parent'):
-                    inst = parent_form.save(commit=False)
-                    inst.family = family
-                    inst.save()
-            
-            for child_form in child_forms:
-                if child_form.cleaned_data.get('child'):
-                    inst = child_form.save(commit=False)
-                    inst.family = family
-                    inst.save()
-
-
-            messages.success(request, 'Family was successfully added')
+            messages.success(request, 'Language was successfully added')
             if 'save_add_another' in request.POST:
-                return redirect(reverse('add_family'))
+                return redirect(reverse('add_language'))
             else:
-                return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
-
+                return redirect(reverse('index'))
     else:
-        family_form = FamilyForm(initial={'id': make_unique_id()})
-
-    return render(request, "ParticipantDB/Family/new.html", {'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
-
-@login_required
-def family_detail(request, family_id):
-    family = get_object_or_404(Family, pk=family_id)
-    parents = IsParentIn.objects.filter(family = family)
-    children = IsChildIn.objects.filter(family = family)
-    return render(request, 'ParticipantDB/Family/view.html', {'family': family, 'parents': parents, 'children': children})
+        form = LanguageForm()
+    return render(request, "ParticipantDB/Language/new.html", {'form': form})
 
 @login_required
-def delete_family(request, family_id):
-    try:
-        Family.objects.get(pk=family_id).delete()
-        
-        messages.success(request, 'Family was successfully deleted')
-        return redirect(reverse('index'))
-    except Family.DoesNotExist:
-        raise Http404("No family with id" + family_id)
-    
-@login_required
-def update_family(request, family_id):
-    try:
-        family_inst = Family.objects.get(pk=family_id)
-    except Family.DoesNotExist:
-        Http404("No Family with id " + family_id)
-
-    child_forms = ChildInFamilyInlineFormSet(
-        queryset = IsChildIn.objects.filter(family=family_inst),
-        prefix = 'children'
-    )
-    parent_forms = ParentInlineFormSet(
-        queryset = IsParentIn.objects.filter(family=family_inst),
-        prefix = 'parents'
-    )
+def add_musical_skill(request):
     if request.method == "POST":
-        family_form = FamilyForm(request.POST, instance = family_inst)
-        child_forms = ChildInFamilyInlineFormSet(request.POST, request.FILES, prefix='children')
-        parent_forms = ParentInlineFormSet(request.POST, request.FILES, prefix='parents')
-        
-        if family_form.is_valid() and parent_forms.is_valid() and child_forms.is_valid():
-            family = family_form.save(commit=False)
-            family.save()
-
-            for parent_form in parent_forms:                    
-                if parent_form.cleaned_data.get('DELETE'):
-                    toDelete = parent_form.cleaned_data.get('parent')
-                    print(toDelete)
-                    IsParentIn.objects.filter(parent=toDelete, family=family_inst).delete()
-                elif parent_form.cleaned_data.get('parent'):
-                    inst = parent_form.save(commit=False)
-                    inst.family = family
-                    inst.save()
+        form = MusicalSkillForm(request.POST)
+        if form.is_valid():
+            form.save()
             
-            for child_form in child_forms:
-                if child_form.cleaned_data.get('DELETE'):
-                    toDelete = child_form.cleaned_data.get('child')
-                    print(toDelete)
-                    IsChildIn.objects.filter(child=toDelete, family=family_inst).delete()
-                elif child_form.cleaned_data.get('child'):
-                    inst = child_form.save(commit=False)
-                    inst.family = family
-                    inst.save()
-
-            messages.success(request, 'Family was successfully updated')
-            return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
-
+            messages.success(request, 'Musical skill was successfully added')
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_musical_skill'))
+            else:
+                return redirect(reverse('index'))
     else:
-        family_form = FamilyForm(instance = family_inst)
+        form = MusicalSkillForm()
+    return render(request, "ParticipantDB/MusicalSkill/new.html", {'form': form})
 
-    return render(request, "ParticipantDB/Family/update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
 
-# Adult ------------------------------------------------------------------
+# People -------------------------------------------------------------------------
 
-@login_required
+# Adult
 def add_adult(request):
     musical_experience_forms = MusicalExperienceInlineFormSet(
         queryset = MusicalExperience.objects.none(), 
@@ -299,9 +223,8 @@ def delete_adult(request, adult_id):
         return redirect(reverse('index'))
     except Adult.DoesNotExist:
         raise Http404("No adult with id" + adult_id)
-    
-# Child ------------------------------------------------------------------
 
+# Child
 @login_required
 def add_child(request):
     exposure_forms = ExposureInlineFormSet(
@@ -387,40 +310,120 @@ def delete_child(request, child_id):
     except Child.DoesNotExist:
         raise Http404("No child with id" + child_id)
 
-# Language ------------------------------------------------------------------
+# Family
+@login_required
+def add_family(request):
+    child_forms = ChildInFamilyInlineFormSet(
+        queryset = IsChildIn.objects.none(),
+        prefix = 'children'
+    )
+    parent_forms = ParentInlineFormSet(
+        queryset = IsParentIn.objects.none(),
+        prefix = 'parents'
+    )
+    if request.method == "POST":
+        family_form = FamilyForm(request.POST)
+        child_forms = ChildInFamilyInlineFormSet(request.POST, prefix='children')
+        parent_forms = ParentInlineFormSet(request.POST, prefix='parents')
+        if family_form.is_valid() and child_forms.is_valid() and parent_forms.is_valid():
+            family = family_form.save(commit=False)
+            family.save()
+            
+            for parent_form in parent_forms:
+                if parent_form.cleaned_data.get('parent'):
+                    inst = parent_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
+            
+            for child_form in child_forms:
+                if child_form.cleaned_data.get('child'):
+                    inst = child_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
+
+
+            messages.success(request, 'Family was successfully added')
+            if 'save_add_another' in request.POST:
+                return redirect(reverse('add_family'))
+            else:
+                return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
+
+    else:
+        family_form = FamilyForm(initial={'id': make_unique_id()})
+
+    return render(request, "ParticipantDB/Family/new.html", {'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
 
 @login_required
-def add_language(request):
-    if request.method == "POST":
-        form = LanguageForm(request.POST)
-        if form.is_valid():
-            form.save()
-            
-            messages.success(request, 'Language was successfully added')
-            if 'save_add_another' in request.POST:
-                return redirect(reverse('add_language'))
-            else:
-                return redirect(reverse('index'))
-    else:
-        form = LanguageForm()
-    return render(request, "ParticipantDB/Language/new.html", {'form': form})
+def update_family(request, family_id):
+    try:
+        family_inst = Family.objects.get(pk=family_id)
+    except Family.DoesNotExist:
+        Http404("No Family with id " + family_id)
 
-# Musical ------------------------------------------------------------------
-@login_required
-def add_musical_skill(request):
+    child_forms = ChildInFamilyInlineFormSet(
+        queryset = IsChildIn.objects.filter(family=family_inst),
+        prefix = 'children'
+    )
+    parent_forms = ParentInlineFormSet(
+        queryset = IsParentIn.objects.filter(family=family_inst),
+        prefix = 'parents'
+    )
     if request.method == "POST":
-        form = MusicalSkillForm(request.POST)
-        if form.is_valid():
-            form.save()
+        family_form = FamilyForm(request.POST, instance = family_inst)
+        child_forms = ChildInFamilyInlineFormSet(request.POST, request.FILES, prefix='children')
+        parent_forms = ParentInlineFormSet(request.POST, request.FILES, prefix='parents')
+        
+        if family_form.is_valid() and parent_forms.is_valid() and child_forms.is_valid():
+            family = family_form.save(commit=False)
+            family.save()
+
+            for parent_form in parent_forms:                    
+                if parent_form.cleaned_data.get('DELETE'):
+                    toDelete = parent_form.cleaned_data.get('parent')
+                    print(toDelete)
+                    IsParentIn.objects.filter(parent=toDelete, family=family_inst).delete()
+                elif parent_form.cleaned_data.get('parent'):
+                    inst = parent_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
             
-            messages.success(request, 'Musical skill was successfully added')
-            if 'save_add_another' in request.POST:
-                return redirect(reverse('add_musical_skill'))
-            else:
-                return redirect(reverse('index'))
+            for child_form in child_forms:
+                if child_form.cleaned_data.get('DELETE'):
+                    toDelete = child_form.cleaned_data.get('child')
+                    print(toDelete)
+                    IsChildIn.objects.filter(child=toDelete, family=family_inst).delete()
+                elif child_form.cleaned_data.get('child'):
+                    inst = child_form.save(commit=False)
+                    inst.family = family
+                    inst.save()
+
+            messages.success(request, 'Family was successfully updated')
+            return redirect(reverse('family_detail', kwargs={'family_id': family.id}))
+
     else:
-        form = MusicalSkillForm()
-    return render(request, "ParticipantDB/MusicalSkill/new.html", {'form': form})
+        family_form = FamilyForm(instance = family_inst)
+
+    return render(request, "ParticipantDB/Family/update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
+
+@login_required
+def family_detail(request, family_id):
+    family = get_object_or_404(Family, pk=family_id)
+    parents = IsParentIn.objects.filter(family = family)
+    children = IsChildIn.objects.filter(family = family)
+    return render(request, 'ParticipantDB/Family/view.html', {'family': family, 'parents': parents, 'children': children})
+    
+@login_required
+def delete_family(request, family_id):
+    try:
+        Family.objects.get(pk=family_id).delete()
+        
+        messages.success(request, 'Family was successfully deleted')
+        return redirect(reverse('index'))
+    except Family.DoesNotExist:
+        raise Http404("No family with id" + family_id)
+
+
+
 
 # Assessment --------------------------------------------------------------
 @login_required
@@ -461,32 +464,6 @@ def add_assessment(request):
         assessment_form = AssessmentForm()
     
     return render(request, "ParticipantDB/Assessment/new.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
-
-@login_required
-def assessment_detail(request, assessment_name):
-    assessment = get_object_or_404(Assessment, pk=assessment_name)
-    assessment_fields = Assessment_Field.objects.filter(field_of = assessment)
-    assessment_runs = Assessment_Run.objects.filter(assessment = assessment)
-    authed_groups = get_user_groups(request)
-    print(authed_groups)
-    print(assessment.lab.group)
-    canAccess = assessment.lab.group.name in authed_groups
-    return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
-
-@login_required
-def delete_assessment(request, assessment_name):
-    try:
-        assessment = Assessment.objects.get(pk=assessment_name)
-        authed_groups = get_user_groups(request)
-        canAccess = assessment.lab.group.name in authed_groups
-        if canAccess:
-            assessment.delete()
-            messages.success(request, 'Assessment was successfully deleted')
-        
-        messages.error(request, 'Assessment was not deleted as you do not have authorization to access it')
-        return redirect(reverse('index'))
-    except Assessment.DoesNotExist:
-        raise Http404("No assessment named " + assessment_name)
 
 @login_required
 def update_assessment(request, assessment_name):
@@ -537,6 +514,36 @@ def update_assessment(request, assessment_name):
         assessment_form = AssessmentForm(instance = assessment_inst)
     
     return render(request, "ParticipantDB/Assessment/update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
+
+@login_required
+def assessment_detail(request, assessment_name):
+    assessment = get_object_or_404(Assessment, pk=assessment_name)
+    assessment_fields = Assessment_Field.objects.filter(field_of = assessment)
+    assessment_runs = Assessment_Run.objects.filter(assessment = assessment)
+    authed_groups = get_user_groups(request)
+    print(authed_groups)
+    print(assessment.lab.group)
+    canAccess = assessment.lab.group.name in authed_groups
+    return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
+
+@login_required
+def delete_assessment(request, assessment_name):
+    try:
+        assessment = Assessment.objects.get(pk=assessment_name)
+        authed_groups = get_user_groups(request)
+        canAccess = assessment.lab.group.name in authed_groups
+        if canAccess:
+            assessment.delete()
+            messages.success(request, 'Assessment was successfully deleted')
+        
+        messages.error(request, 'Assessment was not deleted as you do not have authorization to access it')
+        return redirect(reverse('index'))
+    except Assessment.DoesNotExist:
+        raise Http404("No assessment named " + assessment_name)
+
+
+
+
 
 # Assessment Run -----------------------------------------------------------
 @login_required
@@ -627,6 +634,10 @@ def delete_assessment_run(request, assessment_run_id):
 @login_required
 def update_assessment_run(request, assessment_run_id):
     pass
+
+
+
+
 # Experiment --------------------------------------------------------------
 @login_required
 def add_experiment(request):
@@ -673,6 +684,73 @@ def add_experiment(request):
     return render(request, "ParticipantDB/Experiment/new.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
 
 @login_required
+def update_experiment(request, experiment_name):
+    try:
+        experiment_inst = Experiment.objects.get(pk=experiment_name)
+    except Experiment.DoesNotExist:
+        Http404("No experiment with name " + experiment_name)
+    
+    experiment_section_forms = ExperimentSectionInlineFormSet(
+        queryset = Experiment_Section.objects.filter(experiment = experiment_inst),
+        prefix = 'experiment_sections'
+    )
+    
+    authed_groups = get_user_groups(request)
+    canAccess = experiment_inst.lab.group.name in authed_groups
+    if request.method == "POST":
+        experiment_form = ExperimentForm(request.POST, instance=experiment_inst)
+        experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
+        if experiment_form.is_valid():
+            experiment = experiment_form.save(commit=False)
+            nameOverload = Assessment.objects.filter(assessment_name=experiment.experiment_name).exists()
+            if(experiment.lab.group.name in authed_groups and not nameOverload):
+                if experiment_section_forms.is_valid():
+                    experiment.save()
+                    for form in experiment_section_forms:
+                        if form.cleaned_data.get('DELETE'):
+                            toDelete = form.cleaned_data.get('experiment_section_name')
+                            Experiment_Section.objects.filter(experiment = experiment_inst, experiment_section_name=toDelete).delete()
+                        elif form.cleaned_data.get('experiment_section_name'):
+                            inst = form.save(commit=False)
+                            inst.experiment = experiment
+                            inst.save()
+               
+                    messages.success(request, 'Experiment was successfully updated')
+                    return redirect(reverse('update_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))       
+            else:
+                if(nameOverload):
+                    messages.error(request, "An assessment already exists with this name, please choose another name")
+                else:
+                    messages.error(request, "You are not authorized to update this experiment")
+    else:
+        experiment_form = ExperimentForm(instance = experiment_inst)
+
+    return render(request, "ParticipantDB/Experiment/update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name, 'canAccess': canAccess})
+
+@login_required
+def experiment_detail(request, experiment_name):
+    experiment = get_object_or_404(Experiment, pk=experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
+    authed_groups = get_user_groups(request)
+    print(authed_groups)
+    print(experiment.lab.group)
+    canAccess = experiment.lab.group.name in authed_groups
+    return render(request, 'ParticipantDB/Experiment/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
+
+@login_required
+def delete_experiment(request, experiment_name):
+    try:
+        Experiment.objects.get(pk=experiment_name).delete()
+        messages.success(request, 'Experiment was successfully deleted')
+        return redirect(reverse('index'))
+    except Experiment.DoesNotExist:
+        raise Http404("No experiment named " + experiment_name)
+
+
+
+
+# Experiment Section ----------------------------------------------------
+@login_required
 def add_experiment_section_fields(request, experiment_name):
     try:
         experiment = Experiment.objects.get(pk=experiment_name)
@@ -705,114 +783,8 @@ def add_experiment_section_fields(request, experiment_name):
     return render(request, "ParticipantDB/ExperimentSection/new.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
-def update_experiment_section_fields(request, experiment_name): 
-    try:
-        experiment_inst = Experiment.objects.get(pk=experiment_name)
-    except Experiment.DoesNotExist:
-        Http404("No experiment with name " + experiment_name)
-    experiment_sections = Experiment_Section.objects.filter(experiment=experiment_inst)
-    fields = {}
-    for section in experiment_sections:
-        section_prefix = 'experiment_section_fields_' + section.experiment_section_name
-        section_fields = ExperimentSectionFieldInlineFormSet(
-            queryset = Experiment_Section_Field.objects.filter(field_of = section),
-            prefix = section_prefix
-        )
-        fields[section.id] = section_fields
-    
-    if request.method == "POST":
-        for section in experiment_sections:
-            section_prefix = 'experiment_section_fields_' + section.experiment_section_name
-            section_fields = ExperimentSectionFieldInlineFormSet(
-                request.POST,
-                prefix = section_prefix,
-            )
-            for section_field in section_fields:
-                if section_field.is_valid():
-                    if section_field.cleaned_data.get('DELETE'):
-                        toDelete = section_field.cleaned_data.get('field_name')
-                        Experiment_Section_Field.objects.filter(field_of=section, field_name=toDelete).delete()
-                    elif section_field.cleaned_data.get('field_name'):
-                        inst = section_field.save(commit = False)
-                        inst.field_of = section
-                        inst.save()
-        
-        messages.success(request, 'Experiment Section Fields were successfully updated')
-        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))       
-    return render(request, "ParticipantDB/ExperimentSection/update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
-
-@login_required
-def experiment_detail(request, experiment_name):
-    experiment = get_object_or_404(Experiment, pk=experiment_name)
-    experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
-    authed_groups = get_user_groups(request)
-    print(authed_groups)
-    print(experiment.lab.group)
-    canAccess = experiment.lab.group.name in authed_groups
-    return render(request, 'ParticipantDB/Experiment/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
-
-@login_required
-def delete_experiment(request, experiment_name):
-    try:
-        Experiment.objects.get(pk=experiment_name).delete()
-        messages.success(request, 'Experiment was successfully deleted')
-        return redirect(reverse('index'))
-    except Experiment.DoesNotExist:
-        raise Http404("No experiment named " + experiment_name)
-    
-@login_required
-def update_experiment(request, experiment_name):
-    try:
-        experiment_inst = Experiment.objects.get(pk=experiment_name)
-    except Experiment.DoesNotExist:
-        Http404("No experiment with name " + experiment_name)
-    
-    experiment_section_forms = ExperimentSectionInlineFormSet(
-        queryset = Experiment_Section.objects.filter(experiment = experiment_inst),
-        prefix = 'experiment_sections'
-    )
-    
-    authed_groups = get_user_groups(request)
-    canAccess = experiment_inst.lab.group.name in authed_groups
-    # all_labs = Lab.objects.all()
-    # auth_groups = get_user_groups(request)
-    # auth_labs = []
-    # for lab in all_labs:
-    #     flag = False
-    #     for group in auth_groups:
-    #         if lab.group.name == group:
-    #             flag = True
-    #     if flag:
-    #         auth_labs.append(lab)
-    if request.method == "POST":
-        experiment_form = ExperimentForm(request.POST, instance=experiment_inst)
-        experiment_section_forms = ExperimentSectionInlineFormSet(request.POST, prefix = 'experiment_sections') 
-        if experiment_form.is_valid():
-            experiment = experiment_form.save(commit=False)
-            nameOverload = Assessment.objects.filter(assessment_name=experiment.experiment_name).exists()
-            if(experiment.lab.group.name in authed_groups and not nameOverload):
-                if experiment_section_forms.is_valid():
-                    experiment.save()
-                    for form in experiment_section_forms:
-                        if form.cleaned_data.get('DELETE'):
-                            toDelete = form.cleaned_data.get('experiment_section_name')
-                            Experiment_Section.objects.filter(experiment = experiment_inst, experiment_section_name=toDelete).delete()
-                        elif form.cleaned_data.get('experiment_section_name'):
-                            inst = form.save(commit=False)
-                            inst.experiment = experiment
-                            inst.save()
-               
-                    messages.success(request, 'Experiment was successfully updated')
-                    return redirect(reverse('update_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))       
-            else:
-                if(nameOverload):
-                    messages.error(request, "An assessment already exists with this name, please choose another name")
-                else:
-                    messages.error(request, "You are not authorized to update this experiment")
-    else:
-        experiment_form = ExperimentForm(instance = experiment_inst)
-
-    return render(request, "ParticipantDB/Experiment/update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name, 'canAccess': canAccess})
+def update_experiment_section(request, experiment_name, experiment_section_name):
+    pass
 
 @login_required
 def experiment_section_detail(request, experiment_name, experiment_section_name):
@@ -842,9 +814,6 @@ def delete_experiment_section(request, experiment_name, experiment_section_name)
         raise Http404("No Experiment '{}'".format(experiment_name))
 
 
-@login_required
-def update_experiment_section(request, experiment_name, experiment_section_name):
-    pass
 
 # Experiment Section Run Views -----------------------------------------------------
 @login_required
@@ -923,11 +892,47 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
     return render(request, "ParticipantDB/ExperimentSectionRun/new2.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})
 
 @login_required
+def update_experiment_section_fields(request, experiment_name): 
+    try:
+        experiment_inst = Experiment.objects.get(pk=experiment_name)
+    except Experiment.DoesNotExist:
+        Http404("No experiment with name " + experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(experiment=experiment_inst)
+    fields = {}
+    for section in experiment_sections:
+        section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+        section_fields = ExperimentSectionFieldInlineFormSet(
+            queryset = Experiment_Section_Field.objects.filter(field_of = section),
+            prefix = section_prefix
+        )
+        fields[section.id] = section_fields
+    
+    if request.method == "POST":
+        for section in experiment_sections:
+            section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+            section_fields = ExperimentSectionFieldInlineFormSet(
+                request.POST,
+                prefix = section_prefix,
+            )
+            for section_field in section_fields:
+                if section_field.is_valid():
+                    if section_field.cleaned_data.get('DELETE'):
+                        toDelete = section_field.cleaned_data.get('field_name')
+                        Experiment_Section_Field.objects.filter(field_of=section, field_name=toDelete).delete()
+                    elif section_field.cleaned_data.get('field_name'):
+                        inst = section_field.save(commit = False)
+                        inst.field_of = section
+                        inst.save()
+        
+        messages.success(request, 'Experiment Section Fields were successfully updated')
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))       
+    return render(request, "ParticipantDB/ExperimentSection/update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
+
+@login_required
 def experiment_section_run_detail(request, experiment_section_run_id):
     experiment_section_run = get_object_or_404(Experiment_Section_Run, pk=experiment_section_run_id)
     experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_section_run)
     return render(request, 'ParticipantDB/ExperimentSectionRun/view.html', {'experiment_section_run': experiment_section_run, 'experiment_section_run_fields': experiment_section_run_fields})
-
 
 @login_required
 def delete_experiment_section_run(request, experiment_section_run_id):
