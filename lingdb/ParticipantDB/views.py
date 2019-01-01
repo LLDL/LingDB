@@ -704,7 +704,7 @@ def add_experiment_section_fields(request, experiment_name):
                     inst.save()
         
         messages.success(request, 'Experiment Section Fields were successfully added')
-        return redirect(reverse('add_experiment_section_fields', kwargs={'experiment_name': experiment.experiment_name}))       
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
     return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
@@ -731,14 +731,18 @@ def update_experiment_section_fields(request, experiment_name):
                 prefix = section_prefix,
             )
             for section_field in section_fields:
-                if section_field.is_valid() and section_field.cleaned_data.get('field_name'):
-                    inst = section_field.save(commit = False)
-                    inst.field_of = section
-                    inst.save()
+                if section_field.is_valid():
+                    if section_field.cleaned_data.get('DELETE'):
+                        toDelete = section_field.cleaned_data.get('field_name')
+                        Experiment_Section_Field.objects.filter(field_of=section, field_name=toDelete).delete()
+                    elif section_field.cleaned_data.get('field_name'):
+                        inst = section_field.save(commit = False)
+                        inst.field_of = section
+                        inst.save()
         
         messages.success(request, 'Experiment Section Fields were successfully updated')
-        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
-    return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))       
+    return render(request, "ParticipantDB/experiment_section_form_update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
 def experiment_detail(request, experiment_name):

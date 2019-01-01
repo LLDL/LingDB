@@ -1,0 +1,46 @@
+{% extends "ParticipantDB/sidebar.html" %}
+{% block content %}
+    <h2>Update Fields for Sections of Experiment '{{experiment.experiment_name}}'</h2>
+    <form  action="{% url 'update_experiment_section_fields' experiment.experiment_name %}"  method="post">
+        {% csrf_token %}
+        
+        {% if fields.errors %}
+            {{ fields.errors }}
+        {% endif %}
+        {% if fields.non_form_errors %}
+            {{ fields.non_form_errors }}
+        {% endif %}
+        {% for experiment_section in experiment_sections %}
+            <h3>Section: {{experiment_section.experiment_section_name}}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="field_name">Field Name</th>
+                        <th class="field_name">Field Type</th>
+                        <th class="field name">Delete?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for field in fields.items %}
+                    {% if field.0 == experiment_section.id %}
+                    
+                        {{field.1.management_form}}
+                        
+                        {% for item in field.1 %}
+                            {{item.id}}
+                            <tr>
+                                <td class="field_value">{{item.field_name}}</td>
+                                <td class="field_value">{{item.type}}</td>
+                                <td class="field_value_input">{{item.DELETE}}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>    
+        {% endfor %}
+
+
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}
