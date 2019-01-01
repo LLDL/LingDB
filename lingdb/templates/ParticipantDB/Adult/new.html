@@ -13,11 +13,17 @@
     <form method="post">
         {% csrf_token %}
         <h3>Personal &amp; Contact Info</h3>
-        <table id="new_adult_table">
+
+        {% for field in adult_form %}
+            <div class="input">
+                {{field}} {{field.errors}}
+            </div>
+        {% endfor %}
+
+        {% comment %} <table id="new_adult_table">
             {{adult_form.as_table}}
         </table>
-        
-        
+         {% endcomment %}
         <h3>Languages Spoken</h3>
         {{ speaks_formset.management_form }}
         {% if speaks_formset.errors %}

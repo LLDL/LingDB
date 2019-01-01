@@ -135,6 +135,12 @@ input[type="checkbox"]{
 /* input, select{
     height: 2em;
 } */
+/* input{
+    width: 50%;
+    padding: .5em;
+    margin: .25em 0em;
+    box-sizing: border-box;
+} */
 #search_box{
     height: 2em;
     font-size: 1.25em;
@@ -158,9 +164,10 @@ input[type="checkbox"]{
     color: #ffffff;
 }
 
-.select2-container {
-    width: 100% !important;
-}
+/* .select2-container {
+    width: 50% !important;
+    margin: .25em 0em;
+} */
 
 /* 
 .field_value_input input{

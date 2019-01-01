@@ -1,5 +1,5 @@
 # Django Imports ----------------------------------------------------------------
-from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect
+from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect, EmailInput, Textarea
 
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
@@ -71,9 +71,22 @@ class AdultForm(ModelForm):
         model = Adult
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
+            'id': TextInput(attrs={'min': 100000, 'max': 999999, 'type': 'number', 'placeholder': 'ID'}),
+            'given_name': TextInput(attrs={'placeholder': 'Given Name'}),
+            'preferred_name': TextInput(attrs={'placeholder': 'Preferred Name'}),
+            'surname': TextInput(attrs={'placeholder': 'Surname'}),
             'birth_date': DateInput(attrs={'type': 'date'}),
-            'pref_phone_time': Select2Widget(),
-            'contact_pref': Select2Widget(),
+            'gender': TextInput(attrs={'placeholder': 'Gender'}),
+            'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', 'placeholder': 'SFU ID'}),
+            'address': TextInput(attrs={'placeholder': 'Address'}),
+            'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', 'placeholder': 'Years of Education'}),
+            'phone': TextInput(attrs={'type': 'tel', 'placeholder': 'Phone Number'}),
+            'email': EmailInput(attrs={'placeholder': 'Email'}),
+            'contact_pref': Select2Widget(attrs={'data-placeholder': 'Contact Preference'}),
+            'pref_phone_time': Select2Widget(attrs={'data-placeholder': 'Preferred Phone Time'}),
+            'personal_notes': Textarea(attrs={'placeholder': 'Personal Notes'}),
+            'health_notes': Textarea(attrs={'placeholder': 'Health Notes'}),          
+            
         }
 
 # Child Forms -------------------------------------------------------------------
@@ -322,8 +335,8 @@ class ChooseExperimentSectionForm(ModelForm):
 class ExperimentSectionRunForm(ModelForm):
     class Meta:
         model = Experiment_Section_Run
-        fields = ('participantAdult', 'participantChild', 'date', 'notes', )
-        # fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor', )
+        # fields = ('participantAdult', 'participantChild', 'date', 'notes', )
+        fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor', )
         widgets = {
             'date': DateInput(attrs={'type': 'date'})
         }

@@ -936,4 +936,9 @@ def experiment_section_run_detail(request, experiment_section_run_id):
 
 @login_required
 def delete_experiment_section_run(request, experiment_section_run_id):
-    pass
+    try:
+        Experiment_Section_Run.objects.get(pk=experiment_section_run_id).delete()
+        messages.success(request, 'Experiment Section run was successfully deleted')
+        return redirect(reverse('index'))
+    except Experiment_Section_Run.DoesNotExist:
+        raise Http404("No experiment section run with id " + experiment_section_run_id)
