@@ -1,4 +1,4 @@
-#new_adult_table, #new_child_table, #new_assessment_table, #new_assessment_run_table{
+/* #new_adult_table, #new_child_table, #new_assessment_table, #new_assessment_run_table{
     text-align: left;
 }
 .displayTable{
@@ -13,9 +13,9 @@
 }
 form{
     margin-bottom: 0em;
-}
+} */
 #main-content{
-    padding: 0em 1em 1em 1em;
+    padding: 1em 1em 1em 1em;
 }
 /* Index */
 html{
@@ -27,9 +27,9 @@ body{
     margin: 0;
     display: flex;
     box-sizing: border-box;
-    font-family: Roboto, sans-serif;
+    /* font-family: Roboto, sans-serif; */
 }
-h1{
+/* h1{
     background-color: #a6192e;
     padding: 1em;
     position: relative;
@@ -46,7 +46,7 @@ textarea{
     resize: vertical;
     min-height: 2em;
     max-height: 20em;
-}
+} */
 #home{
     color: #ffffff;
     display: inline-block;

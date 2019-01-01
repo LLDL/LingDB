@@ -71,21 +71,21 @@ class AdultForm(ModelForm):
         model = Adult
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
-            'id': TextInput(attrs={'min': 100000, 'max': 999999, 'type': 'number', 'placeholder': 'ID'}),
-            'given_name': TextInput(attrs={'placeholder': 'Given Name'}),
-            'preferred_name': TextInput(attrs={'placeholder': 'Preferred Name'}),
-            'surname': TextInput(attrs={'placeholder': 'Surname'}),
+            'id': TextInput(attrs={'min': 100000, 'max': 999999, 'type': 'number', }),
+            'given_name': TextInput(attrs={}),
+            'preferred_name': TextInput(attrs={}),
+            'surname': TextInput(attrs={}),
             'birth_date': DateInput(attrs={'type': 'date'}),
-            'gender': TextInput(attrs={'placeholder': 'Gender'}),
-            'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', 'placeholder': 'SFU ID'}),
-            'address': TextInput(attrs={'placeholder': 'Address'}),
-            'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', 'placeholder': 'Years of Education'}),
-            'phone': TextInput(attrs={'type': 'tel', 'placeholder': 'Phone Number'}),
-            'email': EmailInput(attrs={'placeholder': 'Email'}),
-            'contact_pref': Select2Widget(attrs={'data-placeholder': 'Contact Preference'}),
+            'gender': TextInput(attrs={}),
+            'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
+            'address': TextInput(attrs={}),
+            'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', }),
+            'phone': TextInput(attrs={'type': 'tel', }),
+            'email': EmailInput(attrs={}),
+            'contact_pref': Select2Widget(attrs={'class': 'form-control'}),
             'pref_phone_time': Select2Widget(attrs={'data-placeholder': 'Preferred Phone Time'}),
-            'personal_notes': Textarea(attrs={'placeholder': 'Personal Notes'}),
-            'health_notes': Textarea(attrs={'placeholder': 'Health Notes'}),          
+            'personal_notes': Textarea(attrs={}),
+            'health_notes': Textarea(attrs={}),          
             
         }
 

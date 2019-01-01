@@ -1,37 +1,45 @@
 {% extends "ParticipantDB/sidebar.html" %}
 {% load static %}
 {% block extraHead %}
-
     {{ adult_form.media.css }}
     {{ speaks_formset.media.css }}
     {{ musical_experience_formset.media.css}}
 {% endblock %}
 
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>New Adult</h2>
+    <h1>New Adult</h1>
     
     <form method="post">
         {% csrf_token %}
         <h3>Personal &amp; Contact Info</h3>
-
-        {% for field in adult_form %}
+        {{ adult_form|crispy}}
+        {% comment %} {% for field in adult_form %}
             <div class="input">
-                {{field}} {{field.errors}}
+                {{field.label}} {{field}} {{field.errors}}
             </div>
-        {% endfor %}
+        {% endfor %} {% endcomment %}
 
         {% comment %} <table id="new_adult_table">
             {{adult_form.as_table}}
         </table>
          {% endcomment %}
         <h3>Languages Spoken</h3>
-        {{ speaks_formset.management_form }}
+        {% comment %} {{ speaks_formset.management_form }} {% endcomment %}
         {% if speaks_formset.errors %}
             {{ speaks_formset.errors }}
         {% endif %}
         {% if speaks_formset.non_form_errors %}
             {{ speaks_formset.non_form_errors }}
         {% endif %}
+        
+        {{ speaks_formset.management_form|crispy }}
+        {% comment %} {% for speaks in speaks_formset %}
+            <div class="form-inline">
+                {% crispy speaks %}
+            </div>
+        {% endfor %} {% endcomment %}
+        {% comment %} {% crispy speaks_formset %} {% endcomment %}
         <table>
             <thead>
                 <tr>
@@ -46,11 +54,11 @@
             <tbody>
                 {% for speaks in speaks_formset %}
                     <tr>            
-                        <td class="field_value">{{speaks.lang}}</td>  
-                        <td class="field_value_input">{{speaks.is_native}}</td>  
-                        <td class="field_value">{{speaks.nth_most_dominant}}</td>  
-                        <td class="field_value">{{speaks.age_learning_started}}</td>  
-                        <td class="field_value">{{speaks.age_learning_ended}}</td>  
+                        <td class="field_value">{{speaks.lang|as_crispy_field}}</td>  
+                        <td class="field_value_input">{{speaks.is_native|as_crispy_field}}</td>  
+                        <td class="field_value">{{speaks.nth_most_dominant|as_crispy_field}}</td>  
+                        <td class="field_value">{{speaks.age_learning_started|as_crispy_field}}</td>  
+                        <td class="field_value">{{speaks.age_learning_ended|as_crispy_field}}</td>  
                     </tr>
                 {% endfor %}
             </tbody>
@@ -84,9 +92,10 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        <input type="submit" name="save" value="Save">
-        <input type="submit" name="save_add_another" value="Save & Add Another">
+        <div class="btn-group">
+            <input type="submit" class="btn btn-primary" name="save" value="Save">
+            <input type="submit" class="btn btn-primary" name="save_add_another" value="Save & Add Another">
+        </div>
     </form>
     
     {{ adult_form.media.js }}

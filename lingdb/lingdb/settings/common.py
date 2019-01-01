@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ParticipantDB.apps.ParticipantDBConfig',
     'django_select2',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,6 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
