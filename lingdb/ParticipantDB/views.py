@@ -96,14 +96,14 @@ def add_family(request):
     else:
         family_form = FamilyForm(initial={'id': make_unique_id()})
 
-    return render(request, "ParticipantDB/family_form.html", {'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
+    return render(request, "ParticipantDB/Family/new.html", {'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
 
 @login_required
 def family_detail(request, family_id):
     family = get_object_or_404(Family, pk=family_id)
     parents = IsParentIn.objects.filter(family = family)
     children = IsChildIn.objects.filter(family = family)
-    return render(request, 'ParticipantDB/family_detail.html', {'family': family, 'parents': parents, 'children': children})
+    return render(request, 'ParticipantDB/Family/view.html', {'family': family, 'parents': parents, 'children': children})
 
 @login_required
 def delete_family(request, family_id):
@@ -165,7 +165,7 @@ def update_family(request, family_id):
     else:
         family_form = FamilyForm(instance = family_inst)
 
-    return render(request, "ParticipantDB/family_form_update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
+    return render(request, "ParticipantDB/Family/update.html", {'family_id': family_id, 'family_form': family_form, 'child_forms': child_forms, 'parent_forms': parent_forms})
 
 # Adult ------------------------------------------------------------------
 
@@ -209,7 +209,7 @@ def add_adult(request):
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
 
-    return render(request, "ParticipantDB/adult_form.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
+    return render(request, "ParticipantDB/Adult/new.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
 
 @login_required
 def update_adult(request, adult_id):
@@ -264,7 +264,7 @@ def update_adult(request, adult_id):
     else:
         adult_form = AdultForm(instance = adult_inst)
 
-    return render(request, "ParticipantDB/adult_form_update.html", {'adult_id': adult_id, 'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
+    return render(request, "ParticipantDB/Adult/update.html", {'adult_id': adult_id, 'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
 
 @login_required
 def adult_detail(request, adult_id):
@@ -286,9 +286,9 @@ def adult_detail(request, adult_id):
         family = Family.objects.get(pk=parent_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
+        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
     except IsParentIn.DoesNotExist:
-        return render(request, 'ParticipantDB/adult_detail.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
+        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
 
 @login_required
 def delete_adult(request, adult_id):
@@ -327,7 +327,7 @@ def add_child(request):
 
     else:
         child_form = ChildForm(initial={'id': make_unique_id()})
-    return render(request, "ParticipantDB/child_form.html", {'child_form': child_form, 'exposure_forms': exposure_forms})
+    return render(request, "ParticipantDB/Child/new.html", {'child_form': child_form, 'exposure_forms': exposure_forms})
 
 @login_required
 def update_child(request, child_id):
@@ -362,7 +362,7 @@ def update_child(request, child_id):
     else:
         child_form = ChildForm(instance = child_inst)
 
-    return render(request, "ParticipantDB/child_form_update.html", {'child_id': child_id, 'child_form': child_form, 'exposure_forms': exposure_forms})
+    return render(request, "ParticipantDB/Child/update.html", {'child_id': child_id, 'child_form': child_form, 'exposure_forms': exposure_forms})
 
 @login_required
 def child_detail(request, child_id):
@@ -373,9 +373,9 @@ def child_detail(request, child_id):
         family = Family.objects.get(pk=child_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
+        return render(request, 'ParticipantDB/Child/view.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
     except IsChildIn.DoesNotExist:
-        return render(request, 'ParticipantDB/child_detail.html', {'child': child, 'languages_exposed_to': languages_exposed_to})
+        return render(request, 'ParticipantDB/Child/view.html', {'child': child, 'languages_exposed_to': languages_exposed_to})
 
 @login_required
 def delete_child(request, child_id):
@@ -403,7 +403,7 @@ def add_language(request):
                 return redirect(reverse('index'))
     else:
         form = LanguageForm()
-    return render(request, "ParticipantDB/language_form.html", {'form': form})
+    return render(request, "ParticipantDB/Language/new.html", {'form': form})
 
 # Musical ------------------------------------------------------------------
 @login_required
@@ -420,7 +420,7 @@ def add_musical_skill(request):
                 return redirect(reverse('index'))
     else:
         form = MusicalSkillForm()
-    return render(request, "ParticipantDB/musical_skill_form.html", {'form': form})
+    return render(request, "ParticipantDB/MusicalSkill/new.html", {'form': form})
 
 # Assessment --------------------------------------------------------------
 @login_required
@@ -457,11 +457,10 @@ def add_assessment(request):
                     messages.error(request, "An experiment already exists with this name, please choose another name")
                 else:
                     messages.error(request, "You are not authorized to add assessments to {} lab ".format(assessment.lab))
-                return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
     else:
         assessment_form = AssessmentForm()
     
-    return render(request, "ParticipantDB/assessment_form.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
+    return render(request, "ParticipantDB/Assessment/new.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
 
 @login_required
 def assessment_detail(request, assessment_name):
@@ -472,7 +471,7 @@ def assessment_detail(request, assessment_name):
     print(authed_groups)
     print(assessment.lab.group)
     canAccess = assessment.lab.group.name in authed_groups
-    return render(request, 'ParticipantDB/assessment_detail.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
+    return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
 
 @login_required
 def delete_assessment(request, assessment_name):
@@ -534,11 +533,10 @@ def update_assessment(request, assessment_name):
                     messages.error(request, "An experiment already exists with this name, please choose another name")
                 else:
                     messages.error(request, "You are not authorized to edit {} lab's assessments ".format(assessment.lab))
-                return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
     
-    return render(request, "ParticipantDB/assessment_form_update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
+    return render(request, "ParticipantDB/Assessment/update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
 
 # Assessment Run -----------------------------------------------------------
 @login_required
@@ -559,7 +557,7 @@ def choose_assessment(request):
         assessments_all = Assessment.objects.all()
         assessments = get_user_authed_list(request, assessments_all)
         
-    return render(request, 'ParticipantDB/choose_assessment.html', {'assessments': assessments})
+    return render(request, 'ParticipantDB/AssessmentRun/new1.html', {'assessments': assessments})
 
 @login_required 
 def add_assessment_run(request, assessment_name, participant_type, participant=None):
@@ -609,13 +607,13 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
             assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
     
     field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
-    return render(request, "ParticipantDB/assessment_run_form.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
+    return render(request, "ParticipantDB/AssessmentRun/new2.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
 
 @login_required
 def assessment_run_detail(request, assessment_run_id):
     assessment_run = get_object_or_404(Assessment_Run, pk=assessment_run_id)
     assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_run)
-    return render(request, 'ParticipantDB/assessment_run_detail.html', {'assessment_run': assessment_run, 'assessment_run_fields': assessment_run_fields})
+    return render(request, 'ParticipantDB/AssessmentRun/view.html', {'assessment_run': assessment_run, 'assessment_run_fields': assessment_run_fields})
 
 @login_required
 def delete_assessment_run(request, assessment_run_id):
@@ -669,11 +667,10 @@ def add_experiment(request):
                     messages.error(request, "An assessment already exists with this name, please choose another name")
                 else:
                     messages.error(request, "You are not authorized to add experiments to {} lab ".format(experiment.lab))
-                    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
     else:
         experiment_form = ExperimentForm()
     
-    return render(request, "ParticipantDB/experiment_form.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
+    return render(request, "ParticipantDB/Experiment/new.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
 
 @login_required
 def add_experiment_section_fields(request, experiment_name):
@@ -705,7 +702,7 @@ def add_experiment_section_fields(request, experiment_name):
         
         messages.success(request, 'Experiment Section Fields were successfully added')
         return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
-    return render(request, "ParticipantDB/experiment_section_form.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
+    return render(request, "ParticipantDB/ExperimentSection/new.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
 def update_experiment_section_fields(request, experiment_name): 
@@ -742,7 +739,7 @@ def update_experiment_section_fields(request, experiment_name):
         
         messages.success(request, 'Experiment Section Fields were successfully updated')
         return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))       
-    return render(request, "ParticipantDB/experiment_section_form_update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
+    return render(request, "ParticipantDB/ExperimentSection/update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
 
 @login_required
 def experiment_detail(request, experiment_name):
@@ -752,7 +749,7 @@ def experiment_detail(request, experiment_name):
     print(authed_groups)
     print(experiment.lab.group)
     canAccess = experiment.lab.group.name in authed_groups
-    return render(request, 'ParticipantDB/experiment_detail.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
+    return render(request, 'ParticipantDB/Experiment/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
 
 @login_required
 def delete_experiment(request, experiment_name):
@@ -812,11 +809,10 @@ def update_experiment(request, experiment_name):
                     messages.error(request, "An assessment already exists with this name, please choose another name")
                 else:
                     messages.error(request, "You are not authorized to update this experiment")
-                    return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name})
     else:
         experiment_form = ExperimentForm(instance = experiment_inst)
 
-    return render(request, "ParticipantDB/experiment_form_update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name, 'canAccess': canAccess})
+    return render(request, "ParticipantDB/Experiment/update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name, 'canAccess': canAccess})
 
 @login_required
 def experiment_section_detail(request, experiment_name, experiment_section_name):
@@ -830,7 +826,7 @@ def experiment_section_detail(request, experiment_name, experiment_section_name)
         raise Http404("No Experiment '{}'".format(experiment_name))
     experiment_section_fields = Experiment_Section_Field.objects.filter(field_of = experiment_section)
 
-    return render(request, 'ParticipantDB/experiment_section_detail.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
+    return render(request, 'ParticipantDB/ExperimentSection/view.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
 
 @login_required
 def delete_experiment_section(request, experiment_name, experiment_section_name):
@@ -874,7 +870,7 @@ def choose_experiment_section(request):
         experiment_sections_all = Experiment_Section.objects.all()
         experiment_sections = get_user_authed_list(request, experiment_sections_all, "experiment")
         
-    return render(request, 'ParticipantDB/choose_experiment_section.html', {'experiment_sections': experiment_sections})
+    return render(request, 'ParticipantDB/ExperimentSectionRun/new1.html', {'experiment_sections': experiment_sections})
 
 @login_required
 def add_experiment_section_run(request, experiment_section_name, experiment_name, participant_type, participant=None):
@@ -924,13 +920,13 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
             experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section})
     
     field_score_pairs = zip(experiment_section_fields, experiment_section_run_field_score_forms)
-    return render(request, "ParticipantDB/experiment_section_run_form.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})
+    return render(request, "ParticipantDB/ExperimentSectionRun/new2.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})
 
 @login_required
 def experiment_section_run_detail(request, experiment_section_run_id):
     experiment_section_run = get_object_or_404(Experiment_Section_Run, pk=experiment_section_run_id)
     experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_section_run)
-    return render(request, 'ParticipantDB/experiment_section_run_detail.html', {'experiment_section_run': experiment_section_run, 'experiment_section_run_fields': experiment_section_run_fields})
+    return render(request, 'ParticipantDB/ExperimentSectionRun/view.html', {'experiment_section_run': experiment_section_run, 'experiment_section_run_fields': experiment_section_run_fields})
 
 
 @login_required
