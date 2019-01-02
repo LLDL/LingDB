@@ -13,7 +13,62 @@
     <form method="post">
         {% csrf_token %}
         <h3>Personal &amp; Contact Info</h3>
-        {{ adult_form|crispy}}
+        {% comment %} {{ adult_form|crispy}} {% endcomment %}
+        <div class="row">
+            <div class="col-sm-6">
+                {{ adult_form.id|as_crispy_field}}
+            </div>
+            <div class="col-sm-6">
+                {{ adult_form.sfu_id|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                {{ adult_form.given_name|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ adult_form.preferred_name|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ adult_form.surname|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                {{ adult_form.birth_date|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ adult_form.gender|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ adult_form.years_of_education|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ adult_form.address|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                {{ adult_form.email|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ adult_form.phone|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ adult_form.contact_pref|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ adult_form.pref_phone_time|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ adult_form.personal_notes|as_crispy_field}}
+            </div>
+            <div class="col-sm-6">
+                {{ adult_form.health_notes|as_crispy_field}}
+            </div>
+        </div>
         {% comment %} {% for field in adult_form %}
             <div class="input">
                 {{field.label}} {{field}} {{field.errors}}
@@ -40,58 +95,62 @@
             </div>
         {% endfor %} {% endcomment %}
         {% comment %} {% crispy speaks_formset %} {% endcomment %}
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Language</th>
-                    <th class="field_name">Native</th>
-                    <th class="field_name">Dominance</th>
-                    <th class="field_name">Starting Age</th>
-                    <th class="field_name">Ending Age</th>
-                </tr>
-                
-            </thead>
-            <tbody>
-                {% for speaks in speaks_formset %}
-                    <tr>            
-                        <td class="field_value">{{speaks.lang|as_crispy_field}}</td>  
-                        <td class="field_value_input">{{speaks.is_native|as_crispy_field}}</td>  
-                        <td class="field_value">{{speaks.nth_most_dominant|as_crispy_field}}</td>  
-                        <td class="field_value">{{speaks.age_learning_started|as_crispy_field}}</td>  
-                        <td class="field_value">{{speaks.age_learning_ended|as_crispy_field}}</td>  
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Language*</th>
+                        <th>Dominance*</th>
+                        <th>Starting Age*</th>
+                        <th>Ending Age</th>
+                        <th>Native*</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    
+                </thead>
+                <tbody>
+                    {% for speaks in speaks_formset %}
+                        <tr>            
+                            <td>{{speaks.lang|as_crispy_field}}</td>  
+                            <td>{{speaks.nth_most_dominant|as_crispy_field}}</td>  
+                            <td>{{speaks.age_learning_started|as_crispy_field}}</td>  
+                            <td>{{speaks.age_learning_ended|as_crispy_field}}</td>  
+                            <td>{{speaks.is_native|as_crispy_field}}</td>  
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         
         <h3>Musical Experience</h3>
-        {{ musical_experience_formset.management_form }}
+        {{ musical_experience_formset.management_form|crispy }}
         {% if musical_experience_formset.errors %}
             {{ musical_experience_formset.errors }}
         {% endif %}
         {% if musical_experience.non_form_errors %}
             {{ musical_experience.non_form_errors}}
         {% endif %}
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Experience</th>
-                    <th class="field_name">Dominance</th>
-                    <th class="field_name">Starting Age</th>
-                    <th class="field_name">Ending Age</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for musical_experience in musical_experience_formset %}
-                    <tr>            
-                        <td class="field_value">{{musical_experience.experience}}</td>  
-                        <td class="field_value">{{musical_experience.nth_most_dominant}}</td>  
-                        <td class="field_value">{{musical_experience.age_learning_started}}</td>  
-                        <td class="field_value">{{musical_experience.age_learning_ended}}</td>  
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Experience*</th>
+                        <th>Dominance*</th>
+                        <th>Starting Age*</th>
+                        <th>Ending Age</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for musical_experience in musical_experience_formset %}
+                        <tr>            
+                            <td class="field_value">{{musical_experience.experience|as_crispy_field}}</td>  
+                            <td class="field_value">{{musical_experience.nth_most_dominant|as_crispy_field}}</td>  
+                            <td class="field_value">{{musical_experience.age_learning_started|as_crispy_field}}</td>  
+                            <td class="field_value">{{musical_experience.age_learning_ended|as_crispy_field}}</td>  
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <div class="btn-group">
             <input type="submit" class="btn btn-primary" name="save" value="Save">
             <input type="submit" class="btn btn-primary" name="save_add_another" value="Save & Add Another">

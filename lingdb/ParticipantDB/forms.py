@@ -1,5 +1,5 @@
 # Django Imports ----------------------------------------------------------------
-from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect, EmailInput, Textarea
+from django.forms import ModelForm, DateInput, inlineformset_factory, modelformset_factory, ValidationError, TextInput, RadioSelect, EmailInput, Textarea, CheckboxInput
 
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
@@ -71,10 +71,7 @@ class AdultForm(ModelForm):
         model = Adult
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
-            'id': TextInput(attrs={'min': 100000, 'max': 999999, 'type': 'number', }),
-            'given_name': TextInput(attrs={}),
-            'preferred_name': TextInput(attrs={}),
-            'surname': TextInput(attrs={}),
+            'id': TextInput(attrs={'readonly': 'readonly'}),
             'birth_date': DateInput(attrs={'type': 'date'}),
             'gender': TextInput(attrs={}),
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
@@ -82,10 +79,8 @@ class AdultForm(ModelForm):
             'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', }),
             'phone': TextInput(attrs={'type': 'tel', }),
             'email': EmailInput(attrs={}),
-            'contact_pref': Select2Widget(attrs={'class': 'form-control'}),
-            'pref_phone_time': Select2Widget(attrs={'data-placeholder': 'Preferred Phone Time'}),
-            'personal_notes': Textarea(attrs={}),
-            'health_notes': Textarea(attrs={}),          
+            'contact_pref': Select2Widget(attrs={'class': 'select2custom'}),
+            'pref_phone_time': Select2Widget(attrs={}),   
             
         }
 
@@ -149,6 +144,7 @@ SpeaksInlineFormSet = inlineformset_factory(
     validate_min = True,
     widgets = {
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'is_native': CheckboxInput(attrs={'class': 'centeredCheck'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
         'lang': Select2Widget()

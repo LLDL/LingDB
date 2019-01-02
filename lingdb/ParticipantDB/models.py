@@ -249,7 +249,7 @@ class Speaks(models.Model):
         verbose_name_plural = "Speaks"
     person = models.ForeignKey(Adult, related_name = 'speaker', on_delete = models.CASCADE, default = None)
     lang = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None)
-    is_native = models.BooleanField(default = False)
+    is_native = models.BooleanField('', default = False)
     nth_most_dominant = models.SmallIntegerField(
         validators=[
             MinValueValidator(1), 
