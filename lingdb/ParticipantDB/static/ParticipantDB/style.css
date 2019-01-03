@@ -1,193 +1,18 @@
-/* #new_adult_table, #new_child_table, #new_assessment_table, #new_assessment_run_table{
-    text-align: left;
-}
-.displayTable{
-    border-collapse: collapse;
-}
-.displayTable, .displayTable td, .displayTable th{
-    border: 1px solid #54585a;
-    padding: .25em;
-}
 .error{
     color: #a6192e;
 }
-form{
-    margin-bottom: 0em;
-} */
-#main-content{
-    padding: 1em 1em 1em 1em;
-}
-/* Index */
-html{
-    height: 100%;
+#content{
+    padding: 2em 5em;
 }
 .login{
     background: #a6192e;
 }
-.regBody{
-    height: 100%;
-    overflow: hidden;
-    margin: 0;
-    display: flex;
-    box-sizing: border-box;
-    /* font-family: Roboto, sans-serif; */
-}
-/* h1{
-    background-color: #a6192e;
-    padding: 1em;
-    position: relative;
-    overflow: hidden;
-}
-th{
-    padding: .5em .25em 0 0;
-    word-wrap: break-all;
-}
-td{
-    padding: .5em .25em 0 0;
-}
-textarea{
-    resize: vertical;
-    min-height: 2em;
-    max-height: 20em;
-} */
-#home{
-    color: #ffffff;
-    display: inline-block;
-    text-decoration: none;
-}
-#logoutForm, #adminPageForm{    
-    float: right;
-}
-#logout, #adminPageButton{
-    background-color: #ffffff;
-    border: solid 0px #000000;
-    padding: 1em;
-    margin-left: 1em;
-    font-weight: 700;
-}
-#logout:hover, #home:hover, #adminPageButton:hover{
-    cursor: pointer
-}
-#logo{
-    width: 150px;
-}
-
-#sidebar{
-    flex-shrink: 0;
-    overflow-y: auto;
-    padding: 20px 20px 40px 20px;
-    /* border-right: solid #000000 1px; */
-    background: #a6192e;
-}
-
-#main-box{
-    flex-grow: 1;
-    padding: 20px 20px 40px 20px;
-    overflow-y: auto;
-    
-}
-#main-box form{
-    padding-bottom: 1em;
-}
-.column{
-    /* height: 100%; */
-    display: flex;
-    flex-direction: column;
-}
-#logo-link{
-    font-size: 1.25em;
-    font-weight: bold;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 0 auto;
-    margin: 0 auto;
-}
-.sidebar-link{
-    line-height: 1.5;
-    padding: .25em 1em .25em 1em;
-    font-size: 1.25em;
-    font-weight: bold;
-    color: #ffffff;
-    text-decoration: none !important;
-}
-.sidebar-link:hover{
-    background-color:#ffffff;
-    color: #54585a;
-    border-radius: 5px;
-    text-decoration: none !important;
-}
-.sidebar-category{
-    line-height: 1.5;
-    font-size: 1.1em;
-    padding: .75em 1em 0 0;
-    color: #ffffff;
-}
-h2{
-    margin-top: 0;
-    margin-bottom: 0;
-}
-h3{
-    margin-top: .5em;
-    margin-bottom: 0em;
-}
-/* input[type="submit"]{
-    margin-bottom:2em;
-    margin-top: 1em;
-}
-input[type="checkbox"]{
-    padding: 0;
-    margin: 0;
-} */
-/* input, select{
-    height: 2em;
-} */
-/* input{
-    width: 50%;
-    padding: .5em;
-    margin: .25em 0em;
-    box-sizing: border-box;
-} */
-#search_box{
-    height: 2em;
-    font-size: 1.25em;
-    padding: .25em 0 .25em 0;
-    border: 0px;
-    border-bottom: 2px solid white;
-    color: #ffffff;
-    background-color: #a6192e;
-    font-family: Roboto, sans-serif;
-}
-#search_box::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #ffffff;
-    opacity: .8; /* Firefox */
-}
-
-#search_box::-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color:#ffffff;
-}
-
-#search_box::-ms-input-placeholder { /* Microsoft Edge */
-    color: #ffffff;
-}
-
 .select2-container {
     width: 100% !important;
 }
 
 table tbody tr td div .col-form-label{
     display: none;
-}
-/* .centeredCheck{
-    position: initial !important;
-    margin-top: 0 !important;
-    margin-left: 0 !important;
-} */
-/* 
-.field_value_input input{
-    width: 100%;
-} */
-.form_group{
-    margin-bottom: 0 !important;
 }
 .selection span{
     height: calc(2.25rem + 2px) !important;
@@ -201,20 +26,20 @@ table tbody tr td div .col-form-label{
     /* margin-top: auto;
     margin-bottom: auto; */
 }
-.card{
-    
-    /* padding: 2em; */
-}
 .whiteText{
     color: #ffffff;
 }
-@media only screen and (max-width: 800px){
-    .index-container{
-        display: block !important;
-    }
-    .index-cat{
-        display: block !important;
-        text-align: center !important;
-        margin: 0 2em !important;
-    }
+.nav-link, .navbar-brand{
+    color: white !important;
+    font-size: 1.2em !important;
+    font-weight: 600 !important;
+}
+nav{
+    background-color: #a6192e !important;
+}
+#search_submit{
+    margin-right: .5em;
+}
+#search_box{
+   background-color: #fff !important;
 }

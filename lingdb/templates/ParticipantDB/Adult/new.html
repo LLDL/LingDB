@@ -1,4 +1,4 @@
-{% extends "ParticipantDB/sidebar.html" %}
+{% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
     {{ adult_form.media.css }}
@@ -150,10 +150,10 @@
                 </tbody>
             </table>
         </div>
-        {% comment %} <div class="btn-group"> {% endcomment %}
-            <input type="submit" class="btn btn-primary" name="save" value="Save">
-            <input type="submit" class="btn btn-primary" name="save_add_another" value="Save & Add Another">
-        {% comment %} </div> {% endcomment %}
+        <div class="btn-group">
+            <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
+            <input type="submit" class="btn btn-outline-primary" name="save_add_another" value="Save & Add Another">
+        </div>
     </form>
     
     {{ adult_form.media.js }}

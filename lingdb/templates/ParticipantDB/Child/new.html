@@ -1,4 +1,4 @@
-{% extends "ParticipantDB/sidebar.html" %}
+{% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
     {{ child_form.media.css}}
     {{ exposure_forms.media.css }}
@@ -89,8 +89,10 @@
             </tbody>
         </table>
         
-        <input type="submit" class="btn btn-primary" name="save" value="Save">
-        <input type="submit" class="btn btn-primary" name="save_add_another" value="Save & Add Another">
+        <div class="btn-group"> 
+            <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
+            <input type="submit" class="btn btn-outline-primary" name="save_add_another" value="Save & Add Another">
+        </div>
     </form>
     
     {{ child_form.media.js}}

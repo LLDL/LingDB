@@ -1,130 +1,144 @@
-{% extends "ParticipantDB/sidebar.html" %}
+{% extends "ParticipantDB/nav.html" %}
+
 {% block content %}
-    <h2>
+
+    <h1>
         Adult # {{ adult.id }}
-    </h2>
-    <a href="{% url 'delete_adult' adult_id=adult.id %}">Delete</a>
-    <a href="{% url 'update_adult' adult_id=adult.id %}">Update</a>
+    </h1>
+    <div class="btn-group"> 
+        <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+        <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
+    </div>
     <div>
-        <h3>Personal Info</h3>
-        <table>
-            <tr>
-                <td class="field_name">Given Name:</td>
-                <td class="field_value">{{adult.given_name}}</td>
-            </tr> 
-            {% if adult.preferred_name %}
-            <tr>
-                    <td class="field_name">Preferred Name:</td>
-                    <td class="field_value">{{adult.preferred_name}}</td>
-            </tr>    
-            {% endif %}
-            <tr>
-                    <td class="field_name">Surname:</td>
-                    <td class="field_value">{{adult.surname}}</td>
-            </tr> 
-            <tr>
-                    <td class="field_name">Birth Date:</td>
-                    <td class="field_value">{{adult.birth_date}}</td>
-            </tr> 
-            <tr>
-                    <td class="field_name">Gender:</td>
-                    <td class="field_value">{{adult.gender}}</td>
-            </tr> 
-            {% if adult.sfu_id %}
-            <tr>
-                    <td class="field_name">SFU ID:</td>
-                    <td class="field_value">{{adult.sfu_id}}</td>
-            </tr>    
-            {% endif %}
-            <tr>
-                    <td class="field_name">Address:</td>
-                    <td class="field_value">{{adult.address}}</td>
-            </tr>
-            <tr>
-                    <td class="field_name">Years of Education:</td>
-                    <td class="field_value">{{adult.years_of_education}}</td>
-            </tr>
-            <tr>
-                    <td class="field_name">Phone:</td>
-                    <td class="field_value">{{adult.phone}}</td>
-            </tr>
-            <tr>
-                    <td class="field_name">Email:</td>
-                    <td class="field_value">{{adult.email}}</td>
-            </tr>
-            <tr>
-                    <td class="field_name">Contact Preference:</td>
-                    <td class="field_value">{{adult.get_contact_pref_display}}</td>
-            </tr>    
-            <tr>
-                    <td class="field_name">Preferred Phone Time:</td>
-                    <td class="field_value">{{adult.get_pref_phone_time_display}}</td>
-            </tr> 
-            {% if adult.health_notes %}
-            <tr>
-                    <td class="field_name">Health Notes:</td>
-                    <td class="field_value">{{adult.health_notes}}</td>
-            </tr>
-            {% endif %}
-            {% if adult.personal_notes %}
-            <tr>
-                    <td class="field_name">Personal Notes:</td>
-                    <td class="field_value">{{adult.personal_notes}}</td>
-            </tr>
-            {% endif %}
-        </table>
-        {% if speaksLanguages.count > 0 %}
-            <h3>Languages Spoken</h3>
-            <table class="displayTable">
-                <thead>
-                    <tr>
-                        <th class="field_name">Language</th>
-                        <th class="field_name">Native</th>
-                        <th class="field_name">Dominance</th>
-                        <th class="field_name">Starting Age</th>
-                        <th class="field_name">Ending Age</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for speaksLanguage in speaksLanguages %}
-                        <tr>
-                            <td class="field_value">{{speaksLanguage.lang}}</td>
-                            <td class="field_value">{{speaksLanguage.is_native}}</td>
-                            <td class="field_value">{{speaksLanguage.nth_most_dominant}}</td>
-                            <td class="field_value">{{speaksLanguage.age_learning_started}}</td>
-                            <td class="field_value">{{speaksLanguage.age_learning_ended}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+        <h2>Personal Info</h2>        
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#personalTable" aria-expanded="false" aria-controls="personalTable">
+            Button with data-target
+        </button>
+
+        <div class="table-responsive" id="personalTable">
+            <table class="table">
+                <tr>
+                    <td class="field_name">Given Name:</td>
+                    <td class="field_value">{{adult.given_name}}</td>
+                </tr> 
+                {% if adult.preferred_name %}
+                <tr>
+                        <td class="field_name">Preferred Name:</td>
+                        <td class="field_value">{{adult.preferred_name}}</td>
+                </tr>    
+                {% endif %}
+                <tr>
+                        <td class="field_name">Surname:</td>
+                        <td class="field_value">{{adult.surname}}</td>
+                </tr> 
+                <tr>
+                        <td class="field_name">Birth Date:</td>
+                        <td class="field_value">{{adult.birth_date}}</td>
+                </tr> 
+                <tr>
+                        <td class="field_name">Gender:</td>
+                        <td class="field_value">{{adult.gender}}</td>
+                </tr> 
+                {% if adult.sfu_id %}
+                <tr>
+                        <td class="field_name">SFU ID:</td>
+                        <td class="field_value">{{adult.sfu_id}}</td>
+                </tr>    
+                {% endif %}
+                <tr>
+                        <td class="field_name">Address:</td>
+                        <td class="field_value">{{adult.address}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Years of Education:</td>
+                        <td class="field_value">{{adult.years_of_education}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Phone:</td>
+                        <td class="field_value">{{adult.phone}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Email:</td>
+                        <td class="field_value">{{adult.email}}</td>
+                </tr>
+                <tr>
+                        <td class="field_name">Contact Preference:</td>
+                        <td class="field_value">{{adult.get_contact_pref_display}}</td>
+                </tr>    
+                <tr>
+                        <td class="field_name">Preferred Phone Time:</td>
+                        <td class="field_value">{{adult.get_pref_phone_time_display}}</td>
+                </tr> 
+                {% if adult.health_notes %}
+                <tr>
+                        <td class="field_name">Health Notes:</td>
+                        <td class="field_value">{{adult.health_notes}}</td>
+                </tr>
+                {% endif %}
+                {% if adult.personal_notes %}
+                <tr>
+                        <td class="field_name">Personal Notes:</td>
+                        <td class="field_value">{{adult.personal_notes}}</td>
+                </tr>
+                {% endif %}
             </table>
+        </div>
+        {% if speaksLanguages.count > 0 %}
+            <h2>Languages Spoken</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Language</th>
+                            <th>Native</th>
+                            <th>Dominance</th>
+                            <th>Starting Age</th>
+                            <th>Ending Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for speaksLanguage in speaksLanguages %}
+                            <tr>
+                                <td>{{speaksLanguage.lang}}</td>
+                                <td>{{speaksLanguage.is_native}}</td>
+                                <td>{{speaksLanguage.nth_most_dominant}}</td>
+                                <td>{{speaksLanguage.age_learning_started}}</td>
+                                <td>{{speaksLanguage.age_learning_ended}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endif %}
         
         {% if musical_exps.count > 0 %}
-            <h3>Musical Experiences</h3>
-            <table class="displayTable">
-                <thead>
-                    <tr>
-                        <th class="field_name">Musical Experience</th>
-                        <th class="field_name">Dominance</th>
-                        <th class="field_name">Starting Age</th>
-                        <th class="field_name">Ending Age</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    {% for musical_exp in musical_exps %}
+            <h2>Musical Experiences</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td class="field_value">{{musical_exp.experience}}</td>
-                            <td class="field_value">{{musical_exp.nth_most_dominant}}</td>
-                            <td class="field_value">{{musical_exp.age_learning_started}}</td>
-                            <td class="field_value">{{musical_exp.age_learning_ended}}</td>
+                            <th>Musical Experience</th>
+                            <th>Dominance</th>
+                            <th>Starting Age</th>
+                            <th>Ending Age</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    
+                    <tbody>
+                        {% for musical_exp in musical_exps %}
+                            <tr>
+                                <td>{{musical_exp.experience}}</td>
+                                <td>{{musical_exp.nth_most_dominant}}</td>
+                                <td>{{musical_exp.age_learning_started}}</td>
+                                <td>{{musical_exp.age_learning_ended}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endif %}
         {% if family %}
-            <h3>Family</h3>
+            <h2>Family</h2>
             <a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
             </a><br>
             {% if parents.count > 1 %}
@@ -187,7 +201,7 @@
             </table>
         {% endif %}
         <form method="get" id="assessment_run" action="/assessment_run/add/" accept-charset="utf-8">
-            <h3>Add Assessment Run</h3>
+            <h4>Add Assessment Run</h4>
             <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
             <input id="participantID" name="participantID" type="hidden" value="{{adult.id}}">
             <select id="chooseAssessmentField" name="chooseAssessmentField">
@@ -197,7 +211,7 @@
             </select>
             <input type="submit" id="chooseAssessmentButton" value="Add Assessment Run">
         </form>
-        {% comment %} <h3>Experiments</h3>
+        {% comment %} <h2>Experiments</h2>
         {% if experiment_section_participations|length > 0 %}
             <table class="displayTable">
                 <thead>
@@ -237,7 +251,7 @@
             </table>
         {% endif %}
         <form method="get" id="chooseExperimentSection" action="/experiment_section_run/add/" accept-charset="utf-8">
-            <h3>Add Experiment Run</h3>
+            <h2>Add Experiment Run</h2>
             <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
             <input id="participantID" name="participantID" type="hidden" value="{{adult.id}}">
             <select id="chooseExperimentSectionField" name="chooseExperimentSectionField">

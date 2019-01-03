@@ -1,4 +1,4 @@
-{% extends "ParticipantDB/sidebar.html" %}
+{% extends "ParticipantDB/nav.html" %}
 {% block content %}
     <h2>Update Family # {{family_id}}</h2>
     <form action="{% url 'update_family' family_id %}" method="post">
