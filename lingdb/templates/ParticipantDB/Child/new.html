@@ -3,43 +3,94 @@
     {{ child_form.media.css}}
     {{ exposure_forms.media.css }}
 {% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>New Child</h2>
+    <h1>New Child</h1>
     <form method="post">
         {% csrf_token %}
-        <h3>Personal &amp; Info</h3>
-        <table id="new_child_table">
-            {{child_form.as_table}}
-        </table>
-        <h3>Languages Exposed To</h3>
+        <h2>Personal Info</h2>
+
+        <div class="row">
+            <div class="col-sm-3">
+                {{ child_form.id|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ child_form.given_name|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ child_form.preferred_name|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ child_form.surname|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                {{ child_form.birth_date|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ child_form.gender|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ child_form.birth_weight|as_crispy_field}}
+            </div>
+            <div class="col-sm-3">
+                {{ child_form.birth_height|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                {{ child_form.was_full_term|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ child_form.hereditary_audio_problems|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ child_form.hereditary_language_pathologies|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
         
-        {{ exposure_forms.management_form }}
+            <div class="col-sm-4">
+                {{ child_form.hx_repeated_ear_infection|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ child_form.personal_notes|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ child_form.health_notes|as_crispy_field}}
+            </div>
+        </div>
+
+        <h2>Languages Exposed To</h2>
+        
         {% if exposure_forms.errors %}
             {{ exposure_forms.errors }}
         {% endif %}
         {% if exposure_forms.non_form_errors %}
             {{ exposure_forms.non_form_errors }}
         {% endif %}
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Language</th>
-                    <th class="field_name">Exposure Percentage</th>
-                </tr>
-                
+        {{ exposure_forms.management_form|crispy }}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Language*</th>
+                        <th>Exposure Percentage*</th>
+                    </tr>
             </thead>
             <tbody>
                 {% for exposure_form in exposure_forms %}
                     <tr>            
-                        <td class="field_value">{{exposure_form.lang}}</td>  
-                        <td class="field_value_input">{{exposure_form.percentage_exposure}}</td>
+                        <td>{{exposure_form.lang|as_crispy_field}}</td>  
+                        <td>{{exposure_form.percentage_exposure|as_crispy_field}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         
-        <input type="submit" name="save" value="Save">
-        <input type="submit" name="save_add_another" value="Save & Add Another">
+        <input type="submit" class="btn btn-primary" name="save" value="Save">
+        <input type="submit" class="btn btn-primary" name="save_add_another" value="Save & Add Another">
     </form>
     
     {{ child_form.media.js}}

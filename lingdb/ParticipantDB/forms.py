@@ -79,7 +79,7 @@ class AdultForm(ModelForm):
             'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', }),
             'phone': TextInput(attrs={'type': 'tel', }),
             'email': EmailInput(attrs={}),
-            'contact_pref': Select2Widget(attrs={'class': 'select2custom'}),
+            'contact_pref': Select2Widget(attrs={}),
             'pref_phone_time': Select2Widget(attrs={}),   
             
         }
@@ -91,6 +91,7 @@ class ChildForm(ModelForm):
         model = Child
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','gestation_length_weeks','was_full_term','birth_weight','birth_height','personal_notes','hx_repeated_ear_infection','hereditary_audio_problems','hereditary_language_pathologies','health_notes')
         widgets = {
+            'id': TextInput(attrs={'readonly': 'readonly'}),
             'birth_date': DateInput(attrs={'type': 'date'}),
             'gestation_length_weeks': TextInput(attrs={'min': 0, 'max': 50, 'type': 'number'}),
             'birth_weight': TextInput(attrs={'min': 0, 'max': 10000, 'type': 'number'}),
