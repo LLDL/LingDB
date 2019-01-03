@@ -8,7 +8,7 @@
 {% block extraHead %}
 {% endblock %}
 </head>
-<body>
+<body class="regBody">
 <div id="sidebar" class="column">
     <a href="/" id="logo-link">
         <img src="{% static 'ParticipantDB/sfu-logo.png' %}" alt="SFU Department of Linguistics Participant Database" id="logo"><br>
@@ -75,14 +75,16 @@
 </div>
 <div id="main-box" class="column">
     {% if messages %}
-        <ul class="messages">
+        <div class="alert alert-success" role="alert">
             {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <span>
+                    {{ message }}
+                </span>
             {% endfor %}
-        </ul>
+        </div>
     {% endif %}
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
 </body>
 </html>

@@ -21,7 +21,10 @@ form{
 html{
     height: 100%;
 }
-body{
+.login{
+    background: #a6192e;
+}
+.regBody{
     height: 100%;
     overflow: hidden;
     margin: 0;
@@ -83,7 +86,9 @@ textarea{
     overflow-y: auto;
     
 }
-
+#main-box form{
+    padding-bottom: 1em;
+}
 .column{
     /* height: 100%; */
     display: flex;
@@ -190,6 +195,18 @@ table tbody tr td div .col-form-label{
 .select2-selection, .select2-selection--single{
     border: 1px solid #ced4da !important;
     border-radius: .25rem !important;
+}
+.autoMargin{
+    margin: auto;
+    /* margin-top: auto;
+    margin-bottom: auto; */
+}
+.card{
+    
+    /* padding: 2em; */
+}
+.whiteText{
+    color: #ffffff;
 }
 @media only screen and (max-width: 800px){
     .index-container{
