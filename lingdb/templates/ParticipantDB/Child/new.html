@@ -64,13 +64,13 @@
 
         <h2>Languages Exposed To</h2>
         
-        {% if exposure_forms.errors %}
+        {% comment %} {% if exposure_forms.errors %}
             {{ exposure_forms.errors }}
-        {% endif %}
-        {% if exposure_forms.non_form_errors %}
-            {{ exposure_forms.non_form_errors }}
-        {% endif %}
+        {% endif %} {% endcomment %}
         {{ exposure_forms.management_form|crispy }}
+        {% comment %} {% if exposure_forms.non_form_errors %}
+            {{ exposure_forms.non_form_errors }}
+        {% endif %} {% endcomment %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>

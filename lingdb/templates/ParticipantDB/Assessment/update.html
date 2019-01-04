@@ -11,12 +11,12 @@
 
             <h3>Fields</h3>
             {{ assessment_field_formset.management_form }}
-            {% if assessment_field_formset.errors %}
+            {% comment %} {% if assessment_field_formset.errors %}
                 {{ assessment_field_formset.errors }}
-            {% endif %}
-            {% if assessment_field_formset.non_form_errors %}
+            {% endif %} {% endcomment %}
+            {% comment %} {% if assessment_field_formset.non_form_errors %}
                 {{ assessment_field_formset.non_form_errors }}
-            {% endif %}
+            {% endif %} {% endcomment %}
             <table>
                 <thead>
                     <tr>

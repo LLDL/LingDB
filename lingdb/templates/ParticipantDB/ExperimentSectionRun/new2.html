@@ -34,12 +34,12 @@
 
         <h3>Results</h3>
         {{ experiment_section_run_field_score_formset.management_form }}
-        {% if experiment_section_run_field_score_formset.errors %}
+        {% comment %} {% if experiment_section_run_field_score_formset.errors %}
             {{ experiment_section_run_field_score_formset.errors }}
-        {% endif %}
-        {% if experiment_section_run_field_score_formset.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if experiment_section_run_field_score_formset.non_form_errors %}
             {{ experiment_section_run_field_score_formset.non_form_errors }}
-        {% endif %}
+        {% endif %} {% endcomment %}
         <table>
             <thead>
                 <tr>

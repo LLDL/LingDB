@@ -7,11 +7,11 @@
 
         <h3>Parent(s)</h3>
         {{ parent_forms.management_form}}
-        {% if parent_forms.non_form_errors %}
+        {% comment %} {% if parent_forms.non_form_errors %}
             <div class="error">
                 {{ parent_forms.non_form_errors }}
             </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <table>
             <thead>
@@ -37,11 +37,11 @@
         
         <h3>Child(ren)</h3>
         {{ child_forms.management_form}}
-        {% if child_forms.non_form_errors %}
+        {% comment %} {% if child_forms.non_form_errors %}
             <div class="error">
                 {{ child_forms.non_form_errors }}
             </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
         
         <table>
             <thead>

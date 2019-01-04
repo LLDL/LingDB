@@ -72,12 +72,12 @@
         
         
         <h2>Languages Spoken</h2>
-        {% if speaks_formset.errors %}
+        {% comment %} {% if speaks_formset.errors %}
             {{ speaks_formset.errors }}
-        {% endif %}
-        {% if speaks_formset.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if speaks_formset.non_form_errors %}
             {{ speaks_formset.non_form_errors }}
-        {% endif %}
+        {% endif %} {% endcomment %}
         {{ speaks_formset.management_form|crispy }}
         <div class="table-responsive">
             <table class="table table-hover">
@@ -109,12 +109,12 @@
         </div>
        
         <h2>Musical Experience</h2>
-        {% if musical_experience_formset.errors %}
+        {% comment %} {% if musical_experience_formset.errors %}
             {{ musical_experience_formset.errors }}
-        {% endif %}
-        {% if musical_experience.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if musical_experience.non_form_errors %}
             {{ musical_experience.non_form_errors}}
-        {% endif %}
+        {% endif %} {% endcomment %}
         {{ musical_experience_formset.management_form|crispy }}
         <div class="table-responsive">
             <table class="table table-hover">

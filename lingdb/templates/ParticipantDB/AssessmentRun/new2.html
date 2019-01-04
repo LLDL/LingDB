@@ -34,12 +34,12 @@
 
         <h3>Results</h3>
         {{ assessment_run_field_score_formset.management_form }}
-        {% if assessment_run_field_score_formset.errors %}
+        {% comment %} {% if assessment_run_field_score_formset.errors %}
             {{ assessment_run_field_score_formset.errors }}
-        {% endif %}
-        {% if assessment_run_field_score_formset.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if assessment_run_field_score_formset.non_form_errors %}
             {{ assessment_run_field_score_formset.non_form_errors }}
-        {% endif %}
+        {% endif %} {% endcomment %}
         <table>
             <thead>
                 <tr>

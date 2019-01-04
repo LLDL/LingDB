@@ -12,12 +12,12 @@
 
             <h3>Sections</h3>
             {{ experiment_section_formset.management_form }}
-            {% if experiment_section_formset.errors %}
+            {% comment %} {% if experiment_section_formset.errors %}
                 {{ experiment_section_formset.errors }}
             {% endif %}
             {% if experiment_section_formset.non_form_errors %}
                 {{ experiment_section_formset.non_form_errors }}
-            {% endif %}
+            {% endif %} {% endcomment %}
             <table>
                 <thead>
                     <tr>

@@ -12,6 +12,9 @@ class FamilyForm(ModelForm):
     class Meta:
         model = Family
         fields = ('id',) 
+        widgets = {
+            'id': TextInput(attrs={'readonly': 'readonly'}),
+        }
 
 class ParentForm(ModelForm):
     class Meta:

@@ -4,12 +4,12 @@
     <form  action="{% url 'update_experiment_section_fields' experiment.experiment_name %}"  method="post">
         {% csrf_token %}
         
-        {% if fields.errors %}
+        {% comment %} {% if fields.errors %}
             {{ fields.errors }}
-        {% endif %}
-        {% if fields.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if fields.non_form_errors %}
             {{ fields.non_form_errors }}
-        {% endif %}
+        {% endif %} {% endcomment %}
         {% for experiment_section in experiment_sections %}
             <h3>Section: {{experiment_section.experiment_section_name}}</h3>
             <table>

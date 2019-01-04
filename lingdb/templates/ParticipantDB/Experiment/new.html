@@ -1,40 +1,52 @@
 {% extends "ParticipantDB/nav.html" %}
+
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>New Experiment</h2>
+    <h1>New Experiment</h1>
     <form method="post">
         {% csrf_token %}
-        <h3>Basic Info</h3>
-        <table id="new_assessment_table">
-            {{experiment_form.as_table}}
-        </table>
+        <h2>Basic Info</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                {{ experiment_form.experiment_name|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ experiment_form.lab|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{ experiment_form.status|as_crispy_field}}
+            </div>
+        </div>
 
-        <h3>Sections</h3>
-        {{ experiment_section_formset.management_form }}
-        {% if experiment_section_formset.errors %}
+        <h2>Sections</h2>
+        {{ experiment_section_formset.management_form|crispy }}
+        {% comment %} {% if experiment_section_formset.errors %}
             {{ experiment_section_formset.errors }}
-        {% endif %}
-        {% if experiment_section_formset.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if experiment_section_formset.non_form_errors %}
             {{ experiment_section_formset.non_form_errors }}
-        {% endif %}
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Name</th>
-                    <th class="field_name">Section Status</th>
-                </tr>
-                
-            </thead>
-            <tbody>
-                {% for experiment_section_form in experiment_section_formset %}
-                    <tr>            
-                        <td class="field_value">{{experiment_section_form.experiment_section_name}}</td>  
-                        <td class="field_value">{{experiment_section_form.section_status}}</td> 
+        {% endif %} {% endcomment %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name*</th>
+                        <th>Section Status*</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    
+                </thead>
+                <tbody>
+                    {% for experiment_section_form in experiment_section_formset %}
+                        <tr>            
+                            <td>{{experiment_section_form.experiment_section_name|as_crispy_field}}</td>  
+                            <td>{{experiment_section_form.section_status|as_crispy_field}}</td> 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
 
-        <input type="submit" value="Add Experiment Section Fields">
+        <input type="submit" class="btn btn-outline-primary" value="Add Experiment Section Fields">
     </form>
 {% endblock %}

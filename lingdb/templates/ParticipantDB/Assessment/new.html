@@ -1,41 +1,53 @@
 {% extends "ParticipantDB/nav.html" %}
+
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>New Assessment</h2>
+    <h1>New Assessment</h1>
     <form method="post">
         {% csrf_token %}
         <h3>Basic Info</h3>
-        <table id="new_assessment_table">
-            {{assessment_form.as_table}}
-        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ assessment_form.assessment_name|as_crispy_field}}
+            </div>
+            <div class="col-sm-6">
+                {{ assessment_form.lab|as_crispy_field}}
+            </div>
+        </div>
+
+
 
         <h3>Fields</h3>
-        {{ assessment_field_formset.management_form }}
-        {% if assessment_field_formset.errors %}
+        {{ assessment_field_formset.management_form|crispy }}
+        {% comment %} {% if assessment_field_formset.errors %}
             {{ assessment_field_formset.errors }}
-        {% endif %}
-        {% if assessment_field_formset.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if assessment_field_formset.non_form_errors %}
             {{ assessment_field_formset.non_form_errors }}
-        {% endif %}
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Name</th>
-                    <th class="field_name">Type</th>
-                </tr>
-                
-            </thead>
-            <tbody>
-                {% for assessment_field_form in assessment_field_formset %}
-                    <tr>            
-                        <td class="field_value">{{assessment_field_form.field_name}}</td>  
-                        <td class="field_value">{{assessment_field_form.type}}</td> 
+        {% endif %} {% endcomment %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name*</th>
+                        <th>Type*</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    
+                </thead>
+                <tbody>
+                    {% for assessment_field_form in assessment_field_formset %}
+                        <tr>            
+                            <td>{{assessment_field_form.field_name|as_crispy_field}}</td>  
+                            <td>{{assessment_field_form.type|as_crispy_field}}</td> 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-
-        <input type="submit" name="save" value="Save">
-        <input type="submit" name="save_add_another" value="Save & Add Another">
+        <div class="btn-group"> 
+            <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
+            <input type="submit" class="btn btn-outline-primary" name="save_add_another" value="Save & Add Another">
+        </div>
     </form>
 {% endblock %}

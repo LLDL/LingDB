@@ -8,7 +8,7 @@ class Language(models.Model):
         verbose_name = "Language"
         verbose_name_plural = "Languages"
         ordering = ['language_name']
-    language_name = models.CharField(max_length = 100, primary_key = True)
+    language_name = models.CharField("Language Name", max_length = 100, primary_key = True)
     def __str__(self):
         return '%s' % (self.language_name) 
 
@@ -17,7 +17,7 @@ class MusicalSkill(models.Model):
         verbose_name = "Musical Skill"
         verbose_name_plural = "Musical Skills"
         ordering = ['skill']
-    skill = models.CharField(max_length = 100, primary_key = True)
+    skill = models.CharField('Skill', max_length = 100, primary_key = True)
     def __str__(self):
         return '%s' % (self.skill) 
 
@@ -113,7 +113,7 @@ class Family(models.Model):
 class Experiment(models.Model):
     class Meta:
         ordering = ['experiment_name']
-    experiment_name = models.CharField(max_length = 100, primary_key = True)
+    experiment_name = models.CharField('Experiment Name', max_length = 100, primary_key = True)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     STATUS_CHOICES = (
         ('prep', 'In Prep'),
@@ -179,7 +179,7 @@ class Experiment_Section_Run_Field_Score(models.Model):
 class Assessment(models.Model):
     class Meta:
         ordering = ['assessment_name']
-    assessment_name = models.CharField(max_length = 100, primary_key = True)
+    assessment_name = models.CharField('Assessment Name', max_length = 100, primary_key = True)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
     def __str__(self):

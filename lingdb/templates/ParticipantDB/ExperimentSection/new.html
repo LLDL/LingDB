@@ -1,42 +1,45 @@
 {% extends "ParticipantDB/nav.html" %}
+
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>Fields for Sections of Experiment '{{experiment.experiment_name}}'</h2>
+    <h1>Fields for Sections of Experiment '{{experiment.experiment_name}}'</h1>
     <form method="post">
         {% csrf_token %}
         
-        {% if fields.errors %}
+        {% comment %} {% if fields.errors %}
             {{ fields.errors }}
-        {% endif %}
-        {% if fields.non_form_errors %}
+        {% endif %} {% endcomment %}
+        {% comment %} {% if fields.non_form_errors %}
             {{ fields.non_form_errors }}
-        {% endif %}
+        {% endif %} {% endcomment %}
         {% for experiment_section in experiment_sections %}
-            <h3>Section: {{experiment_section.experiment_section_name}}</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="field_name">Field Name</th>
-                        <th class="field_name">Field Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for field in fields.items %}
-                    {% if field.0 == experiment_section.id %}
-                    
-                        {{field.1.management_form}}
-                        {% for item in field.1 %}
+            <h2>Section: {{experiment_section.experiment_section_name}}</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td class="field_value">{{item.field_name}}</td>
-                            <td class="field_value">{{item.type}}</td>
+                            <th>Field Name</th>
+                            <th>Field Type</th>
                         </tr>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>    
+                    </thead>
+                    <tbody>
+                    {% for field in fields.items %}
+                        {% if field.0 == experiment_section.id %}
+                        
+                            {{field.1.management_form|crispy}}
+                            {% for item in field.1 %}
+                            <tr>
+                                <td>{{item.field_name|as_crispy_field}}</td>
+                                <td>{{item.type|as_crispy_field}}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>    
+            </div>
         {% endfor %}
 
-
-        <input type="submit" value="Save">
+        <input type="submit" class="btn btn-outline-primary" value="Save">
     </form>
 {% endblock %}
