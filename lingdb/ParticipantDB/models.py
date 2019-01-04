@@ -146,8 +146,8 @@ class Experiment_Section_Run(models.Model):
         verbose_name = "Experiment Section Run"
         verbose_name_plural = "Experiment Section Runs"
         ordering = ['experiment_section', 'participantAdult', 'participantChild']
-    participantAdult = models.ForeignKey(Adult, on_delete = models.CASCADE, null=True, blank=True)
-    participantChild = models.ForeignKey(Child, on_delete = models.CASCADE, null=True, blank=True)
+    participantAdult = models.ForeignKey(Adult, verbose_name='Adult Participant', on_delete = models.CASCADE, null=True, blank=True)
+    participantChild = models.ForeignKey(Child, verbose_name='Child Participant', on_delete = models.CASCADE, null=True, blank=True)
     experiment_section = models.ForeignKey(Experiment_Section, on_delete = models.CASCADE)
     date = models.DateField()
     notes = models.TextField(max_length=1000, null=True, blank=True)
@@ -191,8 +191,8 @@ class Assessment_Run(models.Model):
         verbose_name = "Assessment Run"
         verbose_name_plural = "Assessment Runs"
         ordering = ['participantAdult', 'participantChild']
-    participantAdult = models.ForeignKey(Adult, on_delete = models.CASCADE, null=True, blank=True)
-    participantChild = models.ForeignKey(Child, on_delete = models.CASCADE, null=True, blank=True)
+    participantAdult = models.ForeignKey(Adult, verbose_name='Adult Participant', on_delete = models.CASCADE, null=True, blank=True)
+    participantChild = models.ForeignKey(Child, verbose_name='Child Participant', on_delete = models.CASCADE, null=True, blank=True)
     assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE)
 
     date = models.DateField()
