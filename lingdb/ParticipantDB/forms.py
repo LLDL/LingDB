@@ -304,7 +304,10 @@ class AssessmentRunForm(ModelForm):
         # fields = ('participantAdult', 'participantChild', 'date', 'notes',)
 
         widgets = {
-            'date': DateInput(attrs={'type': 'date'})
+            'date': DateInput(attrs={'type': 'date'}),
+            'participantAdult': Select2Widget(),
+            'participantChild': Select2Widget(),
+            'assessor': Select2Widget(),
         }
     
 class AssessmentRunFieldScoreForm(ModelForm):
@@ -338,7 +341,10 @@ class ExperimentSectionRunForm(ModelForm):
         # fields = ('participantAdult', 'participantChild', 'date', 'notes', )
         fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor', )
         widgets = {
-            'date': DateInput(attrs={'type': 'date'})
+            'date': DateInput(attrs={'type': 'date'}),
+            'participantAdult': Select2Widget(),
+            'participantChild': Select2Widget(),
+            'assessor': Select2Widget(),
         }
 
 class ExperimentSectionRunFieldScoreForm(ModelForm):

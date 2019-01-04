@@ -13,7 +13,6 @@
     <form method="post">
         {% csrf_token %}
         <h2>Personal &amp; Contact Info</h2>
-        {% comment %} {{ adult_form|crispy}} {% endcomment %}
         <div class="row">
             <div class="col-sm-6">
                 {{ adult_form.id|as_crispy_field}}
@@ -69,32 +68,9 @@
                 {{ adult_form.health_notes|as_crispy_field}}
             </div>
         </div>
-        {% comment %} {% for field in adult_form %}
-            <div class="input">
-                {{field.label}} {{field}} {{field.errors}}
-            </div>
-        {% endfor %} {% endcomment %}
 
-        {% comment %} <table id="new_adult_table">
-            {{adult_form.as_table}}
-        </table>
-         {% endcomment %}
         <h2>Languages Spoken</h2>
-        {% comment %} {{ speaks_formset.management_form }} {% endcomment %}
-        {% comment %} {% if speaks_formset.errors %}
-            {{ speaks_formset.errors }}
-        {% endif %} {% endcomment %}
         {{ speaks_formset.management_form|crispy }}
-        {% comment %} {% if speaks_formset.non_form_errors %}
-            {{ speaks_formset.non_form_errors }}
-        {% endif %}
-         {% endcomment %}
-        {% comment %} {% for speaks in speaks_formset %}
-            <div class="form-inline">
-                {% crispy speaks %}
-            </div>
-        {% endfor %} {% endcomment %}
-        {% comment %} {% crispy speaks_formset %} {% endcomment %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
@@ -122,12 +98,6 @@
         
         <h2>Musical Experience</h2>
         {{ musical_experience_formset.management_form|crispy }}
-        {% comment %} {% if musical_experience_formset.errors %}
-            {{ musical_experience_formset.errors }}
-        {% endif %} {% endcomment %}
-        {% comment %} {% if musical_experience.non_form_errors %}
-            {{ musical_experience.non_form_errors}}
-        {% endif %} {% endcomment %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>

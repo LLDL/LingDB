@@ -1,7 +1,6 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
-
     {{ adult_form.media.css }}
     {{ speaks_formset.media.css }}
     {{ musical_experience_formset.media.css}}
@@ -70,14 +69,7 @@
             </div>
         </div>
         
-        
         <h2>Languages Spoken</h2>
-        {% comment %} {% if speaks_formset.errors %}
-            {{ speaks_formset.errors }}
-        {% endif %} {% endcomment %}
-        {% comment %} {% if speaks_formset.non_form_errors %}
-            {{ speaks_formset.non_form_errors }}
-        {% endif %} {% endcomment %}
         {{ speaks_formset.management_form|crispy }}
         <div class="table-responsive">
             <table class="table table-hover">
@@ -90,11 +82,10 @@
                         <th>Native*</th>
                         <th>Delete?</th>
                     </tr>
-                    
                 </thead>
                 <tbody>
                     {% for speaks in speaks_formset %}
-                    {{speaks.id}}
+                        {{speaks.id}}
                         <tr>            
                             <td>{{speaks.lang|as_crispy_field}}</td>  
                             <td>{{speaks.nth_most_dominant|as_crispy_field}}</td>  
@@ -109,12 +100,6 @@
         </div>
        
         <h2>Musical Experience</h2>
-        {% comment %} {% if musical_experience_formset.errors %}
-            {{ musical_experience_formset.errors }}
-        {% endif %} {% endcomment %}
-        {% comment %} {% if musical_experience.non_form_errors %}
-            {{ musical_experience.non_form_errors}}
-        {% endif %} {% endcomment %}
         {{ musical_experience_formset.management_form|crispy }}
         <div class="table-responsive">
             <table class="table table-hover">
@@ -134,8 +119,7 @@
                             <td>{{musical_experience.nth_most_dominant|as_crispy_field}}</td>  
                             <td>{{musical_experience.age_learning_started|as_crispy_field}}</td>  
                             <td>{{musical_experience.age_learning_ended|as_crispy_field}}</td>  
-                            <td>{{musical_experience.DELETE|as_crispy_field}}</td>  
-
+                            <td>{{musical_experience.DELETE|as_crispy_field}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -9,7 +9,6 @@
     <form method="post">
         {% csrf_token %}
         <h2>Personal Info</h2>
-
         <div class="row">
             <div class="col-sm-3">
                 {{ child_form.id|as_crispy_field}}
@@ -64,13 +63,7 @@
 
         <h2>Languages Exposed To</h2>
         
-        {% comment %} {% if exposure_forms.errors %}
-            {{ exposure_forms.errors }}
-        {% endif %} {% endcomment %}
         {{ exposure_forms.management_form|crispy }}
-        {% comment %} {% if exposure_forms.non_form_errors %}
-            {{ exposure_forms.non_form_errors }}
-        {% endif %} {% endcomment %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
@@ -94,7 +87,6 @@
             <input type="submit" class="btn btn-outline-primary" name="save_add_another" value="Save & Add Another">
         </div>
     </form>
-    
     {{ child_form.media.js}}
     {{ exposure_forms.media.js }}
 {% endblock %}

@@ -1,17 +1,10 @@
 {% extends "ParticipantDB/nav.html" %}
-
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>Fields for Sections of Experiment '{{experiment.experiment_name}}'</h1>
     <form method="post">
         {% csrf_token %}
         
-        {% comment %} {% if fields.errors %}
-            {{ fields.errors }}
-        {% endif %} {% endcomment %}
-        {% comment %} {% if fields.non_form_errors %}
-            {{ fields.non_form_errors }}
-        {% endif %} {% endcomment %}
         {% for experiment_section in experiment_sections %}
             <h2>Section: {{experiment_section.experiment_section_name}}</h2>
             <div class="table-responsive">
@@ -25,7 +18,6 @@
                     <tbody>
                     {% for field in fields.items %}
                         {% if field.0 == experiment_section.id %}
-                        
                             {{field.1.management_form|crispy}}
                             {% for item in field.1 %}
                             <tr>

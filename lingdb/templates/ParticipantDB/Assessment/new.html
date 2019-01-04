@@ -5,7 +5,7 @@
     <h1>New Assessment</h1>
     <form method="post">
         {% csrf_token %}
-        <h3>Basic Info</h3>
+        <h2>Basic Info</h2>
         <div class="row">
             <div class="col-sm-6">
                 {{ assessment_form.assessment_name|as_crispy_field}}
@@ -17,14 +17,9 @@
 
 
 
-        <h3>Fields</h3>
+        <h2>Fields</h2>
         {{ assessment_field_formset.management_form|crispy }}
-        {% comment %} {% if assessment_field_formset.errors %}
-            {{ assessment_field_formset.errors }}
-        {% endif %} {% endcomment %}
-        {% comment %} {% if assessment_field_formset.non_form_errors %}
-            {{ assessment_field_formset.non_form_errors }}
-        {% endif %} {% endcomment %}
+
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>

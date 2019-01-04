@@ -20,12 +20,6 @@
 
         <h2>Sections</h2>
         {{ experiment_section_formset.management_form|crispy }}
-        {% comment %} {% if experiment_section_formset.errors %}
-            {{ experiment_section_formset.errors }}
-        {% endif %} {% endcomment %}
-        {% comment %} {% if experiment_section_formset.non_form_errors %}
-            {{ experiment_section_formset.non_form_errors }}
-        {% endif %} {% endcomment %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
