@@ -43,3 +43,9 @@ nav{
 #search_box{
    background-color: #fff !important;
 }
+.table{
+    margin-bottom: 0 !important;
+}
+.noTopBorder th, .noTopBorder td{
+    border-top: 0 !important;
+}
