@@ -1,134 +1,353 @@
 {% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-{% if child %}
-<h2>
-	Child # {{ child.id }}
-</h2>
-<div>
-	<h3>Personal Info</h3>
-	<table>
-		<tr>
-			<td class="field_name">Given Name:</td>
-			<td class="field_value">{{child.given_name}}</td>
-		</tr>
-		{% if child.preferred_name %}
-		<tr>
-			<td class="field_name">Preferred Name:</td>
-			<td class="field_value">{{child.preferred_name}}</td>
-		</tr>
-		{% endif %}
-		<tr>
-			<td class="field_name">Surname:</td>
-			<td class="field_value">{{child.surname}}</td>
-		</tr>
-		<tr>
-			<td class="field_name">Birth Date:</td>
-			<td class="field_value">{{child.birth_date}}</td>
-		</tr>
-		<tr>
-			<td class="field_name">Gender:</td>
-			<td class="field_value">{{child.gender}}</td>
-		</tr>
-		{% if child.gestation_length_weeks %}
-		<tr>
-			<td class="field_name">Gestation Length:</td>
-			<td class="field_value">{{child.gestation_length_weeks}}</td>
-		</tr>
-		{% endif %}
-		{% if child.was_full_term %}
-		<tr>
-			<td class="field_name">Was Full Term:</td>
-			<td class="field_value">{{child.was_full_term}}</td>
-		</tr>
-		{% endif %}
-		{% if child.birth_height %}
-		<tr>
-			<td class="field_name">Birth Height:</td>
-			<td class="field_value">{{child.birth_height}}</td>
-		</tr>
-		{% endif %}
-		{% if child.birth_weight %}
-		<tr>
-			<td class="field_name">Birth Weight:</td>
-			<td class="field_value">{{child.birth_weight}}</td>
-		</tr>
-		{% endif %}
-		{% if child.personal_notes %}
-		<tr>
-			<td class="field_name">Personal Notes:</td>
-			<td class="field_value">{{child.personal_notes}}</td>
-		</tr>
-		{% endif %}
-		{% if child.hx_repeated_ear_infection %}
-		<tr>
-			<td class="field_name">HX Repeated Ear Infection:</td>
-			<td class="field_value">{{child.hx_repeated_ear_infection}}</td>
-		</tr>
-		{% endif %}
-		<tr>
-			<td class="field_name">Hereditary Audio Problems:</td>
-			<td class="field_value">{{child.hereditary_audio_problems}}</td>
-		</tr>
-		<tr>
-			<td class="field_name">Hereditary Language Pathologies:</td>
-			<td class="field_value">{{child.hereditary_language_pathologies}}</td>
-		</tr>
-		{% if child.health_notes %}
-		<tr>
-			<td class="field_name">Health Notes:</td>
-			<td class="field_value">{{child.health_notes}}</td>
-		</tr>
-		{% endif %}
-	</table>
-	{% if languages_exposed_to.count > 0%}
-		<h3>Languages Exposed To</h3>
-		<table>
-			<thead>
-				<tr>
-					<th class="field_name">Language</th>
-					<th class="field_name">Exposure Percentage</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for language_exposed_to in languages_exposed_to %}
-					<tr class="field_value">
-						<td class="field_value">{{language_exposed_to.lang}}</td>
-						<td class="field_value">{{language_exposed_to.percentage_exposure}}</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	{% endif %}
+	<div class="row">
+        <div class="col-md-8">
+            <h1>
+				Child # {{ child.id }}
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
+                    Show Sensitive
+            </button> {% endcomment %}
+            </div>
+        </div>
+    </div>
+	<div class="row">
+        <div class="col-lg-12">
+            <h2>Basic Details</h2>
+        </div>
+    </div>
+	<div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Personal Info
+                </div>
+				<div>
+					<div id="personalTable" class="table-responsive">
+						<table class="table table-hover">
+							<tr class="noTopBorder">
+								<th>Given Name:</td>
+								<td>{{child.given_name}}</td>
+							</tr>
+							{% if child.preferred_name %}
+							<tr>
+								<th>Preferred Name:</td>
+								<td>{{child.preferred_name}}</td>
+							</tr>
+							{% endif %}
+							<tr>
+								<th>Surname:</td>
+								<td>{{child.surname}}</td>
+							</tr>
+							<tr>
+								<th>Birth Date:</td>
+								<td>{{child.birth_date}}</td>
+							</tr>
+							<tr>
+								<th>Gender:</td>
+								<td>{{child.gender}}</td>
+							</tr>
+							{% if child.gestation_length_weeks %}
+							<tr>
+								<th>Gestation Length:</td>
+								<td>{{child.gestation_length_weeks}}</td>
+							</tr>
+							{% endif %}
+							{% if child.was_full_term %}
+							<tr>
+								<th>Was Full Term:</td>
+								<td>{{child.was_full_term}}</td>
+							</tr>
+							{% endif %}
+							{% if child.birth_height %}
+							<tr>
+								<th>Birth Height:</td>
+								<td>{{child.birth_height}}</td>
+							</tr>
+							{% endif %}
+							{% if child.birth_weight %}
+							<tr>
+								<th>Birth Weight:</td>
+								<td>{{child.birth_weight}}</td>
+							</tr>
+							{% endif %}
+							{% if child.personal_notes %}
+							<tr>
+								<th>Personal Notes:</td>
+								<td>{{child.personal_notes}}</td>
+							</tr>
+							{% endif %}
+							{% if child.hx_repeated_ear_infection %}
+							<tr>
+								<th>HX Repeated Ear Infection:</td>
+								<td>{{child.hx_repeated_ear_infection}}</td>
+							</tr>
+							{% endif %}
+							<tr>
+								<th>Hereditary Audio Problems:</td>
+								<td>{{child.hereditary_audio_problems}}</td>
+							</tr>
+							<tr>
+								<th>Hereditary Language Pathologies:</td>
+								<td>{{child.hereditary_language_pathologies}}</td>
+							</tr>
+							{% if child.health_notes %}
+							<tr>
+								<th>Health Notes:</td>
+								<td>{{child.health_notes}}</td>
+							</tr>
+							{% endif %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			{% if languages_exposed_to.count > 0%}
+				<div class="card mb-4">
+                    <div class="card-header">
+                        Language Exposure
+                    </div>
+					<div>
+						<div class="table-responsive">
+                            <table class="table table-hover">
+								<thead>
+									<tr class="noTopBorder">
+										<th>Language</th>
+										<th>Exposure Percentage</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for language_exposed_to in languages_exposed_to %}
+										<tr>
+											<td>{{language_exposed_to.lang}}</td>
+											<td>{{language_exposed_to.percentage_exposure}}</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+			{% if family %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Family
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tbody>
+                                {% if parents.count > 0 %}
+                                    <tr>
+									 	<th>
+                                            {% if parents.count > 1%}
+                                                Parents:
+                                            {% else %}
+                                                Parent:
+                                            {% endif %}
+                                        </th>
+                                        <td>
+                                            {% for parent in parents %}
+												<a href="{% url 'adult_detail' adult_id=parent.parent.id %}" class="btn btn-outline-primary" role="button">  
+													{{parent.parent.given_name}} {{parent.parent.surname}} ({{parent.parent.id}})
+												</a>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if siblings.count > 1 %}
+                                    <tr>
+                                        <th>
+                                            {% if siblings.count > 2 %}
+                                                Siblings:
+                                            {% else %}
+                                                Sibling:
+                                            {% endif %}
+                                        </th>
+                                        <td>
+                                            {% for sibling in siblings %}
+                                                {% if sibling.child.id != child.id %}
+													<a href="{% url 'child_detail' child_id=sibling.child.id %}" class="btn btn-outline-primary mb-1" role="button">  
+														{{sibling.child.given_name}} {{sibling.child.surname}} ({{sibling.child.id}})
+													</a>
+												{% endif %}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-primary" role="button">View Family ({{family.id}})</a>
+                            <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-primary" role="button">Update Family ({{family.id}})</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+		</div>
+	</div>
 
-	{% if family %}
-		<h3>Family</h3>
-		<a href="{% url 'family_detail' family_id=family.id %}">View Family ({{family.id}})
-		</a><br>
-		{% if parents.count > 0 %}
-			<h4>Parent(s)</h4>
-			{% for parent in parents %}
-				<a href="{% url 'adult_detail' adult_id=parent.parent.id %}">  
-					{{parent.parent.id}} - {{parent.parent.given_name}} {{parent.parent.surname}}
-				</a><br>
-			{% endfor %}
-		{% endif %}
-		{% if children.count > 1 %}}
-			<h4>Siblings</h4>
-			{% for currChild in children %}
-				{% if currChild.child.id != child.id %}
-					<a href="{% url 'child_detail' child_id=currChild.child.id %}">  
-						{{currChild.child.id}} - {{currChild.child.given_name}} {{currChild.child.surname}}
-					</a><br>
+
+
+
+	<div class="row">
+        <div class="col-lg-12">
+            <h2>Participation</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Assessments
+                </div>
+				{% if assessment_participations|length > 0 %}
+                	<div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="noTopBorder">
+                                        <th>Assessment</th>
+                                        <th>Lab</th>
+                                        <th>Assessor</th>
+                                        <th>Date</th>
+                                        <th>Notes</th>
+                                        <th>Results</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for participation in assessment_participations %}
+                                        <tr>
+                                            <td>{{participation.assessment}}</td>
+                                            <td>{{participation.assessment.lab}}</td>
+                                            <td>{{participation.assessor}}</td>
+                                            <td>{{participation.date}}</td>
+                                            <td>{{participation.notes}}</td>                          
+                                            <td>
+                                                {% for part in all_scores.items %}
+                                                    {% if part.0 == participation.id %}
+                                                        {% for field in part.1%}
+                                                            <b>{{field.assessment_field.field_name}}:</b> {{field.score}}<br>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {%endfor%}
+                                            </td>   
+                                            <td><a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a></td>    
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+               		 </div>
+				{% else %}
+					<div class="card-body">
+                        No Previous Assessments
+					</div>
 				{% endif %}
-			{% endfor %}
-		{% endif %}
-	{% endif %}
-	
-	<h3>Manage</h3>
-	<a href="{% url 'delete_child' child_id=child.id %}">Delete {{child.id}}</a>
-	<a href="{% url 'update_child'  child_id=child.id %}">Update {{child.id}}</a>
-</div>
-{% else %}
-<h2>Not Available</h2>
-{% endif %}
+                <div class="card-footer">
+                    <form method="get" id="assessment_run" action="{% url 'choose_assessment' %}" accept-charset="utf-8" class="noBottomMargin">
+                        <input id="chooseParticipantField" name="chooseParticipantField" value="child" type="hidden">
+                        <input id="participantID" name="participantID" type="hidden" value="{{child.id}}">
+                        <div class="input-group">
+                            <select id="chooseAssessmentField" name="chooseAssessmentField" class="form-control">
+                                {% for assessment in eligible_assessments %}
+                                    <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-group-append">
+                                <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-primary" value="Add">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Experiment Sections
+                </div>
+				{% if experiment_section_participations|length > 0 %}
+                	<div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="noTopBorder">
+                                        <th>Experiment</th>
+                                        <th>Section</th>
+                                        <th>Lab</th>
+                                        <th>Assessor</th>
+                                        <th>Date</th>
+                                        <th>Notes</th>
+                                        <th>Results</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for participation in experiment_section_participations %}
+                                        <tr>
+                                            <td>{{participation.experiment_section.experiment}}</td>
+                                            <td>{{participation.experiment_section}}</td>
+                                            <td>{{participation.experiment_section.experiment.lab}}</td>
+                                            <td>{{participation.assessor}}</td>
+                                            <td>{{participation.date}}</td>
+                                            <td>{{participation.notes}}</td>                          
+                                            <td>
+                                                {% for part in all_experiment_scores.items %}
+                                                    {% if part.0 == participation.id %}
+                                                        {% for field in part.1%}
+                                                            <b>{{field.experiment_section_field.field_name}}</b>: {{field.score}}<br>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {%endfor%}
+                                            </td>   
+                                            <td><a href="{% url 'delete_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a></td>    
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                	</div>
+				{% else %}
+					<div class="card-body">
+						No Previous Experiment Sections
+					</div>
+				{% endif %}
+                <div class="card-footer">
+                    <form method="get" id="chooseExperimentSection" action="{% url 'choose_experiment_section' %}" accept-charset="utf-8" class="noBottomMargin">
+                        <input id="chooseParticipantField" name="chooseParticipantField" value="child" type="hidden">
+                        <input id="participantID" name="participantID" type="hidden" value="{{child.id}}">
+                        <div class="input-group">
+                            <select id="chooseExperimentSectionField" name="chooseExperimentSectionField" class="form-control">
+                                {% for experiment_section in eligible_experiment_sections %}
+                                    <option value="{{experiment_section.experiment.experiment_name}}~{{experiment_section.experiment_section_name}}">{{experiment_section.experiment.experiment_name}}: {{experiment_section.experiment_section_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-group-append">
+                                <input type="submit" id="chooseExperimentSectionButton" class="btn btn-outline-primary" value="Add">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 {% endblock %}

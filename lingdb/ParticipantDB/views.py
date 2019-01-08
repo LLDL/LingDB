@@ -10,6 +10,7 @@ from django.urls import reverse
 # Python
 from itertools import chain
 import operator
+from datetime import date, timedelta
 
 # Project
 from .forms import *
@@ -217,6 +218,9 @@ def adult_detail(request, adult_id):
     for experiment_participation in experiment_participations:
         experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_participation)
         all_experiment_scores[experiment_participation.id] = experiment_section_run_fields
+    if adult.health_notes != "" or adult.personal_notes != "":
+        messages.info(request, 'Please see health/personal notes')
+
     try:
         parent_in = IsParentIn.objects.get(parent = adult)
         family = Family.objects.get(pk=parent_in.family.id)
@@ -303,14 +307,38 @@ def update_child(request, child_id):
 def child_detail(request, child_id):
     child = get_object_or_404(Child, pk=child_id)
     languages_exposed_to = IsExposedTo.objects.filter(child = child)
+
+    all_assessment_participations = Assessment_Run.objects.filter(participantChild = child)
+    assessment_participations = get_user_authed_list(request, all_assessment_participations, "assessment")
+    all_assessments = Assessment.objects.all()
+    eligible_assessments = get_user_authed_list(request, all_assessments)
+    all_scores = {}
+    for assessment_participation in assessment_participations:
+        assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
+        all_scores[assessment_participation.id] = assessment_run_fields
+
+    all_experiment_section_participations = Experiment_Section_Run.objects.filter(participantChild = child)
+    experiment_participations = get_user_authed_list(request, all_experiment_section_participations, "experiment_section.experiment")
+    all_experiment_sections = Experiment_Section.objects.all()
+    eligible_experiment_sections = get_user_authed_list(request, all_experiment_sections, "experiment")
+    all_experiment_scores = {}
+    for experiment_participation in experiment_participations:
+        experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_participation)
+        all_experiment_scores[experiment_participation.id] = experiment_section_run_fields
+    if child.health_notes != "" or child.personal_notes != "":
+        messages.info(request, 'Please see health/personal notes')
+    if child.hereditary_audio_problems == True:
+        messages.info(request, 'Please see hereditary audio/language problems')
+
     try:
         child_in = IsChildIn.objects.get(child = child)
         family = Family.objects.get(pk=child_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/Child/view.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'children': all_children})
+        return render(request, 'ParticipantDB/Child/view.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'family': family, 'parents': all_parents, 'siblings': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
     except IsChildIn.DoesNotExist:
-        return render(request, 'ParticipantDB/Child/view.html', {'child': child, 'languages_exposed_to': languages_exposed_to})
+        messages.warning(request, 'Family not in database')
+        return render(request, 'ParticipantDB/Child/view.html', {'child': child, 'languages_exposed_to': languages_exposed_to, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
 
 @login_required
 def delete_child(request, child_id):

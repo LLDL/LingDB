@@ -232,8 +232,8 @@
                 <div class="card-header">
                     Assessments
                 </div>
-                <div>
-                    {% if assessment_participations|length > 0 %}
+                {% if assessment_participations|length > 0 %}
+                    <div>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -271,10 +271,12 @@
                                 </tbody>
                             </table>
                         </div>
-                    {% else %}
+                    </div>
+                {% else %}
+                    <div class="card-body">
                         No Previous Assessments
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
                 <div class="card-footer">
                     <form method="get" id="assessment_run" action="{% url 'choose_assessment' %}" accept-charset="utf-8" class="noBottomMargin">
                         <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
@@ -300,8 +302,8 @@
                 <div class="card-header">
                     Experiment Sections
                 </div>
-                <div>
-                    {% if experiment_section_participations|length > 0 %}
+                {% if experiment_section_participations|length > 0 %}
+                    <div>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -341,10 +343,12 @@
                                 </tbody>
                             </table>
                         </div>
-                    {% else %}
-                        No Previous Experiment Sections
-                    {% endif %}
-                </div>
+                    </div>
+				{% else %}
+					<div class="card-body">
+						No Previous Experiment Sections
+					</div>
+				{% endif %}
                 <div class="card-footer">
                     <form method="get" id="chooseExperimentSection" action="{% url 'choose_experiment_section' %}" accept-charset="utf-8" class="noBottomMargin">
                         <input id="chooseParticipantField" name="chooseParticipantField" value="adult" type="hidden">
