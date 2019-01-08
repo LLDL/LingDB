@@ -7,84 +7,100 @@
 {% block content %}
     <h1>Update Child # {{child_id}}</h1>
     <form action="{% url 'update_child' child_id %}" method="post">
-        {% csrf_token %}
-        <h2>Personal Info</h2>
         <div class="row">
-            <div class="col-sm-3">
-                {{ child_form.id|as_crispy_field}}
-            </div>
-            <div class="col-sm-3">
-                {{ child_form.given_name|as_crispy_field}}
-            </div>
-            <div class="col-sm-3">
-                {{ child_form.preferred_name|as_crispy_field}}
-            </div>
-            <div class="col-sm-3">
-                {{ child_form.surname|as_crispy_field}}
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Personal Info
+                    </div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ child_form.id|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                                {{ child_form.given_name|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                                {{ child_form.preferred_name|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                                {{ child_form.surname|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ child_form.birth_date|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                                {{ child_form.gender|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                                {{ child_form.birth_weight|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                                {{ child_form.birth_height|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ child_form.was_full_term|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4">
+                                {{ child_form.hereditary_audio_problems|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4">
+                                {{ child_form.hereditary_language_pathologies|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                        
+                            <div class="col-lg-4">
+                                {{ child_form.hx_repeated_ear_infection|as_crispy_field}}
+                            </div>
+                            <div class="col-lg-4">
+                                {{ child_form.personal_notes|as_crispy_field}}
+                            </div>
+                            <div class="col-lg-4">
+                                {{ child_form.health_notes|as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-3">
-                {{ child_form.birth_date|as_crispy_field}}
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Languages Exposed To
+                    </div>        
+                    {{ exposure_forms.management_form|crispy }}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder">
+                                    <th>Language*</th>
+                                    <th>Exposure Percentage*</th>
+                                    <th>Delete?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exposure_form in exposure_forms %}
+                                    {{exposure_form.id}}
+                                    <tr>            
+                                        <td>{{exposure_form.lang|as_crispy_field}}</td>  
+                                        <td>{{exposure_form.percentage_exposure|as_crispy_field}}</td>
+                                        <td>{{exposure_form.DELETE|as_crispy_field}}</td> 
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-3">
-                {{ child_form.gender|as_crispy_field}}
-            </div>
-            <div class="col-sm-3">
-                {{ child_form.birth_weight|as_crispy_field}}
-            </div>
-            <div class="col-sm-3">
-                {{ child_form.birth_height|as_crispy_field}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                {{ child_form.was_full_term|as_crispy_field}}
-            </div>
-            <div class="col-sm-4">
-                {{ child_form.hereditary_audio_problems|as_crispy_field}}
-            </div>
-            <div class="col-sm-4">
-                {{ child_form.hereditary_language_pathologies|as_crispy_field}}
-            </div>
-        </div>
-        <div class="row">
-        
-            <div class="col-sm-4">
-                {{ child_form.hx_repeated_ear_infection|as_crispy_field}}
-            </div>
-            <div class="col-sm-4">
-                {{ child_form.personal_notes|as_crispy_field}}
-            </div>
-            <div class="col-sm-4">
-                {{ child_form.health_notes|as_crispy_field}}
-            </div>
-        </div>
-
-        <h2>Languages Exposed To</h2>
-        
-        {{ exposure_forms.management_form|crispy }}
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Language*</th>
-                        <th>Exposure Percentage*</th>
-                        <th>Delete?</th>
-                    </tr>
-            </thead>
-            <tbody>
-                {% for exposure_form in exposure_forms %}
-                    {{exposure_form.id}}
-                    <tr>            
-                        <td>{{exposure_form.lang|as_crispy_field}}</td>  
-                        <td>{{exposure_form.percentage_exposure|as_crispy_field}}</td>
-                        <td>{{exposure_form.DELETE|as_crispy_field}}</td> 
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
+        </div>        
         <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
     </form>
     {{ child_form.media.js}}
