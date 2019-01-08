@@ -216,6 +216,9 @@ class AssessmentForm(ModelForm):
     class Meta:
         model = Assessment
         fields = ('assessment_name', 'lab',)
+        widgets = {
+            'lab': Select2Widget()
+        }
     
 class AssessmentFieldForm(ModelForm):
     class Meta:
@@ -236,7 +239,10 @@ AssessmentFieldInlineFormSet = inlineformset_factory(
     extra = 5,
     max_num = 10,
     min_num = 1,
-    validate_min = True
+    validate_min = True,
+    widgets = {
+        'type': Select2Widget()
+    }
 )
 
 # Experiment Forms 

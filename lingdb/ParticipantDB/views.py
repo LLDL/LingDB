@@ -575,8 +575,8 @@ def delete_assessment(request, assessment_name):
         if canAccess:
             assessment.delete()
             messages.success(request, 'Assessment was successfully deleted')
-        
-        messages.error(request, 'Assessment was not deleted as you do not have authorization to access it')
+        else:
+            messages.error(request, 'Assessment was not deleted as you do not have authorization to access it')
         return redirect(reverse('index'))
     except Assessment.DoesNotExist:
         raise Http404("No assessment named " + assessment_name)

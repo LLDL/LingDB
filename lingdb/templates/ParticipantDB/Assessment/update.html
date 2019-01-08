@@ -1,52 +1,73 @@
 {% extends "ParticipantDB/nav.html" %}
-
+{% load static %}
+{% block extraHead %}
+    {{ assessment_form.media.css }}
+    {{ assessment_field_formset.media.css }}
+{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>Update {{assessment_name}} Assessment</h1>
     {% if canAccess %}
-        <form  action="{% url 'update_assessment' assessment_name %}"  method="post">
-            {% csrf_token %}
-            <h2>Basic Info</h2>
+        <form action="{% url 'update_assessment' assessment_name %}"  method="post" class="noBottomMargin">
             <div class="row">
-                <div class="col-sm-6">
-                    {{ assessment_form.assessment_name|as_crispy_field}}
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Basic Info
+                        </div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {{ assessment_form.assessment_name|as_crispy_field}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {{ assessment_form.lab|as_crispy_field}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    {{ assessment_form.lab|as_crispy_field}}
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Fields
+                        </div>
+                        <div>
+                            {{ assessment_field_formset.management_form|crispy }}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr class="noTopBorder">
+                                            <th>Name*</th>
+                                            <th>Type*</th>
+                                            <th>Delete?</th>
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+                                        {% for assessment_field_form in assessment_field_formset %}
+                                            {{assessment_field_form.id}}
+                                            <tr>            
+                                                <td>{{assessment_field_form.field_name|as_crispy_field}}</td>  
+                                                <td>{{assessment_field_form.type|as_crispy_field}}</td>   
+                                                <td>{{assessment_field_form.DELETE|as_crispy_field}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-
-
-            <h2>Fields</h2>
-            {{ assessment_field_formset.management_form|crispy }}
-
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Name*</th>
-                            <th>Type*</th>
-                            <th>Delete?</th>
-                        </tr>
-                        
-                    </thead>
-                    <tbody>
-                        {% for assessment_field_form in assessment_field_formset %}
-                            {{assessment_field_form.id}}
-                            <tr>            
-                                <td>{{assessment_field_form.field_name|as_crispy_field}}</td>  
-                                <td>{{assessment_field_form.type|as_crispy_field}}</td>   
-                                <td>{{assessment_field_form.DELETE|as_crispy_field}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
             <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
 
         </form>
+        {{ assessment_form.media.js }}
+        {{ assessment_field_formset.media.js }}
     {% else %}
         <div>
             <h2>You are not authorized to access this assessment. Please contact the lab for access.</h2>
