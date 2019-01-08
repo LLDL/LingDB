@@ -1,72 +1,122 @@
 {% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>
-        {{ assessment.assessment_name }} Assessment ({{assessment.lab}})
-    </h2>
+
     {% if canAccess %}
-        <div>
-            {% if assessment_fields.count > 0 %}
-                <h3>Fields</h3>
-                <table class="displayTable">
-                    <thead>
-                        <tr>
-                            <th class="field_name">Name</th>
-                            <th class="field_name">Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for assessment_field in assessment_fields %}
-                            <tr>
-                                <td class="field_value">{{assessment_field.field_name}}</td>
-                                <td class="field_value">{{assessment_field.type}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-            
-            <h3>Manage</h3>
-                <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}">Delete {{Assessment}}</a><br>
-                <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
-            {% if assessment_runs.count > 0%}
-                <h3>Runs</h3>
-                <table class="displayTable">
-                    <thead>
-                        <tr>
-                            <th class="field_name">Participant</th>
-                            <th class="field_name">Date</th>
-                            <th class="field_name">Notes</th>
-                            <th class="field_name">Assessor</th>
-                            <th class="field_name">Open</th>
-                            <th class="field_name">Update</th>
-                            <th class="field_name">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for run in assessment_runs %}
-                            <tr>
-                                <td class="field_value">
-                                    {% if run.participantAdult%}
-                                        {{run.participantAdult}}
-                                    {% else %}
-                                        {{run.participantChild}}
-                                    {% endif %}
-                                </td>
-                                <td class="field_value">{{run.date}}</td>
-                                <td class="field_value">{{run.notes}}</td>
-                                <td class="field_value">{{run.assessor}}</td>
-                                <td class="field_value"><a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}">Open</a>
-                                <td class="field_value"><a href="{% url 'update_assessment_run' assessment_run_id=run.id %}">Update</a>
-                                <td class="field_value"><a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}">Delete</a>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+        <div class="row">
+            <div class="col-md-8">
+                <h1>
+                    {{ assessment.assessment_name }} Assessment ({{assessment.lab}})
+                </h1>
+            </div>
+            <div class="col-md-4">
+                <div class="btn-group float-right"> 
+                    <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}" class="btn btn-outline-danger" role="button">Delete</a>
+                    <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}" class="btn btn-outline-primary" role="button">Update</a>
+                    {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
+                        Show Sensitive
+                </button> {% endcomment %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Fields
+                    </div>
+                    {% if assessment_fields.count > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="noTopBorder">
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for assessment_field in assessment_fields %}
+                                        <tr>
+                                            <td>{{assessment_field.field_name}}</td>
+                                            <td>{{assessment_field.type}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Runs
+                    </div>
+                    {% if assessment_runs.count > 0%}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="noTopBorder">
+                                        <th>Participant</th>
+                                        <th>Date</th>
+                                        <th>Notes</th>
+                                        <th>Assessor</th>
+                                        <th>Open</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for run in assessment_runs %}
+                                        <tr>
+                                            <td>
+                                                {% if run.participantAdult%}
+
+                                                    <a href="{% url 'adult_detail' adult_id=run.participantAdult.id %}" class="noBottomMargin btn btn-outline-primary mb-1" role="button">  
+
+                                                    {{run.participantAdult}}
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'child_detail' child_id=run.participantChild.id %}" class="btn btn-outline-primary mb-1" role="button">  
+                                                    {{run.participantChild}}
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{run.date}}</td>
+                                            <td>{{run.notes}}</td>
+                                            <td>{{run.assessor}}</td>
+                                            <td><a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
+                                            <td><a href="{% url 'update_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                            <td><a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                    <div class="card-footer">
+                        <form method="get" id="assessment_run" action="{% url 'choose_assessment' %}" accept-charset="utf-8" class="noBottomMargin">
+                        <input id="chooseAssessmentField" name="chooseAssessmentField" value = "{{assessment.assessment_name}}" type="hidden">
+                        <div class="input-group">
+                            <select id="chooseParticipantField" name="chooseParticipantField" class="form-control">
+                                <option value="adult">Adult</option>
+                                <option value="child">Child</option>
+                            </select>
+                            <div class="input-group-append">
+                                <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-primary" value="Add">
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
         </div>
     {% else %}
         <div>
-            <h3>You are not authorized to access this assessment. Please contact the {{assessment.lab}} lab for access.</h3>
+            <h2>You are not authorized to access this assessment. Please contact the {{assessment.lab}} lab for access.</h2>
         </div>
     {% endif %}
+        
+    
 {% endblock %}
