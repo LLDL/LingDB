@@ -41,7 +41,7 @@ class Person(models.Model):
     health_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Health Notes")
     personal_notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name="Personal Notes")
     def __str__(self):
-        return '%s - %s %s' % (self.id, self.given_name, self.surname) 
+        return '%s: %s %s' % (self.id, self.given_name, self.surname) 
 
     class Meta:
         abstract = True
@@ -122,7 +122,7 @@ class Experiment(models.Model):
     )
     status = models.CharField(max_length = 10, choices = STATUS_CHOICES)
     def __str__(self):
-        return '%s: %s (%s)' % (self.status, self.experiment_name, self.lab) 
+        return '%s' % (self.experiment_name) 
 
 class Experiment_Section(models.Model):
     class Meta:
@@ -139,7 +139,7 @@ class Experiment_Section(models.Model):
     section_status = models.CharField(max_length = 10, choices = STATUS_CHOICES)
 
     def __str__(self):
-        return '%s: %s of %s' % (self.section_status, self.experiment_section_name, self.experiment) 
+        return '%s' % (self.experiment_section_name) 
 
 class Experiment_Section_Run(models.Model):
     class Meta:

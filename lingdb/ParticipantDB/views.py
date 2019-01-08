@@ -205,14 +205,22 @@ def adult_detail(request, adult_id):
         assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_participation)
         all_scores[assessment_participation.id] = assessment_run_fields
 
+    all_experiment_section_participations = Experiment_Section_Run.objects.filter(participantAdult = adult)
+    experiment_participations = get_user_authed_list(request, all_experiment_section_participations, "experiment_section.experiment")
+    all_experiment_sections = Experiment_Section.objects.all()
+    eligible_experiment_sections = get_user_authed_list(request, all_experiment_sections, "experiment")
+    all_experiment_scores = {}
+    for experiment_participation in experiment_participations:
+        experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_participation)
+        all_experiment_scores[experiment_participation.id] = experiment_section_run_fields
     try:
         parent_in = IsParentIn.objects.get(parent = adult)
         family = Family.objects.get(pk=parent_in.family.id)
         all_parents = IsParentIn.objects.filter(family = family)
         all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
+        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
     except IsParentIn.DoesNotExist:
-        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments})
+        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
 
 @login_required
 def delete_adult(request, adult_id):
