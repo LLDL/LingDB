@@ -66,7 +66,7 @@ urlpatterns = [
 
 
     path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/', views.experiment_section_detail, name='experiment_section_detail'),
-    path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/update/', views.update_experiment_section, name='update_experiment_section'),
+    # path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/update/', views.update_experiment_section, name='update_experiment_section'),
     path('experiment/<str:experiment_name>/experiment_section/<str:experiment_section_name>/delete/', views.delete_experiment_section, name='delete_experiment_section'),
 
 
@@ -76,7 +76,7 @@ urlpatterns = [
     path('experiment_section_run/<int:experiment_section_run_id>/', views.experiment_section_run_detail, name='experiment_section_run_detail'),
 
     path('experiment_section_run/<int:experiment_section_run_id>/delete/', views.delete_experiment_section_run, name='delete_experiment_section_run'),
-
+    path('experiment_section_run/<int:experiment_section_run_id>/update/', views.update_experiment_section_run, name='update_experiment_section_run'),
 ]
 
     

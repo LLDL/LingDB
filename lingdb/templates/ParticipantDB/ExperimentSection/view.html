@@ -28,7 +28,7 @@
 
 
             <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Delete {{experiment_section.experiment_section_name}}</a><br>
-            <a href="{% url 'update_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Update {{experiment_section.experiment_section_name}}</a>
+            <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}">Update {{experiment.experiment_name}}</a>
 
     </div>
 {% endblock %}

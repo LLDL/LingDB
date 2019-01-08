@@ -245,6 +245,7 @@
                                         <th>Notes</th>
                                         <th>Results</th>
                                         <th>Delete</th>
+                                        <th>Update</th>
                                     </tr>
                                 </thead>
                                 
@@ -266,6 +267,7 @@
                                                 {%endfor%}
                                             </td>   
                                             <td><a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a></td>    
+                                            <td><a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a></td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -316,6 +318,7 @@
                                         <th>Notes</th>
                                         <th>Results</th>
                                         <th>Delete</th>
+                                        <th>Update</th>
                                     </tr>
                                 </thead>
                                 
@@ -338,6 +341,7 @@
                                                 {%endfor%}
                                             </td>   
                                             <td><a href="{% url 'delete_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a></td>    
+                                            <td><a href="{% url 'update_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a></td>  
                                         </tr>
                                     {% endfor %}
                                 </tbody>

@@ -790,6 +790,35 @@ def delete_experiment(request, experiment_name):
 
 
 # Experiment Section ----------------------------------------------------
+
+@login_required
+def experiment_section_detail(request, experiment_name, experiment_section_name):
+    try:
+        experiment = Experiment.objects.get(experiment_name = experiment_name)
+        try:
+            experiment_section = Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment)
+        except Experiment_Section.DoesNotExist:
+            raise Http404("No Experiment Section '{}' in Experiment '{}'".format(experiment_name, experiment_section_name))
+    except Experiment.DoesNotExist:
+        raise Http404("No Experiment '{}'".format(experiment_name))
+    experiment_section_fields = Experiment_Section_Field.objects.filter(field_of = experiment_section)
+
+    return render(request, 'ParticipantDB/ExperimentSection/view.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
+
+@login_required
+def delete_experiment_section(request, experiment_name, experiment_section_name):
+    try:
+        experiment = Experiment.objects.get(experiment_name = experiment_name)
+        try:
+            Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment).delete()
+            messages.success(request, 'Experiment section was successfully deleted')
+            return redirect(reverse('index'))
+        except Experiment_Section.DoesNotExist:
+            raise Http404("Experiment '{}' does not have an experiment section '{}' ".format(experiment_name, experiment_section_name))
+    except Experiment.DoesNotExist:
+        raise Http404("No Experiment '{}'".format(experiment_name))
+
+
 @login_required
 def add_experiment_section_fields(request, experiment_name):
     try:
@@ -821,38 +850,43 @@ def add_experiment_section_fields(request, experiment_name):
         messages.success(request, 'Experiment Section Fields were successfully added')
         return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment.experiment_name}))       
     return render(request, "ParticipantDB/ExperimentSection/new.html", {'experiment': experiment, 'experiment_sections': experiment_sections, 'fields': fields})
-
+    
 @login_required
-def update_experiment_section(request, experiment_name, experiment_section_name):
-    pass
-
-@login_required
-def experiment_section_detail(request, experiment_name, experiment_section_name):
+def update_experiment_section_fields(request, experiment_name): 
     try:
-        experiment = Experiment.objects.get(experiment_name = experiment_name)
-        try:
-            experiment_section = Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment)
-        except Experiment_Section.DoesNotExist:
-            raise Http404("No Experiment Section '{}' in Experiment '{}'".format(experiment_name, experiment_section_name))
+        experiment_inst = Experiment.objects.get(pk=experiment_name)
     except Experiment.DoesNotExist:
-        raise Http404("No Experiment '{}'".format(experiment_name))
-    experiment_section_fields = Experiment_Section_Field.objects.filter(field_of = experiment_section)
-
-    return render(request, 'ParticipantDB/ExperimentSection/view.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
-
-@login_required
-def delete_experiment_section(request, experiment_name, experiment_section_name):
-    try:
-        experiment = Experiment.objects.get(experiment_name = experiment_name)
-        try:
-            Experiment_Section.objects.get(experiment_section_name=experiment_section_name, experiment=experiment).delete()
-            messages.success(request, 'Experiment section was successfully deleted')
-            return redirect(reverse('index'))
-        except Experiment_Section.DoesNotExist:
-            raise Http404("Experiment '{}' does not have an experiment section '{}' ".format(experiment_name, experiment_section_name))
-    except Experiment.DoesNotExist:
-        raise Http404("No Experiment '{}'".format(experiment_name))
-
+        Http404("No experiment with name " + experiment_name)
+    experiment_sections = Experiment_Section.objects.filter(experiment=experiment_inst)
+    fields = {}
+    for section in experiment_sections:
+        section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+        section_fields = ExperimentSectionFieldInlineFormSet(
+            queryset = Experiment_Section_Field.objects.filter(field_of = section),
+            prefix = section_prefix
+        )
+        fields[section.id] = section_fields
+    
+    if request.method == "POST":
+        for section in experiment_sections:
+            section_prefix = 'experiment_section_fields_' + section.experiment_section_name
+            section_fields = ExperimentSectionFieldInlineFormSet(
+                request.POST,
+                prefix = section_prefix,
+            )
+            for section_field in section_fields:
+                if section_field.is_valid():
+                    if section_field.cleaned_data.get('DELETE'):
+                        toDelete = section_field.cleaned_data.get('field_name')
+                        Experiment_Section_Field.objects.filter(field_of=section, field_name=toDelete).delete()
+                    elif section_field.cleaned_data.get('field_name'):
+                        inst = section_field.save(commit = False)
+                        inst.field_of = section
+                        inst.save()
+        
+        messages.success(request, 'Experiment Section Fields were successfully updated')
+        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))       
+    return render(request, "ParticipantDB/ExperimentSection/update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
 
 
 # Experiment Section Run Views -----------------------------------------------------
@@ -932,43 +966,6 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
     return render(request, "ParticipantDB/ExperimentSectionRun/new2.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})
 
 @login_required
-def update_experiment_section_fields(request, experiment_name): 
-    try:
-        experiment_inst = Experiment.objects.get(pk=experiment_name)
-    except Experiment.DoesNotExist:
-        Http404("No experiment with name " + experiment_name)
-    experiment_sections = Experiment_Section.objects.filter(experiment=experiment_inst)
-    fields = {}
-    for section in experiment_sections:
-        section_prefix = 'experiment_section_fields_' + section.experiment_section_name
-        section_fields = ExperimentSectionFieldInlineFormSet(
-            queryset = Experiment_Section_Field.objects.filter(field_of = section),
-            prefix = section_prefix
-        )
-        fields[section.id] = section_fields
-    
-    if request.method == "POST":
-        for section in experiment_sections:
-            section_prefix = 'experiment_section_fields_' + section.experiment_section_name
-            section_fields = ExperimentSectionFieldInlineFormSet(
-                request.POST,
-                prefix = section_prefix,
-            )
-            for section_field in section_fields:
-                if section_field.is_valid():
-                    if section_field.cleaned_data.get('DELETE'):
-                        toDelete = section_field.cleaned_data.get('field_name')
-                        Experiment_Section_Field.objects.filter(field_of=section, field_name=toDelete).delete()
-                    elif section_field.cleaned_data.get('field_name'):
-                        inst = section_field.save(commit = False)
-                        inst.field_of = section
-                        inst.save()
-        
-        messages.success(request, 'Experiment Section Fields were successfully updated')
-        return redirect(reverse('experiment_detail', kwargs={'experiment_name': experiment_name}))       
-    return render(request, "ParticipantDB/ExperimentSection/update.html", {'experiment': experiment_inst, 'experiment_sections': experiment_sections, 'fields': fields})
-
-@login_required
 def experiment_section_run_detail(request, experiment_section_run_id):
     experiment_section_run = get_object_or_404(Experiment_Section_Run, pk=experiment_section_run_id)
     experiment_section_run_fields = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = experiment_section_run)
@@ -982,3 +979,7 @@ def delete_experiment_section_run(request, experiment_section_run_id):
         return redirect(reverse('index'))
     except Experiment_Section_Run.DoesNotExist:
         raise Http404("No experiment section run with id " + experiment_section_run_id)
+
+@login_required
+def update_experiment_section_run(request, experiment_section_run_id):
+    pass
