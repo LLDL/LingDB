@@ -190,6 +190,7 @@ class MusicalExperienceForm(ModelForm):
 MusicalExperienceFormSet = modelformset_factory(
     MusicalExperience,
     form = MusicalExperienceForm,
+    can_delete = True,
 )
 
 MusicalExperienceInlineFormSet = inlineformset_factory(
@@ -200,7 +201,7 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     extra = 5,
     max_num = 5,
     min_num = 0,
-    validate_min = False,
+    validate_min = True,
     widgets = {
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),

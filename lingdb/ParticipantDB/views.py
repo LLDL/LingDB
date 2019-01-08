@@ -153,15 +153,17 @@ def update_adult(request, adult_id):
     )
    
     if request.method == "POST":
-        adult_form = AdultForm(request.POST, request.FILES, instance=adult_inst)
+        adult_form = AdultForm(request.POST, instance=adult_inst)
         
-        speaks_forms = SpeaksInlineFormSet(request.POST, request.FILES, prefix = 'speaks_forms')
-        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, request.FILES, prefix = 'musical_experiences')
+        speaks_forms = SpeaksInlineFormSet(request.POST, prefix = 'speaks_forms')
+        musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, prefix = 'musical_experiences')
         
-        if adult_form.is_valid():   
+        if adult_form.is_valid(): 
+            print("adult forms valid")  
             adult = adult_form.save(commit=False)
             adult.save()
             if speaks_forms.is_valid():
+                print("speaks forms valid")  
                 for speaks_form in speaks_forms:
                     if speaks_form.cleaned_data.get('DELETE'):
                         toDelete = speaks_form.cleaned_data.get('lang')
@@ -173,6 +175,8 @@ def update_adult(request, adult_id):
                         inst.save()
                     
             if musical_experience_forms.is_valid():  
+                
+                print("musical forms valid")  
                 for musical_experience_form in musical_experience_forms:
                     if musical_experience_form.cleaned_data.get('DELETE'):
                         toDelete = musical_experience_form.cleaned_data.get('experience')
@@ -181,8 +185,8 @@ def update_adult(request, adult_id):
                         inst = musical_experience_form.save(commit=False)
                         inst.person = adult
                         inst.save()          
-                messages.success(request, 'Adult was successfully updated')
-                return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
+            messages.success(request, 'Adult was successfully updated')
+            return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
         
 
     else:

@@ -278,7 +278,7 @@ class MusicalExperience(models.Model):
     class Meta:
         verbose_name_plural = "Musical Experiences"
     person = models.ForeignKey(Adult, related_name = 'musician', on_delete = models.CASCADE, default = None)
-    experience = models.ForeignKey(MusicalSkill, related_name = 'instrument', on_delete = models.CASCADE, default = None,)
+    experience = models.ForeignKey(MusicalSkill, related_name = 'instrument', on_delete = models.CASCADE, default = None)
     nth_most_dominant = models.SmallIntegerField(
         validators=[
             MinValueValidator(1), 

@@ -75,6 +75,7 @@
             </thead>
             <tbody>
                 {% for exposure_form in exposure_forms %}
+                    {{exposure_form.id}}
                     <tr>            
                         <td>{{exposure_form.lang|as_crispy_field}}</td>  
                         <td>{{exposure_form.percentage_exposure|as_crispy_field}}</td>
