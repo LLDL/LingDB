@@ -1,46 +1,72 @@
 {% extends "ParticipantDB/nav.html" %}
+{% load static %}
+{% block extraHead %}
+    {{ experiment_form.media.css }}
+    {{ experiment_section_formset.media.css }}
+{% endblock %}
+
 
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>New Experiment</h1>
-    <form method="post">
+    <form method="post" class="noBottomMargin">
         {% csrf_token %}
-        <h2>Basic Info</h2>
         <div class="row">
-            <div class="col-sm-4">
-                {{ experiment_form.experiment_name|as_crispy_field}}
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Basic Info
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{ experiment_form.experiment_name|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{ experiment_form.lab|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{ experiment_form.status|as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-4">
-                {{ experiment_form.lab|as_crispy_field}}
-            </div>
-            <div class="col-sm-4">
-                {{ experiment_form.status|as_crispy_field}}
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Sections
+                    </div>
+                    <div>
+                        {{ experiment_section_formset.management_form|crispy }}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="noTopBorder">
+                                        <th>Name*</th>
+                                        <th>Section Status*</th>
+                                    </tr>         
+                                </thead>
+                                <tbody>
+                                    {% for experiment_section_form in experiment_section_formset %}
+                                        <tr>            
+                                            <td>{{experiment_section_form.experiment_section_name|as_crispy_field}}</td>  
+                                            <td>{{experiment_section_form.section_status|as_crispy_field}}</td> 
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <h2>Sections</h2>
-        {{ experiment_section_formset.management_form|crispy }}
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Name*</th>
-                        <th>Section Status*</th>
-                    </tr>
-                    
-                </thead>
-                <tbody>
-                    {% for experiment_section_form in experiment_section_formset %}
-                        <tr>            
-                            <td>{{experiment_section_form.experiment_section_name|as_crispy_field}}</td>  
-                            <td>{{experiment_section_form.section_status|as_crispy_field}}</td> 
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-
         <input type="submit" class="btn btn-outline-primary" value="Add Experiment Section Fields">
     </form>
+    {{ experiment_form.media.js }}
+    {{ experiment_section_formset.media.js }}
 {% endblock %}

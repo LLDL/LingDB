@@ -60,3 +60,25 @@ nav{
 .table > tbody > tr > td {
     vertical-align: middle;
 }
+.form-group{
+    margin-bottom: 0 !important;
+}
+.vertical-align{
+    align-items: center;
+}
+.centered-checkbox{
+    position: inherit !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+}
+.centered-checkbox-child{
+    text-align: center !important;
+}
+.no-label > div > div > label > input > text{
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+th{
+    text-align: center !important;
+}

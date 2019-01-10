@@ -8,7 +8,7 @@
     <h1>New Child</h1>
     <form method="post" class="noBottomMargin">
         <div class="row">
-            <div class="col-xl-12">
+            <div class="col-xl-6">
                 <div class="card mb-4">
                     <div class="card-header">
                         Personal Info
@@ -16,41 +16,45 @@
                     <div class="card-body">
                         {% csrf_token %}
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 {{ child_form.id|as_crispy_field}}
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 {{ child_form.given_name|as_crispy_field}}
                             </div>
-                            <div class="col-md-3">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
                                 {{ child_form.preferred_name|as_crispy_field}}
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 {{ child_form.surname|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                {{ child_form.birth_date|as_crispy_field}}
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 {{ child_form.gender|as_crispy_field}}
                             </div>
-                            <div class="col-md-3">
-                                {{ child_form.birth_weight|as_crispy_field}}
-                            </div>
-                            <div class="col-md-3">
-                                {{ child_form.birth_height|as_crispy_field}}
+                            <div class="col-md-6">
+                                {{ child_form.was_full_term|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
-                                {{ child_form.was_full_term|as_crispy_field}}
+                                {{ child_form.birth_date|as_crispy_field}}
                             </div>
                             <div class="col-md-4">
+                                {{ child_form.birth_weight|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4">
+                                {{ child_form.birth_height|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row vertical-align mb-2 mt-2">
+                            <div class="col-md-6">
                                 {{ child_form.hereditary_audio_problems|as_crispy_field}}
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 {{ child_form.hereditary_language_pathologies|as_crispy_field}}
                             </div>
                         </div>
@@ -69,9 +73,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-12">
+        {% comment %} </div>
+        <div class="row"> {% endcomment %}
+            <div class="col-xl-6">
                 <div class="card mb-4">
                     <div class="card-header">
                         Languages Exposed To

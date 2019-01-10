@@ -148,10 +148,10 @@ SpeaksInlineFormSet = inlineformset_factory(
     validate_min = True,
     widgets = {
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
-        'is_native': CheckboxInput(attrs={'class': 'centeredCheck'}),
+        'is_native': CheckboxInput(attrs={'class': 'centered-checkbox'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
-        'lang': Select2Widget()
+        'lang': Select2Widget(),
     }
 )
 
@@ -250,6 +250,10 @@ class ExperimentForm(ModelForm):
     class Meta:
         model = Experiment
         fields = ('experiment_name', 'lab', 'status',)
+        widgets = {
+            'lab': Select2Widget(),
+            'status': Select2Widget(),
+        }
 
 class ExperimentSectionForm(ModelForm):
     class Meta:
@@ -271,13 +275,19 @@ ExperimentSectionInlineFormSet = inlineformset_factory(
     extra = 5,
     max_num = 5,
     min_num = 1,
-    validate_min = True
+    validate_min = True,
+    widgets = {
+        'section_status': Select2Widget(),
+    }
 ) 
 
 class ExperimentSectionFieldForm(ModelForm):
     class Meta:
         model = Experiment_Section_Field
         fields = ('field_name', 'type', )
+        widgets = {
+            'type': Select2Widget(),
+        }
 
 ExperimentSectionFieldFormSet = modelformset_factory(
     Experiment_Section_Field,
@@ -293,7 +303,10 @@ ExperimentSectionFieldInlineFormSet = inlineformset_factory(
     extra = 5,
     max_num = 10,
     min_num = 1,
-    validate_min = True
+    validate_min = True,
+    widgets = {
+        'type': Select2Widget(),
+    },
 ) 
 
 
