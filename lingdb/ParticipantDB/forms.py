@@ -76,7 +76,7 @@ class AdultForm(ModelForm):
         widgets = {
             'id': TextInput(attrs={'readonly': 'readonly'}),
             'birth_date': DateInput(attrs={'type': 'date'}),
-            'gender': TextInput(attrs={}),
+            'gender': TextInput(attrs={'list':'auto-genders'}),
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
             'address': TextInput(attrs={}),
             'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', }),
@@ -99,6 +99,7 @@ class ChildForm(ModelForm):
             'gestation_length_weeks': TextInput(attrs={'min': 0, 'max': 50, 'type': 'number'}),
             'birth_weight': TextInput(attrs={'min': 0, 'max': 10000, 'type': 'number'}),
             'birth_height': TextInput(attrs={'min': 0, 'max': 100, 'type': 'number'}),
+            'gender': TextInput(attrs={'list':'auto-genders'}),
         }
 
 # Language Forms ----------------------------------------------------------------

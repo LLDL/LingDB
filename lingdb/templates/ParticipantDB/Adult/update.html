@@ -48,6 +48,11 @@
                             </div>
                             <div class="col-md-3">
                                 {{ adult_form.gender|as_crispy_field}}
+                                
+                                <datalist id="auto-genders">
+                                    <option value="male">
+                                    <option value="female">
+                                </datalist>
                             </div>
                             <div class="col-md-3">
                                 {{ adult_form.years_of_education|as_crispy_field}}

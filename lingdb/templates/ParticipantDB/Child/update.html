@@ -34,6 +34,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 {{ child_form.gender|as_crispy_field}}
+                                
+                                <datalist id="auto-genders">
+                                    <option value="male">
+                                    <option value="female">
+                                </datalist>
                             </div>
                             <div class="col-md-6">
                                 {{ child_form.was_full_term|as_crispy_field}}

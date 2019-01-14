@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'ParticipantDB.apps.ParticipantDBConfig',
     'django_select2',
     'crispy_forms',
-    'watson',
+    # 'watson',
 ]
 
 MIDDLEWARE = [
