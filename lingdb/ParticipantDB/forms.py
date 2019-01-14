@@ -135,7 +135,7 @@ SpeaksFormSet = modelformset_factory(
 ExposureFormSet = modelformset_factory(
     IsExposedTo,
     form = ExposureForm,
-    can_delete = True
+    can_delete = True,
 )
 
 SpeaksInlineFormSet = inlineformset_factory(
