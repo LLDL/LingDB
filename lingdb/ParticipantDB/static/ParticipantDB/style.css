@@ -79,6 +79,6 @@ nav{
     white-space: nowrap;
     overflow: hidden;
 }
-th{
+.centeredCell th{
     text-align: center !important;
 }

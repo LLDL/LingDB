@@ -6,6 +6,7 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from watson import search as watson
 
 # Python
 from itertools import chain
@@ -25,6 +26,9 @@ from .utils import make_unique_id, get_user_groups, get_user_authed_list, check_
 def search(request):
     if request.method == 'GET':
         query = request.GET.get('search_box', None)
+    # search_results = watson.search(query)
+    # for result in search_results:
+    #     print(result.title, result.url)
     try:
         Adult.objects.get(pk=query)
         return redirect(reverse('adult_detail', kwargs={'adult_id': query}))

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'ParticipantDB.apps.ParticipantDBConfig',
     'django_select2',
     'crispy_forms',
+    'watson',
 ]
 
 MIDDLEWARE = [
@@ -72,8 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lingdb.wsgi.application'
-
-
 
 
 # Password validation

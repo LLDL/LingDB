@@ -57,6 +57,14 @@
                     </div>
                 </li>
             </ul>
+            {% comment %} <form class="my-2 my-lg-0 form-inline" id="searchPeople" action="{% url 'watson:search' %}" accept-charset="utf-8">
+                <div class="input-group">
+                    <input id="search_box" name="q" class="transparentInput form-control" type="text" placeholder="Open" size=10>
+                    <div class="input-group-append">
+                        <input type="submit" class="btn btn-outline-light my-2 my-sm-0" id="search_submit" value="Search">
+                    </div>
+                </div>
+            </form> {% endcomment %}
             <form class="my-2 my-lg-0 form-inline" type="get" id="searchPeople" action="/search" accept-charset="utf-8">
                 <div class="input-group">
                     <input id="search_box" name="search_box" class="transparentInput form-control" type="text" placeholder="Open" size=10>
