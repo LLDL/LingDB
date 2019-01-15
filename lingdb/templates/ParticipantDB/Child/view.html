@@ -11,9 +11,9 @@
             <div class="btn-group float-right"> 
                 <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                 <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
-                {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
-                    Show Sensitive
-            </button> {% endcomment %}
+                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
+                    Expand/Collapse
+                </button>
             </div>
         </div>
     </div>
@@ -78,27 +78,27 @@
 							</tr>
 							{% endif %}
 							{% if child.personal_notes %}
-							<tr>
+							<tr class="sensitive collapse">
 								<th>Personal Notes:</td>
 								<td>{{child.personal_notes}}</td>
 							</tr>
 							{% endif %}
 							{% if child.hx_repeated_ear_infection %}
-							<tr>
+							<tr class="sensitive collapse">
 								<th>HX Repeated Ear Infection:</td>
 								<td>{{child.hx_repeated_ear_infection}}</td>
 							</tr>
 							{% endif %}
-							<tr>
+							<tr class="sensitive collapse">
 								<th>Hereditary Audio Problems:</td>
 								<td>{{child.hereditary_audio_problems}}</td>
 							</tr>
-							<tr>
+							<tr class="sensitive collapse">
 								<th>Hereditary Language Pathologies:</td>
 								<td>{{child.hereditary_language_pathologies}}</td>
 							</tr>
 							{% if child.health_notes %}
-							<tr>
+							<tr class="sensitive collapse">
 								<th>Health Notes:</td>
 								<td>{{child.health_notes}}</td>
 							</tr>

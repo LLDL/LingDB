@@ -11,9 +11,9 @@
             <div class="btn-group float-right"> 
                 <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                 <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
-                {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
-                    Show Sensitive
-            </button> {% endcomment %}
+                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
+                    Expand/Collapse
+                </button>
             </div>
         </div>
     </div>
@@ -85,13 +85,13 @@
                                     <td>{{adult.get_pref_phone_time_display}}</td>
                             </tr> 
                             {% if adult.health_notes %}
-                            <tr>
+                            <tr class="sensitive collapse">
                                     <th>Health Notes:</td>
                                     <td>{{adult.health_notes}}</td>
                             </tr>
                             {% endif %}
                             {% if adult.personal_notes %}
-                            <tr>
+                            <tr class="sensitive collapse">
                                     <th>Personal Notes:</td>
                                     <td>{{adult.personal_notes}}</td>
                             </tr>
