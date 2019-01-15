@@ -118,14 +118,14 @@
 						<div class="table-responsive">
                             <table class="table table-hover">
 								<thead>
-									<tr  class="noTopBorder centeredCell">
+									<tr class="noTopBorder centeredCell">
 										<th>Language</th>
 										<th>Exposure Percentage</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for language_exposed_to in languages_exposed_to %}
-										<tr>
+										<tr class="centeredCell">
 											<td>{{language_exposed_to.lang}}</td>
 											<td>{{language_exposed_to.percentage_exposure}}</td>
 										</tr>

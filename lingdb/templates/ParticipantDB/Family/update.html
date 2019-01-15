@@ -1,70 +1,98 @@
 {% extends "ParticipantDB/nav.html" %}
+{% load static %}
+{% block extraHead %}
+    {{ parent_forms.media.css }}
+    {{ child_forms.media.css}}
+{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>Update Family # {{family_id}}</h2>
-    <form action="{% url 'update_family' family_id %}" method="post">
+    <h1>Update Family # {{family_id}}</h1>
+    <form action="{% url 'update_family' family_id %}" method="post" class="noBottomMargin">
         {% csrf_token %}
-        {{family_form.as_table}}
-
-        <h3>Parent(s)</h3>
-        {{ parent_forms.management_form}}
-        {% comment %} {% if parent_forms.non_form_errors %}
-            <div class="error">
-                {{ parent_forms.non_form_errors }}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                Basic Info
+                            </div>
+                            <div class="card-body">
+                                {{family_form.id|as_crispy_field}}
+                                {{family_form.notes|as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                Parent(s)
+                            </div>
+                            <div class="table-responsive">
+                                {{ parent_forms.management_form|crispy}}
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr class="noTopBorder centeredCell">
+                                            <th>Parent*</th>
+                                            <th>Delete?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for parent_form in parent_forms %}
+                                            {{parent_form.id}}
+                                            <tr>
+                                                <td>
+                                                    {{parent_form.parent|as_crispy_field}}
+                                                </td>
+                                                <td class="centered-checkbox-child">
+                                                    {{parent_form.DELETE}}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endif %} {% endcomment %}
-
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Adult</th>
-                    <th class="field_name">Delete?</th>
-                </tr>
-            </thead>
-            <tbody>
-                    {% for parent_form in parent_forms %}
-                    {{parent_form.id}}
-                    <tr>
-                        <td class="field_value">
-                            {{parent_form.parent}}
-                        </td>
-                        <td class="field_value">
-                            {{parent_form.DELETE}}
-                        </td>  
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-        <h3>Child(ren)</h3>
-        {{ child_forms.management_form}}
-        {% comment %} {% if child_forms.non_form_errors %}
-            <div class="error">
-                {{ child_forms.non_form_errors }}
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Child(ren)
+                    </div>
+                    <div class="table-responsive">
+                        {{ child_forms.management_form|crispy}}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder centeredCell">
+                                    <th>Child*</th>
+                                    <th>Delete?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for child_form in child_forms %}
+                                    {{child_form.id}}
+                                    <tr>
+                                        <td>
+                                            {{child_form.child|as_crispy_field}}
+                                        </td>
+                                        <td class="centered-checkbox-child">
+                                            {{child_form.DELETE}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        {% endif %} {% endcomment %}
-        
-        <table>
-            <thead>
-                <tr>
-                    <th class="field_name">Child</th>
-                    <th class="field_value_input">Delete?</th>
-                </tr>
-            </thead>
-            <tbody>
-                    {% for child_form in child_forms %}
-                    {{child_form.id}}
-                    <tr>
-                        <td class="field_value">
-                            {{child_form.child}}
-                        </td>
-                        <td class="field_value_input">
-                            {{child_form.DELETE}}
-                        </td>  
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        </div>
 
-        <input type="submit" value="Save">
+        <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
     </form>
+    {{ parent_forms.media.js}}
+    {{ child_forms.media.js}}
 {% endblock %}

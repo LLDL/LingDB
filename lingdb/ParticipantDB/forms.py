@@ -11,7 +11,7 @@ from .models import *
 class FamilyForm(ModelForm):
     class Meta:
         model = Family
-        fields = ('id',) 
+        fields = ('id', 'notes') 
         widgets = {
             'id': TextInput(attrs={'readonly': 'readonly'}),
         }

@@ -14,6 +14,13 @@ $(function(){
         }
         console.log(temp)
         $("#sumExposure").val(temp);
+        if(temp == 100){
+            $("#sumExposure").removeClass("bg-danger")
+            $("#sumExposure").addClass("bg-success")
+        }else{
+            $("#sumExposure").removeClass("bg-success")
+            $("#sumExposure").addClass("bg-danger")
+        }
     });
     $("#exposure_table").change();
 });

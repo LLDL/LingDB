@@ -4,67 +4,81 @@
     {{ parent_forms.media.css }}
     {{ child_forms.media.css}}
 {% endblock %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>New Family</h2>
-    <form method="post">
+    <h1>New Family</h1>
+    <form method="post" class="noBottomMargin">
+    
         {% csrf_token %}
-        {{family_form.as_table}}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                Basic Info
+                            </div>
+                            <div class="card-body">
+                                {{family_form.id|as_crispy_field}}
+                                {{family_form.notes|as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                Parent(s)
+                            </div>
+                            <div class="table-responsive">
+                                {{ parent_forms.management_form|crispy}}
+                                <table class="table table-hover">
+                                    <tbody>
+                                        {% for parent_form in parent_forms %}
+                                            <tr>
+                                                <td>
+                                                    {{parent_form.parent|as_crispy_field}}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Child(ren)
+                    </div>
+                    <div class="table-responsive">
+                        {{ child_forms.management_form|crispy}}
+                        <table class="table table-hover">
+                            <tbody>
+                                {% for child_form in child_forms %}
+                                    <tr>
+                                        <td>
+                                            {{child_form.child|as_crispy_field}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <h3>Parent(s)</h3>
-        {{ parent_forms.management_form}}
-        {% comment %} {% if parent_forms.errors %}
-            <div class="error">
-                {{ parent_forms.errors }}
-            </div>
-        {% endif %} {% endcomment %}
-        {% comment %} {% if parent_forms.non_form_errors %}
-            <div class="error">
-                {{ parent_forms.non_form_errors }}
-            </div>
-        {% endif %} {% endcomment %}
-        <table>
-            <tbody>
-                {% for parent_form in parent_forms %}
-                    <tr>
-                        <td>
-                            {{parent_form.parent}}
-                        </td> 
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
-        <h3>Child(ren)</h3>
-        {{ child_forms.management_form}}
-        {% comment %} {% if child_forms.errors %}
-            <div class="error">
-                {{ child_forms.errors }}
-            </div>
-        {% endif %} {% endcomment %}
-        {% comment %} {% if child_forms.non_form_errors %}
-            <div class="error">
-                {{ child_forms.non_form_errors }}
-            </div>
-        {% endif %} {% endcomment %}
-        
-        <table>
-            <tbody>
-                {% for child_form in child_forms %}
-                    <tr>
-                        <td class="field_value">
-                            {{child_form.child}}
-                        </td> 
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
-        <input type="submit" name="save" value="Save">
-        <input type="submit" name="save_add_another" value="Save & Add Another">
+        <div class="btn-group"> 
+            <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
+            <input type="submit" class="btn btn-outline-primary" name="save_add_another" value="Save & Add Another">
+        </div>
     </form>
-
-{{ parent_forms.media.js}}
-
-{{ child_forms.media.js}}
+    {{ parent_forms.media.js}}
+    {{ child_forms.media.js}}
 {% endblock %}

@@ -122,7 +122,7 @@
                                 </thead>
                                 <tbody>
                                     {% for speaksLanguage in speaksLanguages %}
-                                        <tr>
+                                        <tr class="centeredCell">
                                             <td>{{speaksLanguage.lang}}</td>
                                             <td>{{speaksLanguage.is_native}}</td>
                                             <td>{{speaksLanguage.nth_most_dominant}}</td>
@@ -154,7 +154,7 @@
                             
                             <tbody>
                                 {% for musical_exp in musical_exps %}
-                                    <tr>
+                                    <tr class="centeredCell">
                                         <td>{{musical_exp.experience}}</td>
                                         <td>{{musical_exp.nth_most_dominant}}</td>
                                         <td>{{musical_exp.age_learning_started}}</td>
@@ -237,7 +237,7 @@
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
-                                    <tr  class="noTopBorder centeredCell">
+                                    <tr class="noTopBorder centeredCell">
                                         <th>Assessment</th>
                                         <th>Lab</th>
                                         <th>Assessor</th>
@@ -251,7 +251,7 @@
                                 
                                 <tbody>
                                     {% for participation in assessment_participations %}
-                                        <tr>
+                                        <tr class="centeredCell">
                                             <td>{{participation.assessment}}</td>
                                             <td>{{participation.assessment.lab}}</td>
                                             <td>{{participation.assessor}}</td>
@@ -324,7 +324,7 @@
                                 
                                 <tbody>
                                     {% for participation in experiment_section_participations %}
-                                        <tr>
+                                        <tr class="centeredCell">
                                             <td>{{participation.experiment_section.experiment}}</td>
                                             <td>{{participation.experiment_section}}</td>
                                             <td>{{participation.experiment_section.experiment.lab}}</td>

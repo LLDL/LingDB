@@ -107,6 +107,7 @@ class Family(models.Model):
     id = models.IntegerField(primary_key = True, verbose_name = "ID")
     parents = models.ManyToManyField('Adult', through='IsParentIn')
     children = models.ManyToManyField('Child', through='IsChildIn')
+    notes = models.TextField(max_length=1000, blank = True, null = True, verbose_name = "Notes")
     def __str__(self):
         return 'Family # %s' % (self.id) 
 
