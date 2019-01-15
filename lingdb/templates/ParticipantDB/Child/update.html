@@ -1,5 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
+    {% load static %}
+    <script src="{% static 'ParticipantDB/js/exposure_form.js' %}"></script>
     {{ child_form.media.css}}
     {{ exposure_forms.media.css }}
 {% endblock %}
@@ -85,7 +87,7 @@
                     </div>        
                     {{ exposure_forms.management_form|crispy }}
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="exposure_table">
                             <thead>
                                 <tr class="noTopBorder centeredCell">
                                     <th>Language*</th>
@@ -102,6 +104,10 @@
                                         <td class="centered-checkbox-child">{{exposure_form.DELETE}}</td> 
                                     </tr>
                                 {% endfor %}
+                                <tr>
+                                    <th>Total</th>
+                                    <td><input id="sumExposure" name="sumExposure" class="textinput textInput form-control" type="text" readonly="readonly" value="0" required="" tabindex="-1"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

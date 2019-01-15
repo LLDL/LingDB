@@ -101,7 +101,6 @@ class ChildForm(ModelForm):
             'birth_height': TextInput(attrs={'min': 0, 'max': 100, 'type': 'number'}),
             'gender': TextInput(attrs={'list':'auto-genders'}),
         }
-
 # Language Forms ----------------------------------------------------------------
 
 class LanguageForm(ModelForm):
@@ -125,6 +124,9 @@ class ExposureForm(ModelForm):
     class Meta:
         model = IsExposedTo
         fields = ('lang', 'percentage_exposure')
+    def clean(self):
+        raise ValidationError('test')
+   
 
 SpeaksFormSet = modelformset_factory(
     Speaks,
