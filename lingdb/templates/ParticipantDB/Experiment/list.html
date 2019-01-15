@@ -1,0 +1,85 @@
+{% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                All Experiments
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+            
+                <a href="{% url 'add_experiment' %}" class="btn btn-outline-primary" role="button">Add Experiment</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+            
+        <div class="col-xl-12">
+            {% if experiments %}
+                <div class="card mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder centeredCell">
+                                    <th>Name</th>
+                                    <th>Lab</th>
+                                    <th>Sections</th>
+                                    <th>Run Count</th>
+                                    <th>Actions</th>
+                                    {% comment %} <th>Update</th>
+                                    <th>Delete</th> {% endcomment %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for experiment in experiments %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{experiment.experiment_name}}
+                                        </td>
+                                        <td>{{experiment.lab}}</td>  
+                                        <td>
+                                            {% for sections in experiment_sections.items %}
+                                                {% if sections.0 == experiment.experiment_name %}
+                                                    <div class="btn-group">
+                                                        {% for section in sections.1%} 
+                                                            <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=section.experiment_section_name %}"  class="noBottomMargin btn btn-outline-primary" role="button">{{section.experiment_section_name}}</a>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for count in experiment_run_counts.items %}
+                                                {% if count.0 == experiment.experiment_name %}
+                                                    {{count.1}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
+                                                <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                                <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div>
+                    <h2>No experiments available for your lab.</h2>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+        
+    
+{% endblock %}

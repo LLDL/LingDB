@@ -711,7 +711,21 @@ def update_assessment_run(request, assessment_run_id):
 # Experiment --------------------------------------------------------------
 @login_required
 def experiment_list(request):
-    pass
+    all_experiments = Experiment.objects.all()
+    eligible_experiments = get_user_authed_list(request, all_experiments)  
+    all_experiment_sections = {}
+    
+    all_counts = {}
+    # all_fields = {}
+    for experiment in eligible_experiments:
+        all_experiment_sections[experiment.experiment_name] = Experiment_Section.objects.filter(experiment = experiment)
+        all_counts[experiment.experiment_name] = 0
+        for section in all_experiment_sections[experiment.experiment_name]:
+            all_counts[experiment.experiment_name] += Experiment_Section_Run.objects.filter(experiment_section = section).count()
+    
+    return render(request, 'ParticipantDB/Experiment/list.html', {'experiments': eligible_experiments, 'experiment_run_counts': all_counts, 'experiment_sections': all_experiment_sections})
+
+
 @login_required
 def add_experiment(request):
     experiment_section_forms = ExperimentSectionInlineFormSet(
