@@ -569,8 +569,15 @@ def assessment_detail(request, assessment_name):
     assessment_fields = Assessment_Field.objects.filter(field_of = assessment)
     assessment_runs = Assessment_Run.objects.filter(assessment = assessment)
     authed_groups = get_user_groups(request)
-    print(authed_groups)
-    print(assessment.lab.group)
+    
+    all_scores = {}
+    for run in assessment_runs:
+        assessment_run_fields = Assessment_Run_Field_Score.objects.filter(assessment_run = run)
+        all_scores[run.id] = assessment_run_fields
+
+
+    # print(authed_groups)
+    # print(assessment.lab.group)
     canAccess = assessment.lab.group.name in authed_groups
     return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
 

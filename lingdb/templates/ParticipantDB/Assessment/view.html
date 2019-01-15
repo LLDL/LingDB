@@ -62,6 +62,7 @@
                                         <th>Date</th>
                                         <th>Notes</th>
                                         <th>Assessor</th>
+                                        <th>Results</th>
                                         <th>Open</th>
                                         <th>Update</th>
                                         <th>Delete</th>
@@ -86,6 +87,7 @@
                                             <td>{{run.date}}</td>
                                             <td>{{run.notes}}</td>
                                             <td>{{run.assessor}}</td>
+                                            <td>{{run.results}}</td>
                                             <td><a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
                                             <td><a href="{% url 'update_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
                                             <td><a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
