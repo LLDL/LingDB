@@ -476,7 +476,15 @@ def delete_family(request, family_id):
 # Assessment --------------------------------------------------------------
 @login_required
 def assessment_list(request):
-    pass
+    all_assessments = Assessment.objects.all()
+    eligible_assessments = get_user_authed_list(request, all_assessments)  
+    all_counts = {}
+    all_fields = {}
+    for assessment in eligible_assessments:
+        all_counts[assessment.assessment_name] = Assessment_Run.objects.filter(assessment = assessment).count()
+        all_fields[assessment.assessment_name] = Assessment_Field.objects.filter(field_of = assessment)
+    
+    return render(request, 'ParticipantDB/Assessment/list.html', {'assessments': eligible_assessments, 'assessment_run_counts': all_counts, 'assessment_fields': all_fields})
 
 
 

@@ -1,0 +1,79 @@
+{% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                All Assessments
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+            
+                <a href="{% url 'add_assessment' %}" class="btn btn-outline-primary" role="button">Add Assessment</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+            
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                {% comment %} {% if assessments.count > 0 %} {% endcomment %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder centeredCell">
+                                    <th>Name</th>
+                                    <th>Lab</th>
+                                    <th>Fields</th>
+                                    <th>Run Count</th>
+                                    <th>Actions</th>
+                                    {% comment %} <th>Update</th>
+                                    <th>Delete</th> {% endcomment %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for assessment in assessments %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{assessment.assessment_name}}
+                                        </td>
+                                        <td>{{assessment.lab}}</td>  
+                                        <td>
+                                            {% for fields in assessment_fields.items %}
+                                                {% if fields.0 == assessment.assessment_name %}
+                                                    {% for field in fields.1%} 
+                                                        {{field.field_name}} ({{field.type}})<br>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for count in assessment_run_counts.items %}
+                                                {% if count.0 == assessment.assessment_name %}
+                                                    {{count.1}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'assessment_detail' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
+                                                <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                                <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% comment %} {% endif %} {% endcomment %}
+            </div>
+        </div>
+    </div>
+        
+    
+{% endblock %}
