@@ -20,8 +20,8 @@
     <div class="row">
             
         <div class="col-xl-12">
-            <div class="card mb-4">
-                {% comment %} {% if assessments.count > 0 %} {% endcomment %}
+            {% if assessments %}
+                <div class="card mb-4">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
@@ -70,8 +70,12 @@
                             </tbody>
                         </table>
                     </div>
-                {% comment %} {% endif %} {% endcomment %}
-            </div>
+                </div>
+            {% else %}
+                <div>
+                    <h2>No assessments available for your lab.</h2>
+                </div>
+            {% endif %}
         </div>
     </div>
         
