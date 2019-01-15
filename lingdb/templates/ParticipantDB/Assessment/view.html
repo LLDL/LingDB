@@ -11,8 +11,9 @@
             </div>
             <div class="col-md-4">
                 <div class="btn-group float-right"> 
-                    <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}" class="btn btn-outline-danger" role="button">Delete</a>
+                
                     <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}" class="btn btn-outline-primary" role="button">Update</a>
+                    <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}" class="btn btn-outline-danger" role="button">Delete</a>
                     {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
                         Show Sensitive
                 </button> {% endcomment %}
@@ -37,7 +38,7 @@
                                 </thead>
                                 <tbody>
                                     {% for assessment_field in assessment_fields %}
-                                        <tr>
+                                        <tr class="centeredCell">
                                             <td>{{assessment_field.field_name}}</td>
                                             <td>{{assessment_field.type}}</td>
                                         </tr>
@@ -57,20 +58,20 @@
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
-                                    <tr  class="noTopBorder centeredCell">
+                                    <tr class="noTopBorder centeredCell">
                                         <th>Participant</th>
                                         <th>Date</th>
                                         <th>Notes</th>
                                         <th>Assessor</th>
                                         <th>Results</th>
-                                        <th>Open</th>
-                                        <th>Update</th>
-                                        <th>Delete</th>
+                                        <th>Actions</th>
+                                        {% comment %} <th>Update</th>
+                                        <th>Delete</th> {% endcomment %}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for run in assessment_runs %}
-                                        <tr>
+                                        <tr class="centeredCell">
                                             <td>
                                                 {% if run.participantAdult%}
 
@@ -87,10 +88,23 @@
                                             <td>{{run.date}}</td>
                                             <td>{{run.notes}}</td>
                                             <td>{{run.assessor}}</td>
-                                            <td>{{run.results}}</td>
-                                            <td><a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                            <td><a href="{% url 'update_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
-                                            <td><a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
+                                            <td>
+                                                {% for part in all_scores.items %}
+                                                    {% if part.0 == run.id %}
+                                                        {% for field in part.1%}
+                                                            <b>{{field.assessment_field.field_name}}:</b> {{field.score}}<br>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {%endfor%}
+                                            </td>    
+                    
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
+                                                    <a href="{% url 'update_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                                    <a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
+                                                </div>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -102,8 +116,8 @@
                         <input id="chooseAssessmentField" name="chooseAssessmentField" value = "{{assessment.assessment_name}}" type="hidden">
                         <div class="input-group">
                             <select id="chooseParticipantField" name="chooseParticipantField" class="form-control">
-                                <option value="adult">Adult</option>
-                                <option value="child">Child</option>
+                                <option value="adult">New Adult Run</option>
+                                <option value="child">New Child Run</option>
                             </select>
                             <div class="input-group-append">
                                 <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-primary" value="Add">

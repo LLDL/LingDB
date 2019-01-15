@@ -475,6 +475,13 @@ def delete_family(request, family_id):
 
 # Assessment --------------------------------------------------------------
 @login_required
+def assessment_list(request):
+    pass
+
+
+
+
+@login_required
 def add_assessment(request):
     assessment_field_forms = AssessmentFieldInlineFormSet(
         queryset = Assessment_Field.objects.none(),
@@ -579,7 +586,7 @@ def assessment_detail(request, assessment_name):
     # print(authed_groups)
     # print(assessment.lab.group)
     canAccess = assessment.lab.group.name in authed_groups
-    return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs})
+    return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs, 'all_scores': all_scores})
 
 @login_required
 def delete_assessment(request, assessment_name):
@@ -694,6 +701,9 @@ def update_assessment_run(request, assessment_run_id):
 
 
 # Experiment --------------------------------------------------------------
+@login_required
+def experiment_list(request):
+    pass
 @login_required
 def add_experiment(request):
     experiment_section_forms = ExperimentSectionInlineFormSet(

@@ -9,11 +9,11 @@
         </div>
         <div class="col-md-4">
             <div class="btn-group float-right"> 
-                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
-                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
                 <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
                     Expand/Collapse
                 </button>
+                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
             </div>
         </div>
     </div>
@@ -222,13 +222,15 @@
                                         <th>Date</th>
                                         <th>Notes</th>
                                         <th>Results</th>
-                                        <th>Delete</th>
+                                        <th>Actions</th>
+                                        {% comment %} <th>Delete</th>
+                                        <th>Update</th> {% endcomment %}
                                     </tr>
                                 </thead>
                                 
                                 <tbody>
                                     {% for participation in assessment_participations %}
-                                        <tr>
+                                        <tr class="centeredCell">
                                             <td>{{participation.assessment}}</td>
                                             <td>{{participation.assessment.lab}}</td>
                                             <td>{{participation.assessor}}</td>
@@ -243,7 +245,13 @@
                                                     {% endif %}
                                                 {%endfor%}
                                             </td>   
-                                            <td><a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a></td>    
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{% url 'assessment_run_detail' assessment_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
+                                                    <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a>
+                                                    <a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a> 
+                                                </div>
+                                            </td>   
                                         </tr>
                                     {% endfor %}
                                 </tbody>

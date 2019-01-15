@@ -49,9 +49,11 @@
                         Resources
                     </a>
                     <div class="dropdown-menu" aria-labelledby="resourcesDropdown">
+                        <a class="dropdown-item" href="{% url 'experiment_list' %}">Experiment List</a>
+                        <a class="dropdown-item" href="{% url 'assessment_list' %}">Assessment List</a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'add_experiment' %}">Add Experiment</a>
                         <a class="dropdown-item" href="{% url 'add_assessment' %}">Add Assessment</a>
-                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'add_language' %}">Add Language</a>
                         <a class="dropdown-item" href="{% url 'add_musical_skill' %}">Add Musical Skill</a>
                     </div>
