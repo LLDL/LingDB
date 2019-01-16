@@ -1,0 +1,221 @@
+{% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                People Query
+            </h1>
+            <h2>
+                (Querying Not Ready)
+            </h2>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+                <a href="{% url 'add_adult' %}" class="btn btn-outline-primary" role="button">Add Adult</a>
+                <a href="{% url 'add_child' %}" class="btn btn-outline-primary" role="button">Add Child</a>
+                <a href="{% url 'add_family' %}" class="btn btn-outline-primary" role="button">Add Family</a>
+            </div>
+        </div>
+    </div>
+
+    {% if adults or children or families %}
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Adults
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder centeredCell">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Birth Date</th>
+                                    <th>Gender</th>
+                                    <th>Notes</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for adult in adults %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{adult.id}}
+                                        </td>
+                                       <td>
+                                            {{adult.given_name}} 
+                                            {% if adult.preferred_name %}
+                                                ({{adult.preferred_name}})
+                                            {% endif %}
+                                            {{adult.surname}}
+                                        </td>
+                                        <td>
+                                            {{adult.birth_date}}
+                                        </td>
+                                        <td>
+                                            {{adult.gender}}
+                                        </td>
+                                        <td>
+                                            {% if adult.health_notes or adult.personal_notes %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{adult.phone}}
+                                        </td>
+                                        <td>
+                                            {{adult.email}}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Children
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder centeredCell">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Birth Date</th>
+                                    <th>Gender</th>
+                                    <th>Notes</th>
+                                    <th>Hereditary Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for child in children %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{child.id}}
+                                        </td>
+                                       <td>
+                                            {{child.given_name}} 
+                                            {% if child.preferred_name %}
+                                                ({{child.preferred_name}})
+                                            {% endif %}
+                                            {{child.surname}}
+                                        </td>
+                                        <td>
+                                            {{child.birth_date}}
+                                        </td>
+                                        <td>
+                                            {{child.gender}}
+                                        </td>
+                                        <td>
+                                            {% if child.health_notes or child.personal_notes %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if child.hereditary_audio_problems or child.hereditary_language_pathologies %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'child_detail' child_id=child.id %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Families
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="noTopBorder centeredCell">
+                                    <th>ID</th>
+                                    {% comment %} <th>Parents</th> {% endcomment %}
+                                    {% comment %} <th>Children</th> {% endcomment %}
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for family in families %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{family.id}}
+                                        </td>
+                                       {% comment %} <td>
+                                            {% for parent in families.parents %}
+                                                {{parent.id}} {{parent.given_name}}
+                                            {% endfor %}
+                                            
+                                        </td>
+                                        <td>
+                                        </td> {% endcomment %}
+                                        <td>
+                                            {% if family.notes %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'delete_family' family_id=family.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div>
+            <h2>No people available in the database.</h2>
+        </div>
+    {% endif %}
+        
+    
+{% endblock %}

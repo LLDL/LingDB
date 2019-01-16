@@ -4,7 +4,7 @@ import django.contrib.auth.models
 from operator import attrgetter
 
 def make_unique_id():
-    potentially_random = randint(100000, 999999)
+    potentially_random = randint(1000000, 9999999)
     # print(potentially_random)
     isUnique = False
     while(isUnique == False):
@@ -12,7 +12,7 @@ def make_unique_id():
         child_exists = Child.objects.filter(pk=potentially_random).exists()
         family_exists = Family.objects.filter(pk=potentially_random).exists()
         if(adult_exists or child_exists or family_exists):
-            potentially_random = randint(100000, 999999)
+            potentially_random = randint(1000000, 9999999)
         else:
             isUnique = True
     return str(potentially_random)

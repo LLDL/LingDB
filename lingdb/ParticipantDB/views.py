@@ -97,6 +97,11 @@ def add_musical_skill(request):
 
 
 # People -------------------------------------------------------------------------
+def people_list(request):
+    adults = Adult.objects.all()
+    children = Child.objects.all()
+    families = Family.objects.all()
+    return render(request, 'ParticipantDB/peopleList.html', {'adults': adults, 'children': children, 'families': families})
 
 # Adult
 def add_adult(request):

@@ -7,7 +7,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     # index
     path('', views.index, name='index'),
-
+    path('people/', views.people_list, name='people_list'),
     # family
     path('family/add/', views.add_family, name='add_family'),   
     path('family/<int:family_id>/', views.family_detail, name='family_detail'),
