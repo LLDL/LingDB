@@ -596,8 +596,6 @@ def assessment_detail(request, assessment_name):
         all_scores[run.id] = assessment_run_fields
 
 
-    # print(authed_groups)
-    # print(assessment.lab.group)
     canAccess = assessment.lab.group.name in authed_groups
     return render(request, 'ParticipantDB/Assessment/view.html', {'canAccess': canAccess, 'assessment': assessment, 'assessment_fields': assessment_fields, 'assessment_runs': assessment_runs, 'all_scores': all_scores})
 
@@ -877,9 +875,7 @@ def update_experiment(request, experiment_name):
 def experiment_detail(request, experiment_name):
     experiment = get_object_or_404(Experiment, pk=experiment_name)
     experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
-    authed_groups = get_user_groups(request)
-    print(authed_groups)
-    print(experiment.lab.group)
+    authed_groups = get_user_groups(request)  
     canAccess = experiment.lab.group.name in authed_groups
     return render(request, 'ParticipantDB/Experiment/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
 
@@ -908,8 +904,15 @@ def experiment_section_detail(request, experiment_name, experiment_section_name)
     except Experiment.DoesNotExist:
         raise Http404("No Experiment '{}'".format(experiment_name))
     experiment_section_fields = Experiment_Section_Field.objects.filter(field_of = experiment_section)
+    experiment_section_runs = Experiment_Section_Run.objects.filter(experiment_section = experiment_section)
 
-    return render(request, 'ParticipantDB/ExperimentSection/view.html', {'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields})
+    authed_groups = get_user_groups(request)
+    all_scores = {}
+    for run in experiment_section_runs:
+        all_scores[run.id] = Experiment_Section_Run_Field_Score.objects.filter(experiment_section_run = run)
+    
+    canAccess = experiment.lab.group.name in authed_groups
+    return render(request, 'ParticipantDB/ExperimentSection/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_section': experiment_section, 'experiment_section_fields': experiment_section_fields, 'experiment_section_runs':experiment_section_runs, 'all_scores': all_scores})
 
 @login_required
 def delete_experiment_section(request, experiment_name, experiment_section_name):
