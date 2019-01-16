@@ -709,6 +709,60 @@ def delete_assessment_run(request, assessment_run_id):
 @login_required
 def update_assessment_run(request, assessment_run_id):
     pass
+    # try:
+    #     assessment_run_inst = Assessment_Run.objects.get(pk=assessment_run_id)
+    # except Assessment_Run.DoesNotExist:
+    #     Http404("No assessment run with id " + assessment_run_id)
+    # assessment = Assessment.objects.get(assessment_name = assessment_run_inst.assessment.assessment_name)
+    # user_can_add = check_user_groups(request, assessment_run_inst, "assessment")
+    # if not user_can_add:
+    #     return HttpResponseForbidden()
+    # assessment_run_form = AssessmentRunForm(instance = assessment_run_inst)
+    # assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
+    #     queryset = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_run_inst),
+    #     prefix = 'assessment_run_field_scores'
+    # )
+    # all_fields = {}
+    # all_types = {}
+    # all_scores = Assessment_Run_Field_Score.objects.filter(assessment_run=assessment_run_inst)
+    # for score in all_scores:
+    #     all_fields[score.id] = score.assessment_field.field_name
+    #     all_types[score.id] = score.assessment_field.type
+    # assessment_fields = Assessment_Field.objects.filter(field_of=assessment)
+    
+    # field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
+    # if (assessment_run_inst.participantAdult):
+    #     participant_type = "adult"
+    # else:
+    #     participant_type = "child"
+    # if request.method == "POST":
+    #     pass
+        # assessment_run_form = AssessmentRunForm(request.POST, instance=assessment_run_inst)
+        # assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
+        #     request.POST,
+        #     prefix = 'assessment_run_field_scores'
+        # )
+        # if assessment_run_form.is_valid():
+        #     assessment_run = assessment_run_form.save(commit=False)
+            # auth_groups = get_user_groups(request)
+            # if(assessment_run.assessment.lab.group.name in auth_groups):
+            # assessment_run.save()
+            # if assessment_run_field_score_forms.is_valid():
+            #     for field, form in zip(assessment_fields, assessment_run_field_score_forms):
+            #         inst = form.save(commit=False)
+            #         inst.assessment_run = assessment_run
+            #         inst.assessment_field = field
+            #         inst.save()
+            #     messages.success(request, 'Assessment Run was successfully updated')
+            #     return redirect(reverse('assessment_run_detail', kwargs={'assessment_run_id': assessment_run.id}))
+            # else:
+            #     messages.error(request, "You are not authorized to edit {} lab's assessment runs".format(assessment_run.assessment.lab))
+        
+
+    #     return render(request, "ParticipantDB/AssessmentRun/update.html", {'assessment': assessment, 'all_fields': all_fields, 'all_types': all_types ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_forms': assessment_run_field_score_forms, 'participant_type': participant_type, 'assessment_run_id': assessment_run_id})
+ 
+
+    # return render(request, "ParticipantDB/AssessmentRun/update.html", {'assessment': assessment ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_forms': assessment_run_field_score_forms, 'participant_type': participant_type, 'assessment_run_id': assessment_run_id})
 
 
 

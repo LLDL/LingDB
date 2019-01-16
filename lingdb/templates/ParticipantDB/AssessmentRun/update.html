@@ -1,0 +1,84 @@
+{% extends "ParticipantDB/nav.html" %}
+
+{% load static %}
+{% block extraHead %}
+    {{ assessment_run_form.media.css }}
+    {{ assessment_run_field_score_forms.media.css }}
+    {% comment %} {{ field_score_pairs.1.media.css }} {% endcomment %}
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Update {{assessment.assessment_name}} Run (ID: {{assessment_run_id}})</h1>
+    <form action="{% url 'update_assessment_run' assessment_run_id %}" method="post" class="noBottomMargin">
+        {% csrf_token %}
+        {{assessment_run_form.management_form|crispy}}
+        {{assessment_run_form.id}}
+        <h2>Basic Info</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                {% if participant_type == "adult" %}
+                    {{assessment_run_form.participantAdult|as_crispy_field}}
+                {% else %}
+                    {{assessment_run_form.participantChild|as_crispy_field}}
+                {% endif %}
+            </div>
+            <div class="col-sm-4">
+                {{assessment_run_form.date|as_crispy_field}}
+            </div>
+            <div class="col-sm-4">
+                {{assessment_run_form.assessor|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                {{assessment_run_form.notes|as_crispy_field}}
+            </div>
+        </div>
+        <h2>Results</h2>
+        {{assessment_run_field_score_forms.management_form|crispy}}
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Score</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                        {% for score in assessment_run_field_score_forms %}
+                            <tr>
+                                <td>
+                                    {% for field in all_fields.items %}
+                                        {{field.1.field_name}}
+                                    {% endfor%}
+                                </td>
+                                <td>
+                                {{score.id}}
+                                {{score.assessment_field}}
+                                {{score.score|as_crispy_field}}
+                                </td>
+                            </tr>
+                        {%endfor%}
+                    {% comment %} {% for field, score in field_score_pairs %}
+                        <tr>            
+                            <td>{{field.field_name}}</td>
+                            <td>{{field.type}}</td>
+                            <td>{{score.score|as_crispy_field}}</td>
+                        </tr>
+                    {% endfor %} {% endcomment %}
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
+    </form>
+    {{ assessment_run_form.media.js }}
+    {{ assessment_run_field_score_forms.media.js }}
+    {% comment %} {{ field_score_pairs.1.media.css }} {% endcomment %}
+{% endblock %}
