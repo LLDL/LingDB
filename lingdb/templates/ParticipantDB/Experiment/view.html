@@ -1,38 +1,78 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block content %}
-    <h2>
-        {{ experiment.experiment_name }} Experiment ({{experiment.lab}})
-    </h2>
     {% if canAccess %}
-        <div>
-            {% if experiment_sections.count > 0 %}
-                <h3>Sections</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="field_name">Name</th>
-                            <th class="field_name">Status</th>
-                            <th class="field_name">Open</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for experiment_section in experiment_sections %}
-                            <tr>
-                                <td class="field_value">{{experiment_section.experiment_section_name}}</td>
-                                <td class="field_value">{{experiment_section.section_status}}</td>
-                                <td class="field_value">
-                                    <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}">Open</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+        <div class="row">
+            <div class="col-md-8">
+                <h1>
+                    {{ experiment.experiment_name }} Experiment
+                </h1>
+            </div>
+            <div class="col-md-4">
+                <div class="btn-group float-right"> 
+                
+                    <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Update</a>
+                    <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-danger" role="button">Delete</a>
+                    {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
+                        Show Sensitive
+                </button> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
             
-            <h3>Manage</h3>
-                <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}">Delete {{Experiment}}</a><br>
-                <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}">Update {{Experiment}}</a>
-
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Basic Info
+                    </div>
+                    <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tr class="noTopBorder">
+                                    <th>Lab:</th>
+                                    <td>{{experiment.lab}}</td>
+                                </tr> 
+                                <tr>
+                                    <th>Status:</th>
+                                    <td>{{experiment.status}}</td>
+                                </tr> 
+                            </table>
+                        </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Sections
+                    </div>
+                    {% if experiment_sections.count > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="noTopBorder centeredCell">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for experiment_section in experiment_sections %}
+                                        <tr class="centeredCell">
+                                            <td>{{experiment_section.experiment_section_name}}</td>
+                                            <td>{{experiment_section.section_status}}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     {% else %}
         <div>

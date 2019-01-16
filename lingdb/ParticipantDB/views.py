@@ -875,9 +875,12 @@ def update_experiment(request, experiment_name):
 def experiment_detail(request, experiment_name):
     experiment = get_object_or_404(Experiment, pk=experiment_name)
     experiment_sections = Experiment_Section.objects.filter(experiment=experiment)
+    all_fields = {}
+    for section in experiment_sections:
+        all_fields[section.experiment_section_name] = Experiment_Section_Field.objects.filter(field_of = section)
     authed_groups = get_user_groups(request)  
     canAccess = experiment.lab.group.name in authed_groups
-    return render(request, 'ParticipantDB/Experiment/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections})
+    return render(request, 'ParticipantDB/Experiment/view.html', {'canAccess': canAccess, 'experiment': experiment, 'experiment_sections': experiment_sections, 'all_fields': all_fields})
 
 @login_required
 def delete_experiment(request, experiment_name):
