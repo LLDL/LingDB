@@ -10,7 +10,6 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="btn-group float-right"> 
-                    <a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Open Experiment</a>
                     <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Update Experiment</a>
                     <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-danger" role="button">Delete Section</a>
                     {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
@@ -33,7 +32,7 @@
                                 </tr>
                                 <tr>
                                     <th>Experiment</th>
-                                    <td>{{ experiment.experiment_name }}</td>
+                                    <td><a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">{{ experiment.experiment_name }}</td>
                                 </tr>
                             </tbody>
                         </table>

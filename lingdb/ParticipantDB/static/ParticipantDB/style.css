@@ -57,7 +57,7 @@ nav{
     font-weight: 600 !important;
     font-size: 1.25em !important;
 }
-.table > tbody > tr > td {
+.table > tbody > tr > td, .table > tbody > tr > th {
     vertical-align: middle;
 }
 .form-group{
