@@ -1,20 +1,42 @@
 {% extends "ParticipantDB/nav.html" %}
+
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>
-        Family # {{family.id}}
-    </h2>
-    <h3>Parents</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                Family # {{family.id}}
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
+                    Expand/Collapse
+                </button>
+                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                <a href="{% url 'delete_family' family_id=family.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Parents</h2>
     {% for parent in parents %}
-        {{parent.parent.id}}, {{parent.parent.given_name}} {{parent.parent.surname}} 
-        <a href="{% url 'adult_detail' adult_id=parent.parent.id %}">Open</a> <a href="{% url 'update_adult' adult_id=parent.parent.id %}">Edit</a><br>
+            {% with parent.parent as adult and parent.parent.id as testID %}
+                {% load family_tags %}
+                {% with parentsSpeak|hashval:testID as speaksLanguages and parentsMusic|hashval:testID as musical_exps %}
+                    {% comment %} {{parentsSpeak.adult}} {% endcomment %}
+                    {% comment %} {{adult}} {% endcomment %}
+                    {{speaksLanguages.items}}
+                        {% include "ParticipantDB/Adult/_partial.html" %}
+                {% endwith %}
+            {% endwith %}
     {% endfor %}
-    <h3>Children</h3>
+    {% comment %} <h3>Children</h3>
     {% for child in children %}
         {{child.child.id}}, {{child.child.given_name}} {{child.child.surname}} 
         <a href="{% url 'child_detail' child_id=child.child.id %}">Update</a>
         <a href="{% url 'update_child' child_id=child.child.id %}">Edit</a><br>
-    {% endfor %}
-    <h3>Manage</h3>
-    <a href="{% url 'delete_family' family_id=family.id %}">Delete {{family}}</a><br>
-    <a href="{% url 'update_family' family_id=family.id %}">Update {{family}}</a>
+    {% endfor %} {% endcomment %}
 {% endblock %}

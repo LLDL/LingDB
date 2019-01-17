@@ -463,7 +463,21 @@ def family_detail(request, family_id):
     family = get_object_or_404(Family, pk=family_id)
     parents = IsParentIn.objects.filter(family = family)
     children = IsChildIn.objects.filter(family = family)
-    return render(request, 'ParticipantDB/Family/view.html', {'family': family, 'parents': parents, 'children': children})
+    parentsSpeak = {}
+    parentsMusic = {}
+    for parent in parents:
+        parentsSpeak[parent.parent.id] = Speaks.objects.filter(person = parent.parent)
+        parentsMusic[parent.parent.id] = MusicalExperience.objects.filter(person = parent.parent)
+    childrenLangExposure = {}
+    for child in children:
+        childrenLangExposure[child.child.id] = IsExposedTo.objects.filter(child = child.child)
+
+
+
+
+
+
+    return render(request, 'ParticipantDB/Family/view.html', {'family': family, 'parents': parents, 'children': children, 'parentsSpeak': parentsSpeak, 'parentsMusic': parentsMusic, 'childrenLangExposure': childrenLangExposure})
     
 @login_required
 def delete_family(request, family_id):
