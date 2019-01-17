@@ -82,3 +82,7 @@ nav{
 .centeredCell th, .centeredCell td{
     text-align: center !important;
 }
+.no-lr{
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
