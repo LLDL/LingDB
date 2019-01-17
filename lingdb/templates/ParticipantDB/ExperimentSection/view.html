@@ -5,10 +5,10 @@
         <div class="row">
             <div class="col-md-8">
                 <h1>
-                    {{experiment_section.experiment_section_name}} of {{ experiment.experiment_name }} ({{experiment.lab}})
+                    {{experiment_section.experiment_section_name}}
                 </h1>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 mb-4">
                 <div class="btn-group float-right"> 
                     <a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Open Experiment</a>
                     <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Update Experiment</a>
@@ -21,6 +21,24 @@
         </div>
         <div class="row">
             <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Basic Info
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                                <tr class="noTopBorder">
+                                    <th>Lab</th>
+                                    <td>{{experiment.lab}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Experiment</th>
+                                    <td>{{ experiment.experiment_name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="card mb-4">
                     <div class="card-header">
                         Fields
@@ -47,15 +65,6 @@
                     {% endif %}
                 </div>
             </div>
-            
-
-
-
-
-
-
-
-
             <div class="col-lg-8">
                 <div class="card mb-4">
                     <div class="card-header">
