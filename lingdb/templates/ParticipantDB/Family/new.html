@@ -39,6 +39,10 @@
                                             <tr>
                                                 <td>
                                                     {{parent_form.parent|as_crispy_field}}
+                                                {% comment %} </td>
+                                                <td> {% endcomment %}
+                                                
+                                                    {{parent_form.isPrimary|as_crispy_field}}
                                                 </td>
                                             </tr>
                                         {% endfor %}

@@ -10,26 +10,70 @@
         </div>
         <div class="col-md-4">
             <div class="btn-group float-right"> 
-                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
+                {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
                     Expand/Collapse
-                </button>
+                </button> {% endcomment %}
                 <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-primary" role="button">Update</a>
                 <a href="{% url 'delete_family' family_id=family.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                 
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Family Info
+                </div>
+                <div>
+                    {% comment %} <h2>Personal Info</h2>         {% endcomment %}
+                    <div id="personalTable" class="table-responsive">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr class="noTopBorder">
+                                
+                                    <th>Primary Contact</th>
+                                    <td>
+                                        {% for parent in parents %}
+                                            {% if parent.isPrimary %}
+                                                <b>{{ parent.parent.given_name }}
+                                                {{adult.preferred_name}}
+                                                {{ parent.parent.surname }}
+                                                by {{parent.parent.get_contact_pref_display}}</b><br>
+                                                Email: {{ parent.parent.email}}<br>
+                                                Phone: {{ parent.parent.phone}}
+                                                ({{parent.parent.get_pref_phone_time_display}})
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Notes</th>
+                                    <td>{{family.notes}}</td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h2>Parents</h2>
     {% for parent in parents %}
             {% with parent.parent as adult and parent.parent.id as testID %}
                 {% load family_tags %}
                 {% with parentsSpeak|hashval:testID as speaksLanguages and parentsMusic|hashval:testID as musical_exps %}
-                    {% comment %} {{parentsSpeak.adult}} {% endcomment %}
-                    {% comment %} {{adult}} {% endcomment %}
-                    {{speaksLanguages.items}}
-                        {% include "ParticipantDB/Adult/_partial.html" %}
+                    {% include "ParticipantDB/Adult/_partial.html" %}
+                {% endwith %}
+            {% endwith %}
+    {% endfor %}
+    <h2>Children</h2>
+    {% for kid in children %}
+            {% with kid.child as child and kid.child.id as testID %}
+                {% load family_tags %}
+                {% with childrenLangExposure|hashval:testID as languages_exposed_to %}
+                    {% include "ParticipantDB/Child/_partial.html" %}
                 {% endwith %}
             {% endwith %}
     {% endfor %}

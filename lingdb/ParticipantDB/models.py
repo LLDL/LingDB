@@ -310,6 +310,7 @@ class IsParentIn(models.Model):
         verbose_name_plural = "Are Parents In"
     parent = models.ForeignKey(Adult, related_name='parent', on_delete = models.CASCADE)
     family = models.ForeignKey(Family, related_name='family', on_delete = models.CASCADE)
+    isPrimary = models.BooleanField(default = False, verbose_name = "Primary Contact")
 
 class IsChildIn(models.Model):
     class Meta:

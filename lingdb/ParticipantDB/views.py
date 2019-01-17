@@ -465,14 +465,31 @@ def family_detail(request, family_id):
     children = IsChildIn.objects.filter(family = family)
     parentsSpeak = {}
     parentsMusic = {}
+    parentNotes = False
+    childNotes = False
+    childHered = False
     for parent in parents:
         parentsSpeak[parent.parent.id] = Speaks.objects.filter(person = parent.parent)
         parentsMusic[parent.parent.id] = MusicalExperience.objects.filter(person = parent.parent)
+        if parent.parent.health_notes != "" or parent.parent.personal_notes != "":
+            parentNotes = True
     childrenLangExposure = {}
     for child in children:
         childrenLangExposure[child.child.id] = IsExposedTo.objects.filter(child = child.child)
+        if child.child.health_notes != "" or child.child.personal_notes != "":
+            childNotes = True
+        if child.child.hereditary_audio_problems == True or child.child.hereditary_language_pathologies:
+            childHered = True
+    
+    notes = ""
+    
 
-
+    if parentNotes:    
+        messages.info(request, 'At least one parent has health or personal notes')
+    if childNotes:    
+        messages.info(request, 'At least one child has health or personal notes')
+    if childHered:    
+        messages.info(request, 'At least one child has hereditary audio problems or language pathologies')
 
 
 

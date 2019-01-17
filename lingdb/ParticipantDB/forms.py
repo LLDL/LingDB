@@ -31,7 +31,7 @@ ParentInlineFormSet = inlineformset_factory(
     Adult,
     IsParentIn,
     formset = ParentFormSet,
-    fields = ('parent',),
+    fields = ('parent', 'isPrimary'),
     extra = 1,
     max_num = 2,
     min_num = 1,
