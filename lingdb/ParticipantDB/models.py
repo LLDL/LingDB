@@ -52,8 +52,10 @@ class Adult(Person):
         verbose_name_plural = "Adults"
         ordering = ['id']
     sfu_id = models.IntegerField(blank = True, null = True, verbose_name = "SFU ID")
-    address = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, blank = True, null = True)
     years_of_education = models.IntegerField(
+        blank = True,
+        null = True,
         validators=[
             MinValueValidator(0), 
             MaxValueValidator(20),
@@ -79,7 +81,7 @@ class Adult(Person):
         ('ANY', 'Anytime'),
         ('DNC', 'Do Not Call'),
     )
-    pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, verbose_name = "Preferred Phone Time")
+    pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, verbose_name = "Preferred Phone Time", blank = True, null = True, default="ANY")
     
     languages = models.ManyToManyField('Language', blank = True, through='Speaks')
     musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')

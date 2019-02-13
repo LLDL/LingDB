@@ -19,7 +19,7 @@ def make_unique_id():
 
 def get_user_groups(request):
     groups = request.user.groups.values_list('name', flat=True)
-    print(groups)
+    # print(groups)
     return groups
 
 def get_user_authed_list(request, full_queryset, sub_of=""):
@@ -29,11 +29,11 @@ def get_user_authed_list(request, full_queryset, sub_of=""):
     if sub_of:
         sub_of += ".lab.group.id"
         for obj in full_queryset:
-            print(obj)
+            # print(obj)
             parent = attrgetter(sub_of)(obj)
-            print("Assessment Group: ", parent)
+            # print("Assessment Group: ", parent)
             for group in groups:
-                print("Curr Group: ", group)
+                # print("Curr Group: ", group)
                 if parent == group:
                     user_authed_list.append(obj)
     else:

@@ -80,12 +80,20 @@ class AdultForm(ModelForm):
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
             'address': TextInput(attrs={}),
             'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', }),
-            'phone': TextInput(attrs={'type': 'tel', }),
+            'phone': TextInput(attrs={'type': 'tel'}),
             'email': EmailInput(attrs={}),
             'contact_pref': Select2Widget(attrs={}),
             'pref_phone_time': Select2Widget(attrs={}),   
             
         }
+    def clean_email(self):
+        phone = self.cleaned_data['phone']
+        email = self.cleaned_data['email']
+        if phone == None and email == None:
+            raise ValidationError('Enter at least one of email or phone')
+        else:
+            return self.cleaned_data['email']
+
 
 # Child Forms -------------------------------------------------------------------
 

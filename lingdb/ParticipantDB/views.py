@@ -258,7 +258,7 @@ def add_child(request):
     if request.method == "POST":
         child_form = ChildForm(request.POST)
         exposure_forms = ExposureInlineFormSet(request.POST)
-        if request.POST.get('sumExposure', '') != '100':
+        if request.POST.get('sumExposure', '') != '0':
             messages.error(request, 'Ensure Language Exposure Percentages add to 100')
         elif child_form.is_valid() and exposure_forms.is_valid():
             child = child_form.save(commit=False)
