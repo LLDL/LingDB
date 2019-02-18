@@ -113,11 +113,13 @@ def add_adult(request):
         queryset = Speaks.objects.none(), 
         prefix = 'speaks_forms'
     )
+    add_parent_form = AddParentForm()
     if request.method == "POST":
         adult_form = AdultForm(request.POST)
         speaks_forms = SpeaksInlineFormSet(request.POST, prefix = 'speaks_forms')
         musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, prefix = 'musical_experiences')
-        
+        add_parent_form = AddParentForm(request.POST)
+
         if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid():   
             adult = adult_form.save(commit=False)
             adult.save()
@@ -133,7 +135,10 @@ def add_adult(request):
                     inst = musical_experience_form.save(commit=False)
                     inst.person = adult
                     inst.save()
-                    
+            if add_parent_form.is_valid():
+                inst = add_parent_form.save(commit=False)
+                inst.parent = adult
+                inst.save()
             messages.success(request, 'Adult was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_adult'))
@@ -143,7 +148,7 @@ def add_adult(request):
     else:
         adult_form = AdultForm(initial={'id': make_unique_id()})
 
-    return render(request, "ParticipantDB/Adult/new.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms})
+    return render(request, "ParticipantDB/Adult/new.html", {'adult_form': adult_form, 'speaks_formset': speaks_forms, 'musical_experience_formset': musical_experience_forms, 'addParentForm': AddParentForm})
 
 @login_required
 def update_adult(request, adult_id):

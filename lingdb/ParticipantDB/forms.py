@@ -70,6 +70,15 @@ ChildInFamilyInlineFormSet = inlineformset_factory(
 )
 
 
+class AddParentForm(ModelForm):
+    class Meta:
+        model = IsParentIn
+        fields = ('family', 'isPrimary')
+        widgets = {
+            'family': Select2Widget(attrs={'required': ''})
+        }
+
+
 # Adult Forms -------------------------------------------------------------------
 
 class AdultForm(ModelForm):
