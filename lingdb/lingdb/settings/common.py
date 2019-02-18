@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dateutil',
     'ParticipantDB.apps.ParticipantDBConfig',
     'django_select2',
     'crispy_forms',

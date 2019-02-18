@@ -285,12 +285,16 @@ class MusicalExperience(models.Model):
         verbose_name_plural = "Musical Experiences"
     person = models.ForeignKey(Adult, related_name = 'musician', on_delete = models.CASCADE, default = None)
     experience = models.ForeignKey(MusicalSkill, related_name = 'instrument', on_delete = models.CASCADE, default = None)
-    nth_most_dominant = models.SmallIntegerField(
-        validators=[
-            MinValueValidator(1), 
-            MaxValueValidator(20),
-        ],
+
+    PROFICIENCY_OPTIONS = (
+        ('Professional', 'Professional'),
+        ('Advanced', 'Advanced'),
+        ('Intermediate', 'Intermediate'),
+        ('Basic','Basic'),
     )
+    proficiency = models.CharField(max_length = 12, choices = PROFICIENCY_OPTIONS, default = 'Basic')
+
+
     age_learning_started = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
@@ -307,8 +311,8 @@ class MusicalExperience(models.Model):
         ],
     )
     def __str__(self):
-        return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.experience) 
-
+        return '%s performs %s at a %s level' % (self.person, self.experience, self.proficiency) 
+        
 class IsParentIn(models.Model):
     class Meta:
         verbose_name = "Is Parent In"

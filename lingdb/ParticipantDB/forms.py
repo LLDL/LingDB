@@ -3,6 +3,8 @@ from django.forms import ModelForm, DateInput, inlineformset_factory, modelforms
 
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
+import datetime
+import dateutil.relativedelta as relativedelta
 
 # Project Imports ---------------------------------------------------------------
 from .models import *
@@ -20,6 +22,7 @@ class ParentForm(ModelForm):
     class Meta:
         model = IsParentIn
         fields = ('parent',)
+        
 
 ParentFormSet = modelformset_factory(
     IsParentIn,
@@ -84,7 +87,6 @@ class AdultForm(ModelForm):
             'email': EmailInput(attrs={}),
             'contact_pref': Select2Widget(attrs={}),
             'pref_phone_time': Select2Widget(attrs={}),   
-            
         }
     def clean_email(self):
         phone = self.cleaned_data['phone']
@@ -94,6 +96,14 @@ class AdultForm(ModelForm):
         else:
             return self.cleaned_data['email']
 
+    
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
+        min_birth = datetime.date.today() - relativedelta.relativedelta(years=18)
+        if birth_date > min_birth:
+            raise ValidationError('Birthdate must be before {} to add this person as an adult'.format(min_birth))
+        else:
+            return birth_date
 
 # Child Forms -------------------------------------------------------------------
 
@@ -196,7 +206,7 @@ class MusicalSkillForm(ModelForm):
 class MusicalExperienceForm(ModelForm):
     class Meta:
         model = MusicalExperience
-        fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+        fields = ('experience', 'proficiency', 'age_learning_started', 'age_learning_ended')
 
 MusicalExperienceFormSet = modelformset_factory(
     MusicalExperience,
@@ -207,7 +217,7 @@ MusicalExperienceFormSet = modelformset_factory(
 MusicalExperienceInlineFormSet = inlineformset_factory(
     Adult,
     MusicalExperience,
-    fields = ('experience', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
+    fields = ('experience', 'proficiency', 'age_learning_started', 'age_learning_ended'),
     formset = MusicalExperienceFormSet,
     extra = 5,
     max_num = 5,
@@ -216,7 +226,7 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     widgets = {
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
-        'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
+        'proficiency': Select2Widget(),
         'experience': Select2Widget()
     }
 )

@@ -147,7 +147,7 @@
                             <thead>
                                 <tr  class="noTopBorder centeredCell">
                                     <th>Musical Experience</th>
-                                    <th>Dominance</th>
+                                    <th>Proficiency</th>
                                     <th>Starting Age</th>
                                     <th>Ending Age</th>
                                 </tr>
@@ -157,7 +157,7 @@
                                 {% for musical_exp in musical_exps %}
                                     <tr class="centeredCell">
                                         <td>{{musical_exp.experience}}</td>
-                                        <td>{{musical_exp.nth_most_dominant}}</td>
+                                        <td>{{musical_exp.proficiency}}</td>
                                         <td>{{musical_exp.age_learning_started}}</td>
                                         <td>{{musical_exp.age_learning_ended}}</td>
                                     </tr>

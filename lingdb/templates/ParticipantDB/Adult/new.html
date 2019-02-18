@@ -135,7 +135,7 @@
                                     {% for musical_experience in musical_experience_formset %}
                                         <tr>            
                                             <td>{{musical_experience.experience|as_crispy_field}}</td>  
-                                            <td>{{musical_experience.nth_most_dominant|as_crispy_field}}</td>  
+                                            <td>{{musical_experience.proficiency|as_crispy_field}}</td>  
                                             <td>{{musical_experience.age_learning_started|as_crispy_field}}</td>  
                                             <td>{{musical_experience.age_learning_ended|as_crispy_field}}</td>  
                                         </tr>
