@@ -38,15 +38,23 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
-                                {{ adultFilter.form.gender|as_crispy_field }}
-                                <datalist id="auto-genders">
-                                    <option value="male">
-                                    <option value="female">
-                                </datalist>
+                                {{adultFilter.form.gender.label_tag}}
+                                {{ adultFilter.form.gender|as_crispy_field}}
+                                
+                                {% comment %} {% for choice in adultFilter.form.gender %}
+                                
+                                <label class="checkbox-inline">
+                                    {{ choice.tag }} {{ choice.choice_label }}
+                                </label>
+                                {% endfor %} {% endcomment %}
+              
                             </div>
                         </div>
-                        {% comment %} {{adultFilter.form|crispy}} {% endcomment %}
-                        <button type="submit" class="btn btn-outline-primary" >Query</button>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-outline-primary">Query</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
