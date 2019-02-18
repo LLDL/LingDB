@@ -41,7 +41,19 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
-                                {{ adultFilter.form.gender|as_crispy_field}}             
+                                {% comment %} {{ adultFilter.form.birth_date|as_crispy_field}} {% endcomment %}
+                            </div>
+                            {% comment %} <div class="col-md-4 form-group">
+                                {{ adultFilter.form.birth_date__lt|as_crispy_field}}
+                            </div> {% endcomment %}
+                            <div class="col-md-4 form-group">
+                                {{ adultFilter.form.birth_date|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                        
+                            <div class="col-md-4 form-group">
+                                {{ adultFilter.form.gender|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row mt-4">
