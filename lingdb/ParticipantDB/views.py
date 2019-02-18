@@ -17,7 +17,7 @@ from datetime import date, timedelta
 from .forms import *
 from .models import *
 from .utils import make_unique_id, get_user_groups, get_user_authed_list, check_user_groups
-
+from .filters import *
 
 
 
@@ -97,11 +97,12 @@ def add_musical_skill(request):
 
 
 # People -------------------------------------------------------------------------
-def people_list(request):
+def adult_query(request):
     adults = Adult.objects.all()
-    children = Child.objects.all()
-    families = Family.objects.all()
-    return render(request, 'ParticipantDB/peopleList.html', {'adults': adults, 'children': children, 'families': families})
+    # children = Child.objects.all()
+    # families = Family.objects.all()
+    adultFilter = AdultFilter(request.GET, queryset=adults)
+    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
 
 # Adult
 def add_adult(request):
@@ -188,13 +189,14 @@ def update_adult(request, adult_id):
                     inst.save()
                     
             for musical_experience_form in musical_experience_forms:
-                if musical_experience_form.cleaned_data.get('DELETE'):
-                    toDelete = musical_experience_form.cleaned_data.get('experience')
-                    MusicalExperience.objects.filter(person=adult_inst, experience=toDelete).delete()
-                elif musical_experience_form.cleaned_data.get('experience'):
-                    inst = musical_experience_form.save(commit=False)
-                    inst.person = adult
-                    inst.save()          
+                if musical_experience_form.is_valid():
+                    if musical_experience_form.cleaned_data.get('DELETE'):
+                        toDelete = musical_experience_form.cleaned_data.get('experience')
+                        MusicalExperience.objects.filter(person=adult_inst, experience=toDelete).delete()
+                    elif musical_experience_form.cleaned_data.get('experience') and musical_experience_form.is_valid():
+                        inst = musical_experience_form.save(commit=False)
+                        inst.person = adult
+                        inst.save()          
             messages.success(request, 'Adult was successfully updated')
             return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
         

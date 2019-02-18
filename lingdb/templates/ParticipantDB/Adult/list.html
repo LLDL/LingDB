@@ -1,0 +1,31 @@
+{% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                Adult Query
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+                <a href="{% url 'add_adult' %}" class="btn btn-outline-primary" role="button">Add Adult</a>
+                {% comment %} <a href="{% url 'add_child' %}" class="btn btn-outline-primary" role="button">Add Child</a>
+                <a href="{% url 'add_family' %}" class="btn btn-outline-primary" role="button">Add Family</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+    <form method="get">
+        {{adultFilter.form.as_p}}
+        <button type="submit">Query</button>
+    </form>
+    <ul>
+        {% for adult in adultFilter.qs %}
+            <li><a href="{% url 'adult_detail' adult_id=adult.id %}"> {{adult}}</a></li>
+        {% endfor %}
+    </ul>
+
+    
+{% endblock %}

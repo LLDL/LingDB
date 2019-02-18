@@ -1,7 +1,7 @@
-from models import Adult, Child, Family
+from .models import Adult
 import django_filters
 
-class PersonFilter(django_filters.FilterSet):
+class AdultFilter(django_filters.FilterSet):
     class Meta:
         model = Adult
-        fields = ['birth_date', 'gender', 'years_of_education']
+        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender']

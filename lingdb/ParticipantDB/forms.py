@@ -114,7 +114,7 @@ class AdultForm(ModelForm):
             'gender': TextInput(attrs={'list':'auto-genders'}),
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
             'address': TextInput(attrs={}),
-            'years_of_education': TextInput(attrs={'min': 0, 'max': 20, 'type': 'number', }),
+            'years_of_education': TextInput(attrs={'min': 0, 'max': 50, 'type': 'number', }),
             'phone': TextInput(attrs={'type': 'tel'}),
             'email': EmailInput(attrs={}),
             'contact_pref': Select2Widget(attrs={}),
@@ -139,6 +139,9 @@ class AdultForm(ModelForm):
             raise ValidationError('Birthdate must be before or on {} to add this person as an adult'.format(min_birth))
         else:
             return birth_date
+    
+    def clean_gender(self):
+        return self.cleaned_data['gender'].lower()
 
 # Child Forms -------------------------------------------------------------------
 
@@ -162,6 +165,9 @@ class ChildForm(ModelForm):
             raise ValidationError('Birthdate must be after or on {} to add this person as a child'.format(max_birth))
         else:
             return birth_date
+    
+    def clean_gender(self):
+        return self.cleaned_data['gender'].lower()
 # Language Forms ----------------------------------------------------------------
 
 class LanguageForm(ModelForm):
@@ -180,6 +186,13 @@ class SpeaksForm(ModelForm):
         model = Speaks
         fields = ('lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended')
         
+    # def clean_age_learning_ended(self):
+    #     started = self.cleaned_data['age_learning_started']
+    #     ended = self.cleaned_data['age_learning_ended']
+    #     if ended and started > ended:
+    #         return ValidationError('Language learning must start before ending')
+    #     else:
+    #         return ended
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -215,6 +228,7 @@ SpeaksInlineFormSet = inlineformset_factory(
         'proficiency': Select2Widget(),
         'lang': Select2Widget(),
     }
+    
 )
 
 ExposureInlineFormSet = inlineformset_factory(
@@ -248,6 +262,16 @@ class MusicalExperienceForm(ModelForm):
     class Meta:
         model = MusicalExperience
         fields = ('experience', 'proficiency', 'age_learning_started', 'age_learning_ended')
+    # def clean(self):
+    #     super(MusicalExperienceInlineFormSet, self).clean()
+    #     print('test')
+    #     for form in self.forms:
+    #         started = form.cleaned_data['age_learning_started']
+    #         ended = form.cleaned_data['age_learning_ended']
+    #         if ended and started > ended:
+    #             return ValidationError('Experience must start before ending')
+    #     return self
+    
 
 MusicalExperienceFormSet = modelformset_factory(
     MusicalExperience,
