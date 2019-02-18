@@ -326,4 +326,4 @@ class IsChildIn(models.Model):
         verbose_name = "Is Child In"
         verbose_name_plural = "Are Children In"
     child = models.ForeignKey(Child, on_delete = models.CASCADE)
-    family = models.ForeignKey(Family, on_delete = models.CASCADE)
+    family = models.ForeignKey(Family, on_delete = models.CASCADE, blank=True, null=True)

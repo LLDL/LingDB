@@ -256,11 +256,13 @@ def add_child(request):
         queryset = IsExposedTo.objects.none()
     )
     if request.method == "POST":
-        child_form = ChildForm(request.POST)
+        child_form = ChildForm(request.POST, prefix="child")
         exposure_forms = ExposureInlineFormSet(request.POST)
+        add_child_form = AddChildForm(request.POST, prefix = "childin")
+
         if request.POST.get('sumExposure', '') != '0':
             messages.error(request, 'Ensure Language Exposure Percentages add to 100')
-        elif child_form.is_valid() and exposure_forms.is_valid():
+        elif child_form.is_valid() and exposure_forms.is_valid() and add_child_form.is_valid():
             child = child_form.save(commit=False)
             child.save()
             for exposure_form in exposure_forms:
@@ -269,6 +271,11 @@ def add_child(request):
                     inst.child = child
                     inst.save()
             
+            if add_child_form.cleaned_data.get('family'):
+                inst = add_child_form.save(commit=False)
+                inst.child = child
+                inst.save()
+            
             messages.success(request, 'Child was successfully added')
             if 'save_add_another' in request.POST:
                 return redirect(reverse('add_child'))
@@ -276,8 +283,9 @@ def add_child(request):
                 return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
 
     else:
-        child_form = ChildForm(initial={'id': make_unique_id()})
-    return render(request, "ParticipantDB/Child/new.html", {'child_form': child_form, 'exposure_forms': exposure_forms})
+        child_form = ChildForm(initial={'id': make_unique_id()}, prefix="child")
+        add_child_form = AddChildForm(prefix="childin")
+    return render(request, "ParticipantDB/Child/new.html", {'child_form': child_form, 'exposure_forms': exposure_forms, 'addChildForm': add_child_form})
 
 @login_required
 def update_child(request, child_id):

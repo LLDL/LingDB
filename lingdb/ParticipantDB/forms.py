@@ -69,11 +69,26 @@ ChildInFamilyInlineFormSet = inlineformset_factory(
     }
 )
 
+class AddChildForm(ModelForm):
+    class Meta:
+        model = IsChildIn
+        fields = ('family',)
+        widgets = {
+            'family': Select2Widget(attrs={'required': False})
+        }
+    def clean_family(self):
+        family = self.cleaned_data['family']
+        if family:
+            parents = IsParentIn.objects.filter(family=family)
+            if len(parents)>9:
+                raise ValidationError('This family already has ten children.')
+        return self.cleaned_data['family']
+
 
 class AddParentForm(ModelForm):
     class Meta:
         model = IsParentIn
-        fields = ('family', 'isPrimary')
+        fields = ('family',)
         widgets = {
             'family': Select2Widget(attrs={'required': False})
         }

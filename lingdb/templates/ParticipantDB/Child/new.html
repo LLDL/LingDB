@@ -1,9 +1,10 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
     {% load static %}
-    <script src="{% static 'ParticipantDB/js/exposure_form.js' %}"></script>
+    <script src="{% static 'ParticipantDB/js/child.js' %}"></script>
     {{ child_form.media.css}}
     {{ exposure_forms.media.css }}
+    {{ addChildForm.media.css }}
 {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -22,14 +23,18 @@
                                 {{ child_form.id|as_crispy_field}}
                             </div>
                             <div class="col-md-6">
-                                {{ child_form.given_name|as_crispy_field}}
+                                {{ addChildForm.management_form|crispy }}
+                                {{addChildForm.family|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                {{ child_form.given_name|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4">
                                 {{ child_form.preferred_name|as_crispy_field}}
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 {{ child_form.surname|as_crispy_field}}
                             </div>
                         </div>
@@ -121,4 +126,5 @@
     </form>
     {{ child_form.media.js}}
     {{ exposure_forms.media.js }}
+    {{ addChildForm.media.js }}
 {% endblock %}

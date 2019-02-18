@@ -1,4 +1,3 @@
-
 $(function(){
     $("#exposure_table").change(function(){
         console.log("changed");
@@ -22,5 +21,10 @@ $(function(){
             $("#sumExposure").addClass("bg-danger")
         }
     });
+    
     $("#exposure_table").change();
+
+    // var fam = $("#id_child-family");
+
+    // fam.attr('required', false)
 });
