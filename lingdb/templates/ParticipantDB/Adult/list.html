@@ -6,18 +6,21 @@
 {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
-
-    
-    {% comment %} <div class="row"> {% endcomment %}
-    
+    <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-pills mb-4 justify-content-center">
-                <li class="nav-item"><a class="nav-link active" href="#">Adult Query</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Child Query</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Family Query</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Adult</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Child</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Family</a></li>
             </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="card mb-4">
-                
+                <div class="card-header">
+                    Query
+                </div>
                 <div class="card-body">
                     <form method="get">
                         <div class="row">
@@ -38,16 +41,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
-                                {{adultFilter.form.gender.label_tag}}
-                                {{ adultFilter.form.gender|as_crispy_field}}
-                                
-                                {% comment %} {% for choice in adultFilter.form.gender %}
-                                
-                                <label class="checkbox-inline">
-                                    {{ choice.tag }} {{ choice.choice_label }}
-                                </label>
-                                {% endfor %} {% endcomment %}
-              
+                                {{ adultFilter.form.gender|as_crispy_field}}             
                             </div>
                         </div>
                         <div class="row mt-4">
@@ -59,13 +53,75 @@
                 </div>
             </div>
         </div>
+    </div>
     {% comment %} </div> {% endcomment %}
-    <ul>
-        {% for adult in adultFilter.qs %}
-            <li><a href="{% url 'adult_detail' adult_id=adult.id %}"> {{adult}}</a></li>
-        {% endfor %}
-    </ul>
-
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Results
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="noTopBorder centeredCell">
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Birth Date</th>
+                                <th>Gender</th>
+                                <th>Notes</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for adult in adultFilter.qs %}
+                                <tr class="centeredCell">
+                                    <td>
+                                        {{adult.id}}
+                                    </td>
+                                    <td>
+                                        {{adult.given_name}} 
+                                        {% if adult.preferred_name %}
+                                            ({{adult.preferred_name}})
+                                        {% endif %}
+                                        {{adult.surname}}
+                                    </td>
+                                    <td>
+                                        {{adult.birth_date}}
+                                    </td>
+                                    <td>
+                                        {{adult.gender}}
+                                    </td>
+                                    <td>
+                                        {% if adult.health_notes or adult.personal_notes %}
+                                            Yes
+                                        {% else %}
+                                            No
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{adult.phone}}
+                                    </td>
+                                    <td>
+                                        {{adult.email}}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Open</a>
+                                            <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                            <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
   
     {{ adultFilter.media.js }}  
 {% endblock %}

@@ -8,7 +8,7 @@ print(GENDERS)
 GENDER_CHOICES = ()
 
 for gender_CHOICE in GENDERS:
-    GENDER_CHOICES += (gender_CHOICE[0], gender_CHOICE[0]),
+    GENDER_CHOICES += (gender_CHOICE[0], gender_CHOICE[0].capitalize()),
 print(GENDER_CHOICES)
 class AdultFilter(django_filters.FilterSet):
     given_name = django_filters.CharFilter(lookup_expr='icontains', label="Given Name")
@@ -17,7 +17,7 @@ class AdultFilter(django_filters.FilterSet):
     # birth_date = django_filters.DateFromToRangeFilter()
     # birth_date__gte = django_filters.DateFilter(field_name='birth_date', lookup_expr='gte')
     # birth_date__lte = django_filters.DateFilter(field_name='birth_date', lookup_expr='lte')
-    gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple)
+    gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple, lookup_expr='icontains', label="Gender")
     class Meta:
         model = Adult
         fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date']
