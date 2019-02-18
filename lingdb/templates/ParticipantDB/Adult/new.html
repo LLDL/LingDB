@@ -93,7 +93,7 @@
                             <thead>
                                 <tr class="noTopBorder centeredCell">
                                     <th>Language*</th>
-                                    <th>Dominance*</th>
+                                    <th>Proficiency*</th>
                                     <th>Starting Age*</th>
                                     <th>Ending Age</th>
                                     <th>Native*</th>
@@ -103,7 +103,7 @@
                                 {% for speaks in speaks_formset %}
                                     <tr>            
                                         <td>{{speaks.lang|as_crispy_field}}</td>  
-                                        <td>{{speaks.nth_most_dominant|as_crispy_field}}</td>  
+                                        <td>{{speaks.proficiency|as_crispy_field}}</td>  
                                         <td>{{speaks.age_learning_started|as_crispy_field}}</td>  
                                         <td>{{speaks.age_learning_ended|as_crispy_field}}</td>  
                                         <td class="centered-checkbox">{{speaks.is_native|as_crispy_field}}</td>  

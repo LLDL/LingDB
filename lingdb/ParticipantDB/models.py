@@ -253,12 +253,15 @@ class Speaks(models.Model):
     person = models.ForeignKey(Adult, related_name = 'speaker', on_delete = models.CASCADE, default = None)
     lang = models.ForeignKey(Language, related_name = 'languagespoken', on_delete = models.CASCADE, default = None)
     is_native = models.BooleanField('', default = False)
-    nth_most_dominant = models.SmallIntegerField(
-        validators=[
-            MinValueValidator(1), 
-            MaxValueValidator(20),
-        ],
+
+    PROFICIENCY_OPTIONS = (
+        ('Native', 'Native'),
+        ('Advanced', 'Advanced'),
+        ('Intermediate', 'Intermediate'),
+        ('Basic','Basic'),
     )
+    proficiency = models.CharField(max_length = 11, choices = PROFICIENCY_OPTIONS, default = 'Basic')
+
     age_learning_started = models.SmallIntegerField(
         validators=[
             MinValueValidator(0), 
@@ -275,8 +278,8 @@ class Speaks(models.Model):
         ],
     )
     def __str__(self):
-        return '%s\'s n=%s is %s' % (self.person, self.nth_most_dominant, self.lang) 
-
+        return '%s speaks %s at a %s level' % (self.person, self.lang, self.proficiency) 
+        
 class MusicalExperience(models.Model):
     class Meta:
         verbose_name_plural = "Musical Experiences"

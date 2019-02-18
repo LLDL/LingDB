@@ -125,7 +125,7 @@ class LanguageForm(ModelForm):
 class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
-        fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended')
+        fields = ('lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended')
         
 
 class ExposureForm(ModelForm):
@@ -151,7 +151,7 @@ ExposureFormSet = modelformset_factory(
 SpeaksInlineFormSet = inlineformset_factory(
     Adult,
     Speaks,
-    fields = ('lang', 'is_native', 'nth_most_dominant', 'age_learning_started', 'age_learning_ended'),
+    fields = ('lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended'),
     formset = SpeaksFormSet,
     extra = 5,
     max_num = 5,
@@ -161,7 +161,7 @@ SpeaksInlineFormSet = inlineformset_factory(
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'is_native': CheckboxInput(attrs={'class': 'centered-checkbox'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
-        'nth_most_dominant': TextInput(attrs={'min': 1, 'max': 10, 'type': 'number'}),
+        'proficiency': Select2Widget(),
         'lang': Select2Widget(),
     }
 )

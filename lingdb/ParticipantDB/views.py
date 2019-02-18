@@ -168,33 +168,27 @@ def update_adult(request, adult_id):
         speaks_forms = SpeaksInlineFormSet(request.POST, prefix = 'speaks_forms')
         musical_experience_forms = MusicalExperienceInlineFormSet(request.POST, prefix = 'musical_experiences')
         
-        if adult_form.is_valid(): 
-            print("adult forms valid")  
+        if adult_form.is_valid() and speaks_forms.is_valid() and musical_experience_forms.is_valid(): 
             adult = adult_form.save(commit=False)
             adult.save()
-            if speaks_forms.is_valid():
-                print("speaks forms valid")  
-                for speaks_form in speaks_forms:
-                    if speaks_form.cleaned_data.get('DELETE'):
-                        toDelete = speaks_form.cleaned_data.get('lang')
-                        Speaks.objects.filter(person=adult_inst, lang=toDelete).delete()
-                        # delete
-                    elif speaks_form.cleaned_data.get('lang'):
-                        inst = speaks_form.save(commit=False)
-                        inst.person = adult
-                        inst.save()
+            for speaks_form in speaks_forms:
+                if speaks_form.cleaned_data.get('DELETE'):
+                    toDelete = speaks_form.cleaned_data.get('lang')
+                    Speaks.objects.filter(person=adult_inst, lang=toDelete).delete()
+                    # delete
+                elif speaks_form.cleaned_data.get('lang'):
+                    inst = speaks_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()
                     
-            if musical_experience_forms.is_valid():  
-                
-                print("musical forms valid")  
-                for musical_experience_form in musical_experience_forms:
-                    if musical_experience_form.cleaned_data.get('DELETE'):
-                        toDelete = musical_experience_form.cleaned_data.get('experience')
-                        MusicalExperience.objects.filter(person=adult_inst, experience=toDelete).delete()
-                    elif musical_experience_form.cleaned_data.get('experience'):
-                        inst = musical_experience_form.save(commit=False)
-                        inst.person = adult
-                        inst.save()          
+            for musical_experience_form in musical_experience_forms:
+                if musical_experience_form.cleaned_data.get('DELETE'):
+                    toDelete = musical_experience_form.cleaned_data.get('experience')
+                    MusicalExperience.objects.filter(person=adult_inst, experience=toDelete).delete()
+                elif musical_experience_form.cleaned_data.get('experience'):
+                    inst = musical_experience_form.save(commit=False)
+                    inst.person = adult
+                    inst.save()          
             messages.success(request, 'Adult was successfully updated')
             return redirect(reverse('adult_detail', kwargs={'adult_id': adult_id}))
         
