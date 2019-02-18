@@ -1,9 +1,11 @@
 {% extends "ParticipantDB/nav.html" %}
-{% load static %}
 {% block extraHead %}
+    {% load static %}
     {{ adult_form.media.css }}
     {{ speaks_formset.media.css }}
     {{ musical_experience_formset.media.css}}
+    {{ addParentForm.media.css }}
+    <script src="{% static 'ParticipantDB/js/adult.js' %}"></script>
 {% endblock %}
 
 {% load crispy_forms_tags %}
@@ -26,6 +28,7 @@
                                 {{ adult_form.sfu_id|as_crispy_field}}
                             </div>
                             <div class="col-md-4">
+                            {{ addParentForm.management_form|crispy }}
                                 {{addParentForm.family|as_crispy_field}}
                                 {{addParentForm.isPrimary|as_crispy_field}}
                             </div>
@@ -162,4 +165,5 @@
     {{ adult_form.media.js }}
     {{ speaks_formset.media.js }}
     {{ musical_experience_formset.media.js}}
+    {{ addParentForm.media.js }}
 {% endblock %}

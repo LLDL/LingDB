@@ -75,8 +75,17 @@ class AddParentForm(ModelForm):
         model = IsParentIn
         fields = ('family', 'isPrimary')
         widgets = {
-            'family': Select2Widget(attrs={'required': ''})
+            'family': Select2Widget(attrs={})
         }
+    def clean_family(self):
+        family = self.cleaned_data['family']
+        print(family.id)
+        parents = IsParentIn.objects.filter(family=family)
+        print(len(parents))
+        if len(parents)>1:
+            print('too many parents')
+            raise ValidationError('This family already has two parents.')
+        return self.cleaned_data['family']
 
 
 # Adult Forms -------------------------------------------------------------------
@@ -100,8 +109,11 @@ class AdultForm(ModelForm):
     def clean_email(self):
         phone = self.cleaned_data['phone']
         email = self.cleaned_data['email']
+        # contact_pref = self.cleaned_data['contact_pref']
         if phone == None and email == None:
             raise ValidationError('Enter at least one of email or phone')
+        # if (contact_pref == 'phone' and phone == None) or (contact_pref == 'email' and email == None):
+        #     raise ValidationError('Enter the preferred contact method')
         else:
             return self.cleaned_data['email']
 
