@@ -100,8 +100,8 @@ class AdultForm(ModelForm):
     def clean_birth_date(self):
         birth_date = self.cleaned_data['birth_date']
         min_birth = datetime.date.today() - relativedelta.relativedelta(years=18)
-        if birth_date > min_birth:
-            raise ValidationError('Birthdate must be before {} to add this person as an adult'.format(min_birth))
+        if birth_date >= min_birth:
+            raise ValidationError('Birthdate must be before or on {} to add this person as an adult'.format(min_birth))
         else:
             return birth_date
 
@@ -119,6 +119,14 @@ class ChildForm(ModelForm):
             'birth_height': TextInput(attrs={'min': 0, 'max': 100, 'type': 'number'}),
             'gender': TextInput(attrs={'list':'auto-genders'}),
         }
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
+        max_birth = datetime.date.today() - relativedelta.relativedelta(years=18)
+        if birth_date <= max_birth:
+            raise ValidationError('Birthdate must be after or on {} to add this person as a child'.format(max_birth))
+        else:
+            return birth_date
 # Language Forms ----------------------------------------------------------------
 
 class LanguageForm(ModelForm):
@@ -142,9 +150,7 @@ class ExposureForm(ModelForm):
     class Meta:
         model = IsExposedTo
         fields = ('lang', 'percentage_exposure')
-    def clean(self):
-        raise ValidationError('test')
-   
+        
 
 SpeaksFormSet = modelformset_factory(
     Speaks,

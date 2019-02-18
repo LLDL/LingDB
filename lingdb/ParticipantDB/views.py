@@ -287,24 +287,22 @@ def update_child(request, child_id):
     if request.method == "POST":
         child_form = ChildForm(request.POST, instance = child_inst)
         exposure_forms = ExposureInlineFormSet(request.POST)
-        if request.POST.get('sumExposure', '') != '100':
+        if request.POST.get('sumExposure', '') != '0':
             messages.error(request, 'Ensure Language Exposure Percentages add to 100')
-        elif child_form.is_valid():
+        elif child_form.is_valid() and exposure_forms.is_valid():
             child = child_form.save(commit=False)
             child.save()
-
-            if exposure_forms.is_valid():
-                for exposure_form in exposure_forms:
-                    if exposure_form.cleaned_data.get('DELETE'):
-                        toDelete = exposure_form.cleaned_data.get('lang')
-                        IsExposedTo.objects.filter(child=child_inst, lang=toDelete).delete()
-                    elif exposure_form.cleaned_data.get('lang'):
-                        inst = exposure_form.save(commit=False)
-                        inst.child = child
-                        inst.save()
+            for exposure_form in exposure_forms:
+                if exposure_form.cleaned_data.get('DELETE'):
+                    toDelete = exposure_form.cleaned_data.get('lang')
+                    IsExposedTo.objects.filter(child=child_inst, lang=toDelete).delete()
+                elif exposure_form.cleaned_data.get('lang'):
+                    inst = exposure_form.save(commit=False)
+                    inst.child = child
+                    inst.save()
                         
-                messages.success(request, 'Child was successfully updated')
-                return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
+            messages.success(request, 'Child was successfully updated')
+            return redirect(reverse('child_detail', kwargs={'child_id': child.id}))
     else:
         child_form = ChildForm(instance = child_inst)
 
