@@ -75,16 +75,15 @@ class AddParentForm(ModelForm):
         model = IsParentIn
         fields = ('family', 'isPrimary')
         widgets = {
-            'family': Select2Widget(attrs={})
+            'family': Select2Widget(attrs={'required': False})
         }
     def clean_family(self):
         family = self.cleaned_data['family']
-        print(family.id)
-        parents = IsParentIn.objects.filter(family=family)
-        print(len(parents))
-        if len(parents)>1:
-            print('too many parents')
-            raise ValidationError('This family already has two parents.')
+        if family:
+            parents = IsParentIn.objects.filter(family=family)
+            if len(parents)>1:
+                print('too many parents')
+                raise ValidationError('This family already has two parents.')
         return self.cleaned_data['family']
 
 
