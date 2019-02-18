@@ -1,31 +1,63 @@
 {% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    {% load static %}
+    {{ adultFilter.media.css }}
+    <script src="{% static 'ParticipantDB/js/adult_query.js' %}"></script>
+{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
 
-    <div class="row">
-        <div class="col-md-8">
-            <h1>
-                Adult Query
-            </h1>
-        </div>
-        <div class="col-md-4">
-            <div class="btn-group float-right"> 
-                <a href="{% url 'add_adult' %}" class="btn btn-outline-primary" role="button">Add Adult</a>
-                {% comment %} <a href="{% url 'add_child' %}" class="btn btn-outline-primary" role="button">Add Child</a>
-                <a href="{% url 'add_family' %}" class="btn btn-outline-primary" role="button">Add Family</a> {% endcomment %}
+    
+    {% comment %} <div class="row"> {% endcomment %}
+    
+        <div class="col-md-12">
+            <ul class="nav nav-pills mb-4 justify-content-center">
+                <li class="nav-item"><a class="nav-link active" href="#">Adult Query</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Child Query</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Family Query</a></li>
+            </ul>
+            <div class="card mb-4">
+                
+                <div class="card-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Personal Info</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                {{ adultFilter.form.given_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 form-group">
+                                {{ adultFilter.form.preferred_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 form-group">
+                                {{ adultFilter.form.surname|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                {{ adultFilter.form.gender|as_crispy_field }}
+                                <datalist id="auto-genders">
+                                    <option value="male">
+                                    <option value="female">
+                                </datalist>
+                            </div>
+                        </div>
+                        {% comment %} {{adultFilter.form|crispy}} {% endcomment %}
+                        <button type="submit" class="btn btn-outline-primary" >Query</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    <form method="get">
-        {{adultFilter.form.as_p}}
-        <button type="submit">Query</button>
-    </form>
+    {% comment %} </div> {% endcomment %}
     <ul>
         {% for adult in adultFilter.qs %}
             <li><a href="{% url 'adult_detail' adult_id=adult.id %}"> {{adult}}</a></li>
         {% endfor %}
     </ul>
 
-    
+  
+    {{ adultFilter.media.js }}  
 {% endblock %}

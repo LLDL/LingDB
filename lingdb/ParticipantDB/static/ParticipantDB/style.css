@@ -30,7 +30,7 @@ table tbody tr td div .col-form-label{
 .whiteText{
     color: #ffffff;
 }
-.nav-link, .navbar-brand{
+.main-nav-link , .navbar-brand{
     color: white !important;
     font-size: 1.2em !important;
     font-weight: 600 !important;
