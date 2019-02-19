@@ -98,10 +98,13 @@ def add_musical_skill(request):
 
 # People -------------------------------------------------------------------------
 def adult_query(request):
-    adults = Adult.objects.all()
+    # speaks = Speaks.objects.all()
     # children = Child.objects.all()
     # families = Family.objects.all()
+    adults = Adult.objects.all()
     adultFilter = AdultFilter(request.GET, queryset=adults)
+    # speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
+    
     return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
 
 # Adult

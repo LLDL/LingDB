@@ -1,29 +1,47 @@
-from .models import Adult
+from .models import Adult, Speaks, Language
 import django_filters
 from django.forms import CheckboxSelectMultiple,DateInput
 from django_filters.widgets import RangeWidget
 
-GENDERS = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
-print(GENDERS)
+genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
 
 GENDER_CHOICES = ()
 
-for gender_CHOICE in GENDERS:
-    GENDER_CHOICES += (gender_CHOICE[0], gender_CHOICE[0].capitalize()),
-print(GENDER_CHOICES)
+
+for gender_choice in genders:
+    GENDER_CHOICES += (gender_choice[0], gender_choice[0].capitalize()),
+
+CONTACT_CHOICES = (
+    ('P', 'Phone'),
+    ('E', 'Email'),
+)
+
 class AdultFilter(django_filters.FilterSet):
     given_name = django_filters.CharFilter(lookup_expr='icontains', label="Given Name")
     surname = django_filters.CharFilter(lookup_expr='icontains', label="Surname")
     preferred_name = django_filters.CharFilter(lookup_expr='icontains', label="Preferred Name")
-    # birth_date = django_filters.DateFilter(label='Birth Date', lookup_expr="icontains", widget=DateInput(attrs={'type': 'date'}))
-    # birth_date__gt = django_filters.DateFilter(label="Birth Date After", lookup_type='gt', widget=DateInput(attrs={'type': 'date'}))
+    birth_date = django_filters.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
 
-    # start_birth_date = django_filters.DateFilter(field_name='birth_date', lookup_expr=('gt'),)
-    # end_birth_date = django_filters.DateFilter(field_name='birth_date', lookup_expr=('lt'),)
-    birth_date = django_filters.DateFromToRangeFilter(label="Birth Date Within", widget=RangeWidget(attrs={'type': 'date'}))
-    # birth_date__lt = django_filters.DateFilter(label="Birth Date Before",lookup_expr='birth_date__lt', widget=DateInput(attrs={'type': 'date'}))
-
-    gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple, lookup_expr='icontains', label="Gender")
+    contact_pref = django_filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
+    gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
     class Meta:
         model = Adult
-        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date']
+        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref']
+
+
+# languages = Language.objects.all()
+
+# LANG_CHOICES = ()
+
+
+# for lang_choice in languages:
+#     LANG_CHOICES += (lang_choice.language_name, lang_choice.language_name.capitalize()),
+
+
+
+
+# class SpeaksFilter(django_filters.FilterSet):
+#     lang = django_filters.MultipleChoiceFilter(choices=LANG_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Language")
+#     class Meta:
+#         model = Speaks
+#         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
