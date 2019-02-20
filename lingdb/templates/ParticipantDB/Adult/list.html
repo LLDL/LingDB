@@ -40,15 +40,29 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-2 form-group">
                             {% comment %} </div> {% endcomment %}
                                 {{ adultFilter.form.gender|as_crispy_field}}
+                            </div>
+                            <div class="col-md-2 form-group">
+                                {{ adultFilter.form.contact_pref|as_crispy_field}}
                             </div>
                             <div class="col-md-4 form-group removeDash">
                                 {{adultFilter.form.birth_date|as_crispy_field}}
                             </div>
-                            <div class="col-md-4 form-group">
-                                {{ adultFilter.form.contact_pref|as_crispy_field}}
+                            <div class="col-md-4 form-group removeDash">
+                                {{adultFilter.form.years_of_education|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 form-group">
+                                {{adultFilter.form.languages|as_crispy_field}}
+                            </div>
+                            <div class="col-md-2 form-group ">
+                                {{adultFilter.form.languages__2|as_crispy_field}}
+                            </div>
+                            <div class="col-md-8 form-group">
+                                {% comment %} {{adultFilter.form.years_of_education|as_crispy_field}} {% endcomment %}
                             </div>
                         </div>
                         <div class="row mt-4">

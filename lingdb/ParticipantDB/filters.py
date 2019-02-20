@@ -9,24 +9,31 @@ GENDER_CHOICES = ()
 
 
 for gender_choice in genders:
-    GENDER_CHOICES += (gender_choice[0], gender_choice[0].capitalize()),
+    GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
 
 CONTACT_CHOICES = (
     ('P', 'Phone'),
     ('E', 'Email'),
 )
 
+
+
 class AdultFilter(django_filters.FilterSet):
     given_name = django_filters.CharFilter(lookup_expr='icontains', label="Given Name")
     surname = django_filters.CharFilter(lookup_expr='icontains', label="Surname")
     preferred_name = django_filters.CharFilter(lookup_expr='icontains', label="Preferred Name")
     birth_date = django_filters.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
+    years_of_education = django_filters.RangeFilter(label="Years of Education Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+
 
     contact_pref = django_filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
     gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
+    languages = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="Speaks Any Of")
+    
+    languages__2 = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="And Speaks Any Of", field_name="languages")
     class Meta:
         model = Adult
-        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref']
+        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref', 'years_of_education','languages']
 
 
 # languages = Language.objects.all()

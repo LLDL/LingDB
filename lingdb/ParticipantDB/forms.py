@@ -141,7 +141,7 @@ class AdultForm(ModelForm):
             return birth_date
     
     def clean_gender(self):
-        return self.cleaned_data['gender'].lower()
+        return self.cleaned_data['gender'].capitalize()
 
 # Child Forms -------------------------------------------------------------------
 
@@ -167,7 +167,7 @@ class ChildForm(ModelForm):
             return birth_date
     
     def clean_gender(self):
-        return self.cleaned_data['gender'].lower()
+        return self.cleaned_data['gender'].capitalize()
 # Language Forms ----------------------------------------------------------------
 
 class LanguageForm(ModelForm):
