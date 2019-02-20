@@ -1,7 +1,9 @@
 from .models import Adult, Speaks, Language
 import django_filters
-from django.forms import CheckboxSelectMultiple,DateInput
+from django.forms import CheckboxSelectMultiple,DateInput, SelectMultiple
 from django_filters.widgets import RangeWidget
+
+from django_select2.forms import Select2Widget, Select2MultipleWidget
 
 genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
 
@@ -28,9 +30,9 @@ class AdultFilter(django_filters.FilterSet):
 
     contact_pref = django_filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
     gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
-    languages = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="Speaks Any Of")
+    languages = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="Speaks Any Of", widget=Select2MultipleWidget(attrs={}))
     
-    languages__2 = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="And Speaks Any Of", field_name="languages")
+    languages__2 = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="And Speaks Any Of", field_name="languages",widget=Select2MultipleWidget(attrs={}))
     class Meta:
         model = Adult
         fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref', 'years_of_education','languages']

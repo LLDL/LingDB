@@ -1,7 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
     {% load static %}
-    {{ adultFilter.media.css }}
+    {{ adultFilter.form.media.css }}
     <script src="{% static 'ParticipantDB/js/adult_query.js' %}"></script>
 {% endblock %}
 {% load crispy_forms_tags %}
@@ -55,10 +55,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 form-group">
+                            <div class="col-md-4">
                                 {{adultFilter.form.languages|as_crispy_field}}
                             </div>
-                            <div class="col-md-2 form-group ">
+                            <div class="col-md-4">
                                 {{adultFilter.form.languages__2|as_crispy_field}}
                             </div>
                             <div class="col-md-8 form-group">
@@ -144,5 +144,5 @@
         </div>
     </div>
   
-    {{ adultFilter.media.js }}  
+    {{ adultFilter.form.media.js }}  
 {% endblock %}

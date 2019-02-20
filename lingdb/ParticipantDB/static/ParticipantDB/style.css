@@ -15,9 +15,9 @@
 table tbody tr td div .col-form-label{
     display: none;
 }
-.selection span{
+/* .selection span{
     height: calc(2.25rem + 2px) !important;
-}
+} */
 .select2-selection, .select2-selection--single{
     border: 1px solid #ced4da !important;
     border-radius: .25rem !important;
