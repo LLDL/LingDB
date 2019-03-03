@@ -55,14 +55,29 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-12">
+                                <h4>Languages</h4>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-4">
                                 {{adultFilter.form.languages|as_crispy_field}}
                             </div>
                             <div class="col-md-4">
                                 {{adultFilter.form.languages__2|as_crispy_field}}
                             </div>
-                            <div class="col-md-8 form-group">
-                                {% comment %} {{adultFilter.form.years_of_education|as_crispy_field}} {% endcomment %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Musical Skills</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{adultFilter.form.musical_background|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4">
+                                {{adultFilter.form.musical_background__2|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row mt-4">

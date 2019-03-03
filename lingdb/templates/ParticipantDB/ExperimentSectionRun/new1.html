@@ -1,35 +1,55 @@
 {% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    {% load static %}
+    <script src="{% static 'ParticipantDB/js/experiment_section_select.js' %}"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" type="text/css" media="screen" rel="stylesheet">
+{% endblock %}
 {% block content %}
     <div>
-        <form id="chooseExperimentSection" action="." method="get" accept-charset="utf-8">
-            <!-- <input id="chooseAssessmentField" name="chooseAssessmentField" type="text"> -->
-            <table>
-                <tr>
-                    <td>
-                        Experiment Section
-                    </td>
-                    <td>
-                        <select id="chooseExperimentSectionField" name="chooseExperimentSectionField">
-                            {% for experiment_section in experiment_sections %}
-                            <option value="{{experiment_section.experiment.experiment_name}}~{{experiment_section.experiment_section_name}}">Experiment: {{experiment_section.experiment.experiment_name}} Section: {{experiment_section.experiment_section_name}}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Participant Type
-                    </td>
-                    <td>
-                        <select id="chooseParticipantField" name="chooseParticipantField">
-                            <option value="adult">Adult</option>
-                            <option value="child">Child</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-                <input type="submit" id="chooseExperimentSectionButton" value="Add Run">
+        <h1>New Experiment Section Run</h1>
+        <form id="chooseExperimentSection" action="." method="get" accept-charset="utf-8" class="noBottomMargin">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Choose Section and Participant Type
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="chooseExperimentSectionField">Experiment Section</label>
+                                        <div class="">
+                                            <select id="chooseExperimentSectionField" name="chooseExperimentSectionField" class="select2widget form-control django-select2">
+                                                {% for experiment_section in experiment_sections %}
+                                                <option value="{{experiment_section.experiment.experiment_name}}|{{experiment_section.experiment_section_name}}">Experiment: {{experiment_section.experiment.experiment_name}} Section: {{experiment_section.experiment_section_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+
+
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="chooseParticipantField">Participant Type</label>
+                                        <div class="">
+                                            <select id="chooseParticipantField" name="chooseParticipantField" class="select2widget form-control django-select2">
+                                                <option value="adult">Adult</option>
+                                                <option value="child">Child</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="btn btn-outline-primary" id="chooseExperimentSectionButton" value="Add Run">
         </form>
     </div>
-        
+    <script src="/static/django_select2/django_select2.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
 {% endblock  %}

@@ -1047,7 +1047,9 @@ def update_experiment_section_fields(request, experiment_name):
 @login_required
 def choose_experiment_section(request):
     if (request.method == 'GET') and (request.GET.get('chooseExperimentSectionField', None)) and (request.GET.get('chooseParticipantField', None)):
-        experiment_pair = request.GET.get('chooseExperimentSectionField', None).split("~")
+        experiment_pair = request.GET.get('chooseExperimentSectionField', None).split("|")
+        print(experiment_pair)
+        
         experiment_name = experiment_pair[0]
         experiment_section_name = experiment_pair[1]
         participant_type = request.GET.get('chooseParticipantField', None)
@@ -1064,7 +1066,7 @@ def choose_experiment_section(request):
         except Experiment.DoesNotExist:
             raise Http404("No Experiment '{}'".format(experiment_name))
     else:
-        experiment_sections_all = Experiment_Section.objects.all()
+        experiment_sections_all = Experiment_Section.objects.all().order_by('experiment', 'experiment_section_name')
         experiment_sections = get_user_authed_list(request, experiment_sections_all, "experiment")
         
     return render(request, 'ParticipantDB/ExperimentSectionRun/new1.html', {'experiment_sections': experiment_sections})
