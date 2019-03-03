@@ -98,14 +98,17 @@ def add_musical_skill(request):
 
 # People -------------------------------------------------------------------------
 def adult_query(request):
-    # speaks = Speaks.objects.all()
     # children = Child.objects.all()
     # families = Family.objects.all()
     adults = Adult.objects.all()
+    speaks = Speaks.objects.all()
     adultFilter = AdultFilter(request.GET, queryset=adults)
+    speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
     # speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
-    
-    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
+    speakers = speaksFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=False)
+    combined = adultFilter.qs.filter(id__in=speakers)
+
+    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'combined': combined})
 
 # Adult
 def add_adult(request):

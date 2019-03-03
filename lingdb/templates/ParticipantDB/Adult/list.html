@@ -61,11 +61,14 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4">
-                                {{adultFilter.form.languages|as_crispy_field}}
+                                {{speaksFilter.form.lang|as_crispy_field}}
+                            </div>
+                            {% comment %} <div class="col-md-2">
+                                {{adultFilter.form.languages__speaks__is_native}}
                             </div>
                             <div class="col-md-4">
                                 {{adultFilter.form.languages__2|as_crispy_field}}
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -112,7 +115,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for adult in adultFilter.qs %}
+                            {% for adult in combined %}
                                 <tr class="centeredCell">
                                     <td>
                                         {{adult.id}}

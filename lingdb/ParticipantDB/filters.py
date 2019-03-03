@@ -30,31 +30,18 @@ class AdultFilter(django_filters.FilterSet):
 
     contact_pref = django_filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
     gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
-    languages = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="Speaks Any Of", widget=Select2MultipleWidget(attrs={}))
-    
-    languages__2 = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), label="And Speaks Any Of", field_name="languages",widget=Select2MultipleWidget(attrs={}))
+    # languages__lang = django_filters.ModelMultipleChoiceFilter(field_name="languages__lang", queryset=Language.objects.all(), label="Speaks Any Of", widget=Select2MultipleWidget(attrs={}))
 
     musical_background = django_filters.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), label="Experienced In Any Of", widget=Select2MultipleWidget(attrs={}))
     
     musical_background__2 = django_filters.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), label="And Experienced In Any Of", field_name="musical_background",widget=Select2MultipleWidget(attrs={}))
     class Meta:
         model = Adult
-        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref', 'years_of_education','languages', 'musical_background']
+        exclude = []
+        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref', 'years_of_education',  'musical_background']
 
-
-# languages = Language.objects.all()
-
-# LANG_CHOICES = ()
-
-
-# for lang_choice in languages:
-#     LANG_CHOICES += (lang_choice.language_name, lang_choice.language_name.capitalize()),
-
-
-
-
-# class SpeaksFilter(django_filters.FilterSet):
-#     lang = django_filters.MultipleChoiceFilter(choices=LANG_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Language")
-#     class Meta:
-#         model = Speaks
-#         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
+class SpeaksFilter(django_filters.FilterSet):
+    lang = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Speaks Any Of")
+    class Meta:
+        model = Speaks
+        fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
