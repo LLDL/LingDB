@@ -2,6 +2,7 @@
 {% block extraHead %}
     {% load static %}
     {{ adultFilter.form.media.css }}
+    {{ speaksFilter.form.media.css }}
     <script src="{% static 'ParticipantDB/js/adult_query.js' %}"></script>
 {% endblock %}
 {% load crispy_forms_tags %}
@@ -60,15 +61,23 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 {{speaksFilter.form.lang|as_crispy_field}}
                             </div>
-                            {% comment %} <div class="col-md-2">
-                                {{adultFilter.form.languages__speaks__is_native}}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                {{speaksFilter.form.is_native|as_crispy_field}}
                             </div>
-                            <div class="col-md-4">
-                                {{adultFilter.form.languages__2|as_crispy_field}}
-                            </div> {% endcomment %}
+                            <div class="col-md-2">
+                                {{speaksFilter.form.proficiency|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4 form-group removeDash">
+                                {{speaksFilter.form.age_learning_started|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4 form-group removeDash">
+                                {{speaksFilter.form.age_learning_ended|as_crispy_field}}
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -86,6 +95,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-primary">Query</button>
+                                <a href="{% url 'adult_query' %}" class="btn btn-outline-primary" role="button">Clear</a>
                             </div>
                         </div>
                     </form>
@@ -163,4 +173,5 @@
     </div>
   
     {{ adultFilter.form.media.js }}  
+    {{ speaksFilter.form.media.js }}  
 {% endblock %}
