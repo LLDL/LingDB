@@ -102,14 +102,19 @@ def adult_query(request):
     # families = Family.objects.all()
     adults = Adult.objects.all()
     speaks = Speaks.objects.all()
+    # musical_experiences = MusicalExperience.objects.all()
     adultFilter = AdultFilter(request.GET, queryset=adults)
     speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
-    # speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
-    print(adultFilter.qs)
-    print(speaksFilter.qs)
-    speakers = speaksFilter.qs.order_by('person__id').values_list('person__id', flat=True)
-    print(speakers)
+    # musicalExperienceFilter = MusicalExperienceFilter(request.GET, queryset=musical_experiences)
+    speakers = speaksFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
+    # print(speakers)
+    # musicians = musicalExperienceFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
+    # if(speaksFilter.qs.count() > 0):
     combined = adultFilter.qs.filter(id__in=speakers)
+    # combined = adultFilter.qs
+    # if(musicalExperienceFilter.f.experience or musicalExperienceFilter.proficiency or musicalExperienceFilter.age_learning_ended or musicalExperienceFilter.age_learning_started):
+    # combined = combined.filter(id__in=musicians)
+    # return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
 
     return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'combined': combined})
 

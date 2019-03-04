@@ -42,7 +42,6 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2 form-group">
-                            {% comment %} </div> {% endcomment %}
                                 {{ adultFilter.form.gender|as_crispy_field}}
                             </div>
                             <div class="col-md-2 form-group">
@@ -56,42 +55,66 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <h4>Languages</h4>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Languages</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{speaksFilter.form.lang|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{speaksFilter.form.is_native|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{speaksFilter.form.proficiency|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-group removeDash">
+                                        {{speaksFilter.form.age_learning_started|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6 form-group removeDash">
+                                        {{speaksFilter.form.age_learning_ended|as_crispy_field}}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{speaksFilter.form.lang|as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                {{speaksFilter.form.is_native|as_crispy_field}}
-                            </div>
-                            <div class="col-md-2">
-                                {{speaksFilter.form.proficiency|as_crispy_field}}
-                            </div>
-                            <div class="col-md-4 form-group removeDash">
-                                {{speaksFilter.form.age_learning_started|as_crispy_field}}
-                            </div>
-                            <div class="col-md-4 form-group removeDash">
-                                {{speaksFilter.form.age_learning_ended|as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Musical Skills</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                {{adultFilter.form.musical_background|as_crispy_field}}
-                            </div>
-                            <div class="col-md-4">
-                                {{adultFilter.form.musical_background__2|as_crispy_field}}
-                            </div>
-                        </div>
+                            {% comment %} <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Musical Experiences</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{musicalExperienceFilter.form.no_musical|as_crispy_field}}
+                                        {{adultFilter.form.mbe|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{musicalExperienceFilter.form.experience|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{musicalExperienceFilter.form.proficiency|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-group removeDash">
+                                        {{musicalExperienceFilter.form.age_learning_started|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6 form-group removeDash">
+                                        {{musicalExperienceFilter.form.age_learning_ended|as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>{% endcomment %}
+                        </div> 
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-primary">Query</button>
