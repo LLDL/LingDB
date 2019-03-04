@@ -1,35 +1,54 @@
 {% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    {% load static %}
+    <script src="{% static 'ParticipantDB/js/invoke_select2.js' %}"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" type="text/css" media="screen" rel="stylesheet">
+{% endblock %}
 {% block content %}
     <div>
+        <h1>New Assessment Run</h1>
         <form id="chooseAssessment" action="." method="get" accept-charset="utf-8">
-            <!-- <input id="chooseAssessmentField" name="chooseAssessmentField" type="text"> -->
-            <table>
-                <tr>
-                    <td>
-                        Assessment
-                    </td>
-                    <td>
-                        <select id="chooseAssessmentField" name="chooseAssessmentField">
-                            {% for assessment in assessments %}
-                            <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Participant Type
-                    </td>
-                    <td>
-                        <select id="chooseParticipantField" name="chooseParticipantField">
-                            <option value="adult">Adult</option>
-                            <option value="child">Child</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-                <input type="submit" id="chooseAssessmentButton" value="Add Run">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Choose Assessment and Participant Type
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="chooseAssessmentField">Assessment</label>
+                                        <div class="">
+                                            <select id="chooseAssessmentField" name="chooseAssessmentField" class="select2widget form-control django-select2">
+                                                {% for assessment in assessments %}
+                                                    <option value="{{assessment.assessment_name}}">{{assessment.assessment_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="chooseParticipantField">Participant Type</label>
+                                        <div class="">
+                                            <select id="chooseParticipantField" name="chooseParticipantField" class="select2widget form-control django-select2">
+                                                <option value="adult">Adult</option>
+                                                <option value="child">Child</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" id="chooseAssessmentButton" value="Add Run">
         </form>
     </div>
         
+    <script src="/static/django_select2/django_select2.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
 {% endblock  %}
