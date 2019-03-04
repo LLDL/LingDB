@@ -1,68 +1,98 @@
 {% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>
-        Experiment Section Run # {{experiment_section_run.id}}
-    </h2>
-    <div>
-        <h3>Basic Info</h3>
-        <table>
-            <tr>
-                <td class="field_name">Experiment:</td>
-                <td class="field_value">{{experiment_section_run.experiment_section.experiment.experiment_name}}</td>
-            </tr> 
-            <tr>
-                <td class="field_name">Experiment Section:</td>
-                <td class="field_value">{{experiment_section_run.experiment_section.experiment_section_name}}</td>
-            </tr> 
-            <tr>
-                <td class="field_name">Participant:</td>
-                {% if experiment_section_run.participantAdult %}
-                    <td class="field_value">{{experiment_section_run.participantAdult}}</td>
-                {% else %}
-                    <td class="field_value">{{experiment_section_run.participantChild}}</td>
-                {% endif %}
-            </tr> 
-            <tr>
-                    <td class="field_name">Assessor:</td>
-                    <td class="field_value">{{experiment_section_run.assessor}}</td>
-            </tr>
-            <tr>
-                    <td class="field_name">Date:</td>
-                    <td class="field_value">{{experiment_section_run.date}}</td>
-            </tr>
-            <tr>
-                    <td class="field_name">Notes:</td>
-                    <td class="field_value">{{experiment_section_run.notes}}</td>
-            </tr>
-        </table>
-        {% if experiment_section_run_fields.count > 0 %}
-            <h3>Results</h3>
-            <table class="displayTable">
-                <thead>
-                    <tr>
-                        <th class="field_name">Field</th>
-                        <th class="field_name">Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for experiment_section_run_field in experiment_section_run_fields %}
-                        <tr>
-                            <td class="field_value">{{experiment_section_run_field.experiment_section_field.field_name}}</td>
-                            <td class="field_value">{{experiment_section_run_field.score}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-        
-        <h3>Manage</h3>
-
-
-            <a href="{% url 'delete_experiment_section_run' experiment_section_run_id=experiment_section_run.id %}">Delete {{experiment_section_run.id}}</a><br>
-            
-        {% comment %}
-            <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
-        {% endcomment %}
-
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                Experiment Section Run # {{ experiment_section_run.id }}
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+                <a href="{% url 'update_experiment_section_run' experiment_section_run_id=experiment_section_run.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                <a href="{% url 'delete_experiment_section_run' experiment_section_run_id=experiment_section_run.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Basic Info
+                </div>
+                <div>
+                    <div id="personalTable" class="table-responsive">
+                        <table class="table table-hover">
+                            <tr class="noTopBorder">
+                                <th>Experiment:</th>
+                                <td>{{experiment_section_run.experiment_section.experiment.experiment_name}}</td>
+                            </tr> 
+                            <tr>
+                                <th>Experiment Section:</th>
+                                <td>{{experiment_section_run.experiment_section.experiment_section_name}}</td>
+                            </tr> 
+                            <tr>
+                                <th>Participant:</th>
+                                {% if experiment_section_run.participantAdult %}
+                                    <td>
+                                    <a href="{% url 'adult_detail' adult_id=experiment_section_run.participantAdult.id %}" class="btn btn-outline-primary" role="button">
+                                    {{experiment_section_run.participantAdult}}</a></td>
+                                {% else %}
+                                    <td> <a href="{% url 'child_detail' child_id=experiment_section_run.participantChild.id %}" class="btn btn-outline-primary" role="button">{{experiment_section_run.participantChild}}</a></td>
+                                {% endif %}
+                            </tr> 
+                            <tr>
+                                <th>Assessor:</th>
+                                <td>{{experiment_section_run.assessor}}</td>
+                            </tr>
+                            <tr>
+                                <th>Date:</th>
+                                <td>{{experiment_section_run.date}}</td>
+                            </tr>
+                            <tr>
+                                <th>Notes:</th>
+                                <td>{{experiment_section_run.notes}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Results
+                </div>
+                {% if experiment_section_run_fields.count > 0 %}
+                    <div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for experiment_section_run_field in experiment_section_run_fields %}
+                                        <tr>
+                                            <td>{{experiment_section_run_field.experiment_section_field.field_name}}</td>
+                                            <td>{{experiment_section_run_field.score}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {%else%}
+                    <div class="card-body">
+                        No Results - fields not set
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

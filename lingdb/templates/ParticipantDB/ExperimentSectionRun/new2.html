@@ -12,51 +12,72 @@
     <h1>New Run of Section '{{experiment_section_name}}' of Experiment '{{experiment_name}}' ({{participant_type|title}})</h1>
     <form method="post">
         {% csrf_token %}
-        <h2>Basic Info</h2>
         <div class="row">
-            <div class="col-sm-4">
-                {% if participant_type == "adult" %}
-                    {{experiment_section_run_form.participantAdult|as_crispy_field}}
-                {% else %}
-                    {{experiment_section_run_form.participantChild|as_crispy_field}}
-                {% endif %}
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Basic Info
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {% if participant_type == "adult" %}
+                                    {{experiment_section_run_form.participantAdult|as_crispy_field}}
+                                {% else %}
+                                    {{experiment_section_run_form.participantChild|as_crispy_field}}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{experiment_section_run_form.date|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{experiment_section_run_form.assessor|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{experiment_section_run_form.notes|as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-4">
-                {{experiment_section_run_form.date|as_crispy_field}}
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Results
+                    </div>
+                    <div>
+                        {{ experiment_section_run_field_score_formset.management_form|crispy }}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Score</th>
+                                    </tr>
+                                    
+                                </thead>
+                                <tbody>
+                                    {% for field, score in field_score_pairs %}
+                                        <tr>            
+                                            <td>{{field.field_name}}</td>
+                                            <td>{{field.type}}</td>
+                                            <td>{{score.score|as_crispy_field}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-4">
-                {{experiment_section_run_form.assessor|as_crispy_field}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                {{experiment_section_run_form.notes|as_crispy_field}}
-            </div>
-        </div>
-
-        <h2>Results</h2>
-        {{ experiment_section_run_field_score_formset.management_form|crispy }}
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Type</th>
-                        <th>Score</th>
-                    </tr>
-                    
-                </thead>
-                <tbody>
-                    {% for field, score in field_score_pairs %}
-                        <tr>            
-                            <td>{{field.field_name}}</td>
-                            <td>{{field.type}}</td>
-                            <td>{{score.score|as_crispy_field}}</td>
-                        </tr>
-                    {% endfor %}
-                    
-                </tbody>
-            </table>
         </div>
         <div class="btn-group">
             <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
