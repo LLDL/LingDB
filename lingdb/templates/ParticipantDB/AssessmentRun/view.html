@@ -1,64 +1,90 @@
 {% extends "ParticipantDB/nav.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <h2>
-        Assessment Run # {{assessment_run.id}}
-    </h2>
-    <div>
-        <h3>Basic Info</h3>
-        <table>
-                <tr>
-                    <td class="field_name">Assessment:</td>
-                    <td class="field_value">{{assessment_run.assessment}}</td>
-                </tr> 
-                <tr>
-                    <td class="field_name">Participant:</td>
-                    {% if assessment_run.participantAdult %}
-                        <td class="field_value">{{assessment_run.participantAdult}}</td>
-                    {% else %}
-                        <td class="field_value">{{assessment_run.participantChild}}</td>
-                    {% endif %}
-                </tr> 
-                <tr>
-                        <td class="field_name">Assessor:</td>
-                        <td class="field_value">{{assessment_run.assessor}}</td>
-                </tr>
-                <tr>
-                        <td class="field_name">Date:</td>
-                        <td class="field_value">{{assessment_run.date}}</td>
-                </tr>
-                <tr>
-                        <td class="field_name">Notes:</td>
-                        <td class="field_value">{{assessment_run.notes}}</td>
-                </tr>
-        </table>
-        {% if assessment_run_fields.count > 0 %}
-            <h3>Results</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="field_name">Field</th>
-                        <th class="field_name">Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for assessment_run_field in assessment_run_fields %}
-                        <tr>
-                            <td class="field_value">{{assessment_run_field.assessment_field.field_name}}</td>
-                            <td class="field_value">{{assessment_run_field.score}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-        
-        <h3>Manage</h3>
-
-
-            <a href="{% url 'delete_assessment_run' assessment_run_id=assessment_run.id %}">Delete {{Assessment}}</a><br>
-            
-        {% comment %}
-            <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}">Update {{Assessment}}</a>
-        {% endcomment %}
-
+    <div class="row">
+        <div class="col-md-8">
+            <h1>
+                Assessment Run # {{assessment_run.id}}
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group float-right"> 
+                <a href="{% url 'update_assessment_run' assessment_run_id=assessment_run.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                <a href="{% url 'delete_assessment_run' assessment_run_id=assessment_run.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Basic Info
+                </div>
+                <div>
+                    <div id="personalTable" class="table-responsive">
+                        <table class="table table-hover">
+                            <tr class="noTopBorder">
+                                <th>Assessment:</th>
+                                <td>{{assessment_run.assessment}}</td>
+                            </tr> 
+                            <tr>
+                                <th>Participant:</th>
+                                {% if assessment_run.participantAdult %}
+                                    <td><a href="{% url 'adult_detail' adult_id=assessment_run.participantAdult.id %}" class="btn btn-outline-primary" role="button">{{assessment_run.participantAdult}}</a></td>
+                                {% else %}
+                                    <td><a href="{% url 'child_detail' child_id=assessment_run.participantChild.id %}" class="btn btn-outline-primary" role="button">{{assessment_run.participantChild}}</a></td>
+                                {% endif %}
+                            </tr> 
+                            <tr>
+                                    <th>Assessor:</th>
+                                    <td>{{assessment_run.assessor}}</td>
+                            </tr>
+                            <tr>
+                                    <th>Date:</th>
+                                    <td>{{assessment_run.date}}</td>
+                            </tr>
+                            <tr>
+                                    <th>Notes:</th>
+                                    <td>{{assessment_run.notes}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Results
+                </div>
+                {% if assessment_run_fields.count > 0 %}
+                    <div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for assessment_run_field in assessment_run_fields %}
+                                        <tr>
+                                            <td>{{assessment_run_field.assessment_field.field_name}}</td>
+                                            <td>{{assessment_run_field.score}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    <div>
+                {% else %}
+                    <div class="card-body">
+                        No Results - fields not set
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}
