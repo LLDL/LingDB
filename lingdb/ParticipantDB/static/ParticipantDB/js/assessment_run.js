@@ -4,19 +4,25 @@ $(function(){
         types.each(function(index){
             var type = this.textContent
             var curr = 'id_assessment_field_scores-'+ index +'-score';
-            var input = $('#' + curr).val();
-            console.log(type + " | " + curr + " | " + input)
+            var input = $('#' + curr)
+            var val = input.val();
+            console.log(type + " | " + curr + " | " + val)
             if(type == "Numeric"){
-                if(isNaN(parseInt(input,10))){
+                if(isNaN(parseInt(val,10))){
                     console.log(curr + " isNaN")
+                    input.get(0).setCustomValidity("Input a number")
+                }else{
+                    input.get(0).setCustomValidity('')
                 }
             }
             else if(type === "Pass/Fail"){
-                if(toLowerCase(input) != 'pass' || toLowerCase(input) != 'fail'){
+                if(val.toLowerCase() != 'pass' && val.toLowerCase() != 'fail'){
                     console.log(curr + " is not pass/fail")
+                    input.get(0).setCustomValidity("Input pass or fail")
+                }else{
+                    input.get(0).setCustomValidity('')
                 }
             }
-            
         });
 
 
@@ -45,7 +51,7 @@ $(function(){
         // }
     });
     
-    $("#result_table").change();
+    // $("#result_table").change();
 
     // var fam = $("#id_child-family");
 

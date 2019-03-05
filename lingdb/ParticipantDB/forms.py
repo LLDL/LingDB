@@ -430,7 +430,7 @@ class AssessmentRunFieldScoreForm(ModelForm):
     class Meta:
         model = Assessment_Run_Field_Score
         fields = ('score',)
-    
+
 
 AssessmentRunFieldScoreFormSet = modelformset_factory(
     Assessment_Run_Field_Score,
