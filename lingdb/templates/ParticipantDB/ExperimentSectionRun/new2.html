@@ -4,6 +4,7 @@
     {{ experiment_section_run_form.media.css }}
     {{ experiment_section_run_field_score_formset.media.css }}
     {{ field_score_pairs.media.css }}
+    <script src="{% static 'ParticipantDB/js/run_validation.js' %}"></script>
 {% endblock %}
 
 {% load crispy_forms_tags %}
@@ -54,7 +55,7 @@
                     <div>
                         {{ experiment_section_run_field_score_formset.management_form|crispy }}
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="result_table_exp">
                                 <thead>
                                     <tr>
                                         <th>Field</th>
@@ -67,7 +68,7 @@
                                     {% for field, score in field_score_pairs %}
                                         <tr>            
                                             <td>{{field.field_name}}</td>
-                                            <td>{{field.type}}</td>
+                                            <td class="type">{{field.type}}</td>
                                             <td>{{score.score|as_crispy_field}}</td>
                                         </tr>
                                     {% endfor %}

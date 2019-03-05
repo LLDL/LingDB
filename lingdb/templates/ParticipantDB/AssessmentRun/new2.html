@@ -5,7 +5,7 @@
     {{ assessment_run_form.media.css }}
     {{ assessment_run_field_score_formset.media.css }}
     {{ field_score_pairs.media.css }}
-    <script src="{% static 'ParticipantDB/js/assessment_run.js' %}"></script>
+    <script src="{% static 'ParticipantDB/js/run_validation.js' %}"></script>
 {% endblock %}
 
 {% load crispy_forms_tags %}
@@ -56,7 +56,7 @@
                     <div>
                         {{ assessment_run_field_score_formset.management_form|crispy}}
                         <div class="table-responsive">
-                            <table class="table table-hover" id="result_table">
+                            <table class="table table-hover" id="result_table_ass">
                                 <thead>
                                     <tr>
                                         <th>Field</th>
