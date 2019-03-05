@@ -128,7 +128,7 @@
                     {% endif %}
                     <div class="card-footer">
                         <form method="get" id="chooseExperimentSection" action="{% url 'choose_experiment_section' %}" accept-charset="utf-8" class="noBottomMargin">
-                        <input id="chooseExperimentSectionField" name="chooseExperimentSectionField" value = "{{experiment.experiment_name}}~{{experiment_section.experiment_section_name}}" type="hidden">
+                        <input id="chooseExperimentSectionField" name="chooseExperimentSectionField" value = "{{experiment.experiment_name}}|{{experiment_section.experiment_section_name}}" type="hidden">
                         <div class="input-group">
                             <select id="chooseParticipantField" name="chooseParticipantField" class="form-control">
                                 <option value="adult">New Adult Run</option>

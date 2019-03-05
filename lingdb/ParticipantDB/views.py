@@ -700,7 +700,7 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
         return HttpResponseForbidden()
     assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
         queryset = Assessment_Run_Field_Score.objects.none(),
-        prefix = 'assessment_field_scores'
+        prefix = 'assessment_field_scores',
     )
     assessment_fields = Assessment_Field.objects.filter(field_of=assessment)
     if request.method == "POST":
@@ -712,8 +712,6 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
         if assessment_run_form.is_valid() and assessment_run_field_score_forms.is_valid():
             assessment_run = assessment_run_form.save(commit=False)
             assessment_run.assessment = assessment
-            print(assessment_run.participantAdult)
-            print(assessment_run.participantChild)
             assessment_run.save()
             for field, form in zip(assessment_fields, assessment_run_field_score_forms):
                 inst = form.save(commit=False)
@@ -768,7 +766,8 @@ def update_assessment_run(request, assessment_run_id):
     # user_can_add = check_user_groups(request, assessment_run_inst, "assessment")
     # if not user_can_add:
     #     return HttpResponseForbidden()
-    # assessment_run_form = AssessmentRunForm(instance = assessment_run_inst)
+    # assessment_run_form = AssessmentRunForm(instance = assessment_run_inst, 
+    #     prefix = 'assessment_field_scores')
     # assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
     #     queryset = Assessment_Run_Field_Score.objects.filter(assessment_run = assessment_run_inst),
     #     prefix = 'assessment_run_field_scores'

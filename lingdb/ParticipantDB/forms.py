@@ -22,6 +22,15 @@ class ParentForm(ModelForm):
     class Meta:
         model = IsParentIn
         fields = ('parent',)
+    # def clean(self):
+    #     flag = True
+    #     for form in self.forms:
+    #         if form.cleaned_data['isPrimary']:
+    #             flag = False
+    #     if flag:
+    #         raise ValidationError('Ensure a primary parent is selected')
+    #     else:
+    #         return self
         
 
 ParentFormSet = modelformset_factory(
@@ -34,6 +43,7 @@ ParentInlineFormSet = inlineformset_factory(
     Adult,
     IsParentIn,
     formset = ParentFormSet,
+    form = ParentForm,
     fields = ('parent', 'isPrimary'),
     extra = 1,
     max_num = 2,
@@ -420,7 +430,8 @@ class AssessmentRunFieldScoreForm(ModelForm):
     class Meta:
         model = Assessment_Run_Field_Score
         fields = ('score',)
-        
+    
+
 AssessmentRunFieldScoreFormSet = modelformset_factory(
     Assessment_Run_Field_Score,
     form = AssessmentRunFieldScoreForm,
@@ -430,8 +441,10 @@ AssessmentRunFieldScoreInlineFormSet = inlineformset_factory(
     Assessment_Run,
     Assessment_Run_Field_Score,
     fields = ('score',),
-    formset = AssessmentRunFieldScoreFormSet,
+    form = AssessmentRunFieldScoreForm,
+    # formset = AssessmentRunFieldScoreFormSet,
     extra = 5,
+
 )
 
 # Experiment Section Run Forms
