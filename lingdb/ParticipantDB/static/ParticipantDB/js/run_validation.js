@@ -16,7 +16,6 @@ function validate(){
         console.log(type + " | " + curr + " | " + val)
         if(type == "Numeric"){
             if(isNaN(parseInt(val,10))){
-                console.log(curr + " isNaN")
                 input.get(0).setCustomValidity("Input a numeric score")
             }else{
                 input.get(0).setCustomValidity('')
@@ -24,13 +23,18 @@ function validate(){
         }
         else if(type === "Pass/Fail"){
             if(val.toLowerCase() != 'pass' && val.toLowerCase() != 'fail'){
-                console.log(curr + " is not pass/fail")
                 input.get(0).setCustomValidity("Enter 'pass' or 'fail'")
             }else{
                 input.get(0).setCustomValidity('')
             }
+        }else{
+            if(val == '' ){
+                input.get(0).setCustomValidity("Enter a value")
+            }else{
+                input.get(0).setCustomValidity('')
+
+            }
         }
-    
     });
 }
 
