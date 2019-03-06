@@ -99,7 +99,7 @@ def add_musical_skill(request):
 # People -------------------------------------------------------------------------
 def adult_query(request):
     adults = Adult.objects.all()
-    speaks = Speaks.objects.all()
+    # speaks = Speaks.objects.all()
     adultFilter = AdultFilter(request.GET, queryset=adults)
     # speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
     # speakers = speaksFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django_select2',
     'crispy_forms',
     'django_filters',
-    # 'rest_framework_filters',
+    'rest_framework_filters',
     # 'watson',
 ]
 
@@ -126,3 +126,10 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_filters.backends.RestFrameworkFilterBackend',
+    ),
+}

@@ -1,15 +1,18 @@
 from .models import *
-import django_filters
 from django.forms import CheckboxSelectMultiple,DateInput, SelectMultiple
-from django_filters.widgets import RangeWidget, BooleanWidget
+
+import rest_framework_filters as rff
+from django_filters.rest_framework import FilterSet, filters
+
+import django_filters as df
+from django_filters.widgets import RangeWidget
+from django_filters import DateFromToRangeFilter
 
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
+
 genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
-
 GENDER_CHOICES = ()
-
-
 for gender_choice in genders:
     GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
 
@@ -27,41 +30,36 @@ PROFICIENCY_L_CHOICES = (
 )
 
 
-class AdultFilter(django_filters.FilterSet):
-    given_name = django_filters.CharFilter(lookup_expr='icontains', label="Given Name")
-    surname = django_filters.CharFilter(lookup_expr='icontains', label="Surname")
-    preferred_name = django_filters.CharFilter(lookup_expr='icontains', label="Preferred Name")
-    birth_date = django_filters.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
-    years_of_education = django_filters.RangeFilter(label="Years of Education Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+class AdultFilter(FilterSet):
+    # gname = filters.CharFilter(field_name='given_name')
+    # surname = filters.CharFilter(lookup_expr='icontains', label="Surname")
+    # preferred_name = filters.CharFilter(lookup_expr='icontains', label="Preferred Name")
 
+    # birth_date = df.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
+    # years_of_education = df.RangeFilter(label="Years of Education Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 
-    contact_pref = django_filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
-    gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
+    # contact_pref = df.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
+    # gender = df.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
 
-
-
-
-    spokenLanguage = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),lookup_expr='icontains', field_name="languages__languagespoken__lang__language_name", label="Speaks Any Of")
-
-    
-    languages__languagespoken__proficiency = django_filters.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='iexact', field_name="languages__languagespoken__proficiency")
+    # spokenLanguage = df.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),lookup_expr='icontains', field_name="languages__languagespoken__lang__language_name", label="Speaks Any Of") 
+    # languages__languagespoken__proficiency = df.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='iexact', field_name="languages__languagespoken__proficiency")
 
     class Meta:
         model = Adult
         # exclude = ['id',]
-        fields = ['gender', 'birth_date', 'contact_pref', 'years_of_education', 'languages']
+        fields = ['given_name', 'surname', 'preferred_name', 'gender', 'birth_date', 'contact_pref', 'years_of_education', 'languages']
 
 
 
-# class SpeaksFilter(django_filters.FilterSet):
-#     lang = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Speaks Any Of", field_name="lang")
+# class SpeaksFilter(FilterSet):
+#     lang = df.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Speaks Any Of", field_name="lang")
 
-#     is_native = django_filters.BooleanFilter(label="Native")
+#     is_native = df.BooleanFilter(label="Native")
 
     
 #     
-#     age_learning_started = django_filters.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
-#     age_learning_ended = django_filters.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+#     age_learning_started = df.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+#     age_learning_ended = df.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 #     class Meta:
 #         model = Speaks
 #         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
@@ -74,15 +72,15 @@ class AdultFilter(django_filters.FilterSet):
 #     ('Basic','Basic'),
 # )
 
-# class MusicalExperienceFilter(django_filters.FilterSet):
-    # experience = django_filters.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Skilled In Any Of", field_name="experience")
+# class MusicalExperienceFilter(FilterSet):
+    # experience = df.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Skilled In Any Of", field_name="experience")
 
     
-    # proficiency = django_filters.MultipleChoiceFilter(choices=PROFICIENCY_M_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
-    # age_learning_started = django_filters.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
-    # age_learning_ended = django_filters.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    # proficiency = df.MultipleChoiceFilter(choices=PROFICIENCY_M_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
+    # age_learning_started = df.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    # age_learning_ended = df.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 
-    # no_musical = django_filters.BooleanFilter(field_name='experience', lookup_expr='isnull', label="People without musical skills listed")
+    # no_musical = df.BooleanFilter(field_name='experience', lookup_expr='isnull', label="People without musical skills listed")
     # class Meta:
     #     model = MusicalExperience
     #     fields = ['experience']

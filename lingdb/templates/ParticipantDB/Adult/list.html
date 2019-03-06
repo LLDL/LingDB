@@ -31,16 +31,16 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-md-4 form-group">
-                                {{ adultFilter.form.given_name|as_crispy_field }}
+                                {{ adultFilter.form.as_p }}
                             </div>
                             <div class="col-md-4 form-group">
-                                {{ adultFilter.form.preferred_name|as_crispy_field }}
+                                {% comment %} {{ adultFilter.form.preferred_name }} {% endcomment %}
                             </div>
                             <div class="col-md-4 form-group">
-                                {{ adultFilter.form.surname|as_crispy_field }}
+                                {% comment %} {{ adultFilter.form.surname }} {% endcomment %}
                             </div>
                         </div>
-                        <div class="row">
+                        {% comment %} <div class="row">
                             <div class="col-md-2 form-group">
                                 {{ adultFilter.form.gender|as_crispy_field}}
                             </div>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-6">
                                 {{adultFilter.form.languages__languagespoken__proficiency|as_crispy_field}}
-                            </div>
+                            </div> {% endcomment %}
                         {% comment %}         <div class="row">
                                     
                                     <div class="col-md-6">
@@ -111,7 +111,7 @@
                                         {{musicalExperienceFilter.form.age_learning_ended|as_crispy_field}}
                                     </div>
                                 </div>{% endcomment %}
-                        </div>
+                        {% comment %} </div> {% endcomment %}
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-primary">Query</button>
