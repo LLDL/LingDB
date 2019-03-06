@@ -31,26 +31,26 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-md-4 form-group">
-                                {{ adultFilter.form.as_p }}
+                                {{ adultFilter.form.given_name|as_crispy_field }}
                             </div>
                             <div class="col-md-4 form-group">
-                                {% comment %} {{ adultFilter.form.preferred_name }} {% endcomment %}
+                                {{ adultFilter.form.preferred_name|as_crispy_field }}
                             </div>
                             <div class="col-md-4 form-group">
-                                {% comment %} {{ adultFilter.form.surname }} {% endcomment %}
+                                {{ adultFilter.form.surname|as_crispy_field }}
                             </div>
                         </div>
-                        {% comment %} <div class="row">
-                            <div class="col-md-2 form-group">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
                                 {{ adultFilter.form.gender|as_crispy_field}}
                             </div>
-                            <div class="col-md-2 form-group">
+                            <div class="col-md-3 form-group">
                                 {{ adultFilter.form.contact_pref|as_crispy_field}}
                             </div>
-                            <div class="col-md-4 form-group removeDash">
+                            <div class="col-md-3 form-group removeDash">
                                 {{adultFilter.form.birth_date|as_crispy_field}}
                             </div>
-                            <div class="col-md-4 form-group removeDash">
+                            <div class="col-md-3 form-group removeDash">
                                 {{adultFilter.form.years_of_education|as_crispy_field}}
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                                 <h4>Languages</h4>
                             </div>
                         </div>
-                        <div class="row">
+                        {% comment %} <div class="row">
                             <div class="col-md-6">
                                 {{adultFilter.form.spokenLanguage|as_crispy_field}}
                             </div>

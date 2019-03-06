@@ -31,15 +31,15 @@ PROFICIENCY_L_CHOICES = (
 
 
 class AdultFilter(FilterSet):
-    # gname = filters.CharFilter(field_name='given_name')
-    # surname = filters.CharFilter(lookup_expr='icontains', label="Surname")
-    # preferred_name = filters.CharFilter(lookup_expr='icontains', label="Preferred Name")
+    given_name = filters.CharFilter(field_name='given_name', lookup_expr="icontains", label="Given Name")
+    surname = filters.CharFilter(field_name='surname', lookup_expr='icontains', label="Surname")
+    preferred_name = filters.CharFilter(field_name='preferred_name',lookup_expr='icontains', label="Preferred Name")
 
-    # birth_date = df.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
-    # years_of_education = df.RangeFilter(label="Years of Education Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    birth_date = df.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
+    years_of_education = df.RangeFilter(label="Years of Education Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 
-    # contact_pref = df.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Contact Preference")
-    # gender = df.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
+    contact_pref = df.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Contact Preference")
+    gender = df.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
     # spokenLanguage = df.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),lookup_expr='icontains', field_name="languages__languagespoken__lang__language_name", label="Speaks Any Of") 
     # languages__languagespoken__proficiency = df.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='iexact', field_name="languages__languagespoken__proficiency")
@@ -47,7 +47,7 @@ class AdultFilter(FilterSet):
     class Meta:
         model = Adult
         # exclude = ['id',]
-        fields = ['given_name', 'surname', 'preferred_name', 'gender', 'birth_date', 'contact_pref', 'years_of_education', 'languages']
+        fields = ['languages']
 
 
 
