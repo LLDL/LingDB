@@ -101,7 +101,7 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="{% url 'assessment_run_detail' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                    <a href="{% url 'update_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                                    {% comment %} <a href="{% url 'update_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a> {% endcomment %}
                                                     <a href="{% url 'delete_assessment_run' assessment_run_id=run.id %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
                                                 </div>
                                             </td>

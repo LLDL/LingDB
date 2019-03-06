@@ -271,7 +271,7 @@
                                             <td>
                                                 <div class="btn-group">  
                                                     <a href="{% url 'assessment_run_detail' assessment_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                    <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a>
+                                                    {% comment %} <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a> {% endcomment %}
                                                     <a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a>  
                                                 </div>
                                             </td>
@@ -351,7 +351,7 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="{% url 'experiment_section_run_detail' experiment_section_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a> 
-                                                    <a href="{% url 'update_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a>
+                                                    {% comment %} <a href="{% url 'update_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a> {% endcomment %}
                                                     <a href="{% url 'delete_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a>  
                                                 </div>        
                                             </td>  
