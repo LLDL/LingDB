@@ -33,38 +33,42 @@ class AdultFilter(django_filters.FilterSet):
     gender = django_filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=CheckboxSelectMultiple(), lookup_expr='icontains', label="Gender")
 
 
+
+
+    spokenLanguage = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),lookup_expr='icontains', field_name="languages__languagespoken__lang__language_name", label="Speaks Any Of")
+
     class Meta:
         model = Adult
-        # exclude = []
-        fields = ['given_name', 'surname', 'preferred_name', 'sfu_id', 'gender', 'birth_date', 'contact_pref', 'years_of_education']
+        # exclude = ['id',]
+        fields = ['gender', 'birth_date', 'contact_pref', 'years_of_education', 'languages']
 
-PROFICIENCY_L_CHOICES = (
-    ('Native', 'Native'),
-    ('Advanced', 'Advanced'),
-    ('Intermediate', 'Intermediate'),
-    ('Basic','Basic'),
-)
+# PROFICIENCY_L_CHOICES = (
+#     ('Native', 'Native'),
+#     ('Advanced', 'Advanced'),
+#     ('Intermediate', 'Intermediate'),
+#     ('Basic','Basic'),
+# )
 
-class SpeaksFilter(django_filters.FilterSet):
-    lang = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Speaks Any Of", field_name="lang")
+# class SpeaksFilter(django_filters.FilterSet):
+#     lang = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Speaks Any Of", field_name="lang")
 
-    is_native = django_filters.BooleanFilter(label="Native")
+#     is_native = django_filters.BooleanFilter(label="Native")
 
     
-    proficiency = django_filters.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
-    age_learning_started = django_filters.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
-    age_learning_ended = django_filters.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
-    class Meta:
-        model = Speaks
-        fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
+#     proficiency = django_filters.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
+#     age_learning_started = django_filters.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+#     age_learning_ended = django_filters.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+#     class Meta:
+#         model = Speaks
+#         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
 
 
-PROFICIENCY_M_CHOICES = (
-    ('Professional', 'Professional'),
-    ('Advanced', 'Advanced'),
-    ('Intermediate', 'Intermediate'),
-    ('Basic','Basic'),
-)
+# PROFICIENCY_M_CHOICES = (
+#     ('Professional', 'Professional'),
+#     ('Advanced', 'Advanced'),
+#     ('Intermediate', 'Intermediate'),
+#     ('Basic','Basic'),
+# )
 
 # class MusicalExperienceFilter(django_filters.FilterSet):
     # experience = django_filters.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Skilled In Any Of", field_name="experience")

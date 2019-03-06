@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from django.contrib.auth.models import Group, User
+from .models import *
+
 
 class Language(models.Model):
     class Meta:
@@ -83,7 +85,7 @@ class Adult(Person):
     )
     pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, verbose_name = "Preferred Phone Time", blank = True, null = True, default="ANY")
     
-    languages = models.ManyToManyField('Language', blank = True, through='Speaks')
+    languages = models.ManyToManyField('Language', blank = True, through='Speaks', related_name = 'languages')
     musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')
 
 
