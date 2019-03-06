@@ -85,7 +85,7 @@ class Adult(Person):
     )
     pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, verbose_name = "Preferred Phone Time", blank = True, null = True, default="ANY")
     
-    languages = models.ManyToManyField('Language', blank = True, through='Speaks', related_name = 'languages')
+    languages = models.ManyToManyField('Language', blank = True, through='Speaks', related_name = 'speaks')
     musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')
 
 

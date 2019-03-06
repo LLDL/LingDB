@@ -1,7 +1,7 @@
 from .models import *
 import django_filters
 from django.forms import CheckboxSelectMultiple,DateInput, SelectMultiple
-from django_filters.widgets import RangeWidget
+from django_filters.widgets import RangeWidget, BooleanWidget
 
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
@@ -19,6 +19,12 @@ CONTACT_CHOICES = (
     ('E', 'Email'),
 )
 
+PROFICIENCY_L_CHOICES = (
+    ('Native', 'Native'),
+    ('Advanced', 'Advanced'),
+    ('Intermediate', 'Intermediate'),
+    ('Basic','Basic'),
+)
 
 
 class AdultFilter(django_filters.FilterSet):
@@ -37,17 +43,15 @@ class AdultFilter(django_filters.FilterSet):
 
     spokenLanguage = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),lookup_expr='icontains', field_name="languages__languagespoken__lang__language_name", label="Speaks Any Of")
 
+    
+    languages__languagespoken__proficiency = django_filters.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='iexact', field_name="languages__languagespoken__proficiency")
+
     class Meta:
         model = Adult
         # exclude = ['id',]
         fields = ['gender', 'birth_date', 'contact_pref', 'years_of_education', 'languages']
 
-# PROFICIENCY_L_CHOICES = (
-#     ('Native', 'Native'),
-#     ('Advanced', 'Advanced'),
-#     ('Intermediate', 'Intermediate'),
-#     ('Basic','Basic'),
-# )
+
 
 # class SpeaksFilter(django_filters.FilterSet):
 #     lang = django_filters.ModelMultipleChoiceFilter(queryset=Language.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Speaks Any Of", field_name="lang")
@@ -55,7 +59,7 @@ class AdultFilter(django_filters.FilterSet):
 #     is_native = django_filters.BooleanFilter(label="Native")
 
     
-#     proficiency = django_filters.MultipleChoiceFilter(choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
+#     
 #     age_learning_started = django_filters.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 #     age_learning_ended = django_filters.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 #     class Meta:
