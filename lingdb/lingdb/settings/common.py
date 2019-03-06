@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'ParticipantDB.apps.ParticipantDBConfig',
     'django_select2',
     'crispy_forms',
+    'rest_framework',
     'django_filters',
-    'rest_framework_filters',
+    # 'rest_framework_filters',
     # 'watson',
 ]
 
