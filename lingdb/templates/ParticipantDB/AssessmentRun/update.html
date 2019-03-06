@@ -20,7 +20,7 @@
             <div class="col-sm-4">
                 {% if participant_type == "adult" %}
                     {{assessment_run_form.participantAdult|as_crispy_field}}
-                {% else %}
+                {% elif participant_type == "child" %}
                     {{assessment_run_form.participantChild|as_crispy_field}}
                 {% endif %}
             </div>

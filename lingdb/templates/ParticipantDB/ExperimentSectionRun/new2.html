@@ -13,6 +13,11 @@
     <h1>New Run of Section '{{experiment_section_name}}' of Experiment '{{experiment_name}}' ({{participant_type|title}})</h1>
     <form method="post">
         {% csrf_token %}
+        {% if experiment_section_run_form.non_field_errors %}
+            {% for err in experiment_section_run_form.non_field_errors %}
+                {{err}}
+            {% endfor %}
+        {% endif%}
         <div class="row">
             <div class="col-xl-6">
                 <div class="card mb-4">
@@ -24,7 +29,7 @@
                             <div class="col-sm-12">
                                 {% if participant_type == "adult" %}
                                     {{experiment_section_run_form.participantAdult|as_crispy_field}}
-                                {% else %}
+                                {% elif participant_type == "child"  %}
                                     {{experiment_section_run_form.participantChild|as_crispy_field}}
                                 {% endif %}
                             </div>

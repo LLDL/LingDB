@@ -32,7 +32,7 @@
                                 <th>Participant:</th>
                                 {% if assessment_run.participantAdult %}
                                     <td><a href="{% url 'adult_detail' adult_id=assessment_run.participantAdult.id %}" class="btn btn-outline-primary" role="button">{{assessment_run.participantAdult}}</a></td>
-                                {% else %}
+                                {% elif assessment_run.participantChild %}
                                     <td><a href="{% url 'child_detail' child_id=assessment_run.participantChild.id %}" class="btn btn-outline-primary" role="button">{{assessment_run.participantChild}}</a></td>
                                 {% endif %}
                             </tr> 

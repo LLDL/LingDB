@@ -38,7 +38,7 @@
                                     <td>
                                     <a href="{% url 'adult_detail' adult_id=experiment_section_run.participantAdult.id %}" class="btn btn-outline-primary" role="button">
                                     {{experiment_section_run.participantAdult}}</a></td>
-                                {% else %}
+                                {% elif  experiment_section_run.participantChild %}
                                     <td> <a href="{% url 'child_detail' child_id=experiment_section_run.participantChild.id %}" class="btn btn-outline-primary" role="button">{{experiment_section_run.participantChild}}</a></td>
                                 {% endif %}
                             </tr> 

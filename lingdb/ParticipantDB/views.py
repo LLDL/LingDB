@@ -704,7 +704,10 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
     )
     assessment_fields = Assessment_Field.objects.filter(field_of=assessment)
     if request.method == "POST":
-        assessment_run_form = AssessmentRunForm(request.POST)
+        if participant_type == "adult":
+            assessment_run_form = AdultAssessmentRunForm(request.POST, prefix = 'assessment_run_form')
+        else:
+            assessment_run_form = ChildAssessmentRunForm(request.POST, prefix = 'assessment_run_form')
         assessment_run_field_score_forms = AssessmentRunFieldScoreInlineFormSet(
             request.POST,
             prefix = 'assessment_field_scores'
@@ -728,15 +731,17 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
             
     
     else:
-        if participant and participant_type == "adult":
+        if participant_type == "adult" and participant:
             adult = Adult.objects.get(pk=participant)
-            assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment, 'participantAdult': adult})
-        elif participant:
+            assessment_run_form = AdultAssessmentRunForm(initial = {'assessment': assessment, 'participantAdult': adult}, prefix = 'assessment_run_form')
+        elif participant_type == "adult":
+            assessment_run_form = AdultAssessmentRunForm(initial = {'assessment': assessment}, prefix = 'assessment_run_form')
+        elif participant_type == "child" and participant:
             child = Child.objects.get(pk=participant)
-            assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment, 'participantChild': child})
+            assessment_run_form = ChildAssessmentRunForm(initial = {'assessment': assessment, 'participantChild': child}, prefix = 'assessment_run_form')
         else:
-            assessment_run_form = AssessmentRunForm(initial = {'assessment': assessment})
-    
+            assessment_run_form = ChildAssessmentRunForm(initial = {'assessment': assessment}, prefix = 'assessment_run_form')
+
     field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
     return render(request, "ParticipantDB/AssessmentRun/new2.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
 

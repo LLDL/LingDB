@@ -413,18 +413,38 @@ class ChooseAssessmentForm(ModelForm):
         model = Assessment
         fields = ('assessment_name',)
 
-class AssessmentRunForm(ModelForm):
+class AdultAssessmentRunForm(ModelForm):
     class Meta: 
         model = Assessment_Run
-        fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor',)
-        # fields = ('participantAdult', 'participantChild', 'date', 'notes',)
+        fields = ('participantAdult', 'date', 'notes', 'assessor',)
 
         widgets = {
             'date': DateInput(attrs={'type': 'date'}),
             'participantAdult': Select2Widget(),
+            'assessor': Select2Widget(),
+        }
+    def clean_participantAdult(self):
+        adult = self.cleaned_data['participantAdult']
+        if adult == None:
+            raise ValidationError("Specify a participant")
+        return adult
+
+class ChildAssessmentRunForm(ModelForm):
+    class Meta: 
+        model = Assessment_Run
+        fields = ('participantChild', 'date', 'notes', 'assessor',)
+
+        widgets = {
+            'date': DateInput(attrs={'type': 'date'}),
             'participantChild': Select2Widget(),
             'assessor': Select2Widget(),
         }
+    
+    def clean_participantChild(self):
+        child = self.cleaned_data['participantChild']
+        if child == None:
+            raise ValidationError("Specify a participant")
+        return child
     
 class AssessmentRunFieldScoreForm(ModelForm):
     class Meta:
@@ -442,9 +462,16 @@ AssessmentRunFieldScoreInlineFormSet = inlineformset_factory(
     Assessment_Run_Field_Score,
     fields = ('score',),
     form = AssessmentRunFieldScoreForm,
-    # formset = AssessmentRunFieldScoreFormSet,
+    formset = AssessmentRunFieldScoreFormSet,
     extra = 5,
-
+)
+AssessmentRunFieldScoreInlineFormSet = inlineformset_factory(
+    Assessment_Run,
+    Assessment_Run_Field_Score,
+    fields = ('score',),
+    form = AssessmentRunFieldScoreForm,
+    formset = AssessmentRunFieldScoreFormSet,
+    extra = 5,
 )
 
 # Experiment Section Run Forms
