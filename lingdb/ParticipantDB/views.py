@@ -1099,7 +1099,11 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
     )
     experiment_section_fields = Experiment_Section_Field.objects.filter(field_of=experiment_section)
     if request.method == "POST":
-        experiment_section_run_form = ExperimentSectionRunForm(request.POST)
+        
+        if participant_type == "adult":
+            experiment_section_run_form = AdultExperimentSectionRunForm(request.POST, prefix = 'experiment_run_form')
+        else:
+            experiment_section_run_form = ChildExperimentSectionRunForm(request.POST, prefix = 'experiment_run_form')
         experiment_section_run_field_score_forms = ExperimentSectionRunFieldScoreInlineFormSet(
             request.POST,
             prefix = 'experiment_section_field_scores'
@@ -1124,14 +1128,17 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
             
     
     else:
-        if participant and participant_type == "adult":
+        if participant_type == "adult" and participant:
             adult = Adult.objects.get(pk=participant)
-            experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section, 'participantAdult': adult})
-        elif participant:
+            experiment_section_run_form = AdultExperimentSectionRunForm(initial = {'experiment_section': experiment_section, 'participantAdult': adult}, prefix = 'experiment_run_form')
+        elif participant_type == "adult":
+            experiment_section_run_form = AdultExperimentSectionRunForm(initial = {'experiment_section': experiment_section}, prefix = 'experiment_run_form')
+        elif participant_type == "child" and participant:
             child = Child.objects.get(pk=participant)
-            experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section, 'participantChild': child})
+            experiment_section_run_form = ChildExperimentSectionRunForm(initial = {'experiment_section': experiment_section, 'participantChild': child}, prefix = 'experiment_run_form')
         else:
-            experiment_section_run_form = ExperimentSectionRunForm(initial = {'experiment_section': experiment_section})
+            experiment_section_run_form = ChildExperimentSectionRunForm(initial = {'experiment_section': experiment_section}, prefix = 'experiment_run_form')
+
     
     field_score_pairs = zip(experiment_section_fields, experiment_section_run_field_score_forms)
     return render(request, "ParticipantDB/ExperimentSectionRun/new2.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})

@@ -481,17 +481,37 @@ class ChooseExperimentSectionForm(ModelForm):
         model = Experiment_Section
         fields = ('experiment_section_name',)
 
-class ExperimentSectionRunForm(ModelForm):
+class AdultExperimentSectionRunForm(ModelForm):
     class Meta:
         model = Experiment_Section_Run
-        # fields = ('participantAdult', 'participantChild', 'date', 'notes', )
-        fields = ('participantAdult', 'participantChild', 'date', 'notes', 'assessor', )
+        fields = ('participantAdult', 'date', 'notes', 'assessor', )
         widgets = {
             'date': DateInput(attrs={'type': 'date'}),
             'participantAdult': Select2Widget(),
+            'assessor': Select2Widget(),
+        }
+    def clean_participantAdult(self):
+        adult = self.cleaned_data['participantAdult']
+        if adult == None:
+            raise ValidationError("Specify a participant")
+        return adult
+
+class ChildExperimentSectionRunForm(ModelForm):
+    class Meta:
+        model = Experiment_Section_Run
+        fields = ('participantChild', 'date', 'notes', 'assessor', )
+        widgets = {
+            'date': DateInput(attrs={'type': 'date'}),
             'participantChild': Select2Widget(),
             'assessor': Select2Widget(),
         }
+    
+    def clean_participantChild(self):
+        child = self.cleaned_data['participantChild']
+        if child == None:
+            raise ValidationError("Specify a participant")
+        return child
+
 
 class ExperimentSectionRunFieldScoreForm(ModelForm):
     class Meta:

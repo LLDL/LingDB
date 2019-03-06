@@ -17,7 +17,7 @@ function validate(){
             }else{
                 input.get(0).setCustomValidity('')
             }
-        }else if(type === "Pass/Fail"){
+        }else if(type == "Pass/Fail"){
             if(val.toLowerCase() != 'pass' && val.toLowerCase() != 'fail'){
                 input.get(0).setCustomValidity("Enter 'pass' or 'fail'")
             }else{
@@ -33,9 +33,29 @@ function validate(){
         }
     });
 }
-
+function changeInputs(){
+    var types = $(".type");
+    types.each(function(index){
+        var type = this.textContent
+        var curr = ''
+        if($("#result_table_ass").length==1){
+            curr = "#id_assessment_field_scores-";
+        }else{
+            curr = "#id_experiment_section_field_scores-";
+        }
+        curr += index +'-score';
+        var input = $(curr);
+        console.log(input);
+        console.log(type);
+        if(type == "Numeric"){
+            input.attr('type', 'number');
+        }else if(type == "Pass/Fail"){
+            input.attr('list', 'auto-passfail')
+        }
+    });
+}
 $(function(){
-    
+    changeInputs()
     if($("#result_table_ass").length==1){
         $("#result_table_ass").change(validate);
         $("#result_table_ass").change();
