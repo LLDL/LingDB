@@ -45,8 +45,6 @@ function changeInputs(){
         }
         curr += index +'-score';
         var input = $(curr);
-        console.log(input);
-        console.log(type);
         if(type == "Numeric"){
             input.attr('type', 'number');
         }else if(type == "Pass/Fail"){
