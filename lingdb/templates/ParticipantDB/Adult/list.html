@@ -55,8 +55,19 @@
                                 {{adultFilter.form.years_of_education|as_crispy_field}}
                             </div>
                         </div>
+                        <div class="row mb-4">
+                            <div class="col-md-3 form-group">
+                                {{adultFilter.form.health_notes_inc|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{adultFilter.form.personal_notes_inc|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{adultFilter.form.has_family|as_crispy_field}}
+                            </div>
+                        </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 mb-4">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4>Languages</h4>
@@ -85,23 +96,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 mb-4">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4>Musical Experiences</h4>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6 form-group removeDash">
-                                        {% comment %} {{adultFilter.form.no_musical|as_crispy_field}} {% endcomment %}
-                                    </div>
-                                </div>
-                                {% comment %} <div class="row">
-                                    <div class="col-md-12">
-                                        {{musicalExperienceFilter.form.no_musical|as_crispy_field}}
-                                        {{adultFilter.form.mbe|as_crispy_field}}
-                                    </div>
-                                </div> {% endcomment %}
                                 <div class="row">
                                     <div class="col-md-12">
                                         {{musicalExperienceFilter.form.experience|as_crispy_field}}
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-4">
+                        <div class="row">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-primary">Query</button>
                                 <a href="{% url 'adult_query' %}" class="btn btn-outline-primary" role="button">Clear</a>
@@ -155,47 +155,55 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for adult in combined%}
-                            {% comment %} {% for adult in combined %} {% endcomment %}
+                            {% if combined.count %}
+                                {% for adult in combined%}
+                                {% comment %} {% for adult in combined %} {% endcomment %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{adult.id}}
+                                        </td>
+                                        <td>
+                                            {{adult.given_name}} 
+                                            {% if adult.preferred_name %}
+                                                ({{adult.preferred_name}})
+                                            {% endif %}
+                                            {{adult.surname}}
+                                        </td>
+                                        <td>
+                                            {{adult.birth_date}}
+                                        </td>
+                                        <td>
+                                            {{adult.gender}}
+                                        </td>
+                                        <td>
+                                            {% if adult.health_notes or adult.personal_notes %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{adult.phone}}
+                                        </td>
+                                        <td>
+                                            {{adult.email}}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else%}
                                 <tr class="centeredCell">
-                                    <td>
-                                        {{adult.id}}
-                                    </td>
-                                    <td>
-                                        {{adult.given_name}} 
-                                        {% if adult.preferred_name %}
-                                            ({{adult.preferred_name}})
-                                        {% endif %}
-                                        {{adult.surname}}
-                                    </td>
-                                    <td>
-                                        {{adult.birth_date}}
-                                    </td>
-                                    <td>
-                                        {{adult.gender}}
-                                    </td>
-                                    <td>
-                                        {% if adult.health_notes or adult.personal_notes %}
-                                            Yes
-                                        {% else %}
-                                            No
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {{adult.phone}}
-                                    </td>
-                                    <td>
-                                        {{adult.email}}
-                                    </td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Open</a>
-                                            <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
-                                            <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
-                                        </div>
-                                    </td>
+                                    <td colspan='8'>
+                                        Sorry, no results.
+                                    </tr>
                                 </tr>
-                            {% endfor %}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

@@ -30,7 +30,6 @@ PROFICIENCY_L_CHOICES = (
     ('Basic','Basic'),
 )
 
-
 class AdultFilter(filters.FilterSet):
     given_name = filters.CharFilter(field_name='given_name', lookup_expr="icontains", label="Given Name")
     surname = filters.CharFilter(field_name='surname', lookup_expr='icontains', label="Surname")
@@ -42,13 +41,14 @@ class AdultFilter(filters.FilterSet):
     contact_pref = filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Contact Preference")
     gender = filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
-    # no_musical = filters.BooleanFilter(field_name='musical_background', lookup_expr='isnull', label="Include people without musical backgrounds")
 
+    health_notes_inc = filters.CharFilter(field_name='health_notes', lookup_expr='icontains', label="Health Notes Include")
+    personal_notes_inc = filters.CharFilter(field_name='personal_notes', lookup_expr='icontains', label="Personal Notes Include")
+
+    has_family = filters.BooleanFilter(field_name='parent', lookup_expr='isnull', exclude=True, label="Family In Database")
     class Meta:
         model = Adult
-        # exclude = ['id',]
-        fields = ['given_name', 'surname', 'preferred_name', 'birth_date', 'contact_pref', 'gender']
-
+        exclude = ['id', 'address', 'phone', 'email']
 
 
 class SpeaksFilter(filters.FilterSet):

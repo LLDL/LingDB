@@ -111,7 +111,6 @@ def adult_query(request):
    
     musical_field_filled = request.GET.get('experience', '') or request.GET.get('m_proficiency', '') or  request.GET.get('m_age_learning_started', '') or  request.GET.get('m_age_learning_ended', '')
     if musical_field_filled:
-        print("filled")
         combined = combined.filter(id__in=musicians).distinct('id')
     
     # return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
