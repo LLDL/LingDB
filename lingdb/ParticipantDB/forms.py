@@ -50,7 +50,8 @@ ParentInlineFormSet = inlineformset_factory(
     min_num = 1,
     validate_min = True,
     widgets = {
-        'parent': Select2Widget()
+        'parent': Select2Widget(),
+        'isPrimary': CheckboxInput(attrs={'class': 'primaryContact'})
     }
 )
 

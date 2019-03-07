@@ -3,6 +3,7 @@
 {% block extraHead %}
     {{ parent_forms.media.css }}
     {{ child_forms.media.css}}
+    <script src="{% static 'ParticipantDB/js/family.js' %}"></script>
 {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
