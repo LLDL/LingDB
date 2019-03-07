@@ -42,7 +42,7 @@ class AdultFilter(filters.FilterSet):
     contact_pref = filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Contact Preference")
     gender = filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
-    no_musical = filters.BooleanFilter(field_name='musical_background', lookup_expr='isnull', label="Show people without musical backgrounds")
+    # no_musical = filters.BooleanFilter(field_name='musical_background', lookup_expr='isnull', label="Include people without musical backgrounds")
 
     class Meta:
         model = Adult
@@ -56,31 +56,30 @@ class SpeaksFilter(filters.FilterSet):
 
     is_native = filters.BooleanFilter(label="Native", field_name="is_native")
 
-#     
-    age_learning_started = filters.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    s_proficiency = filters.MultipleChoiceFilter(field_name="proficiency", choices=PROFICIENCY_L_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
+    s_age_learning_started = filters.RangeFilter(field_name="age_learning_started", label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 
-    age_learning_ended = filters.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    s_age_learning_ended = filters.RangeFilter(field_name="age_learning_ended", label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
     class Meta:
         model = Speaks
         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
 
 
-# PROFICIENCY_M_CHOICES = (
-#     ('Professional', 'Professional'),
-#     ('Advanced', 'Advanced'),
-#     ('Intermediate', 'Intermediate'),
-#     ('Basic','Basic'),
-# )
+PROFICIENCY_M_CHOICES = (
+    ('Professional', 'Professional'),
+    ('Advanced', 'Advanced'),
+    ('Intermediate', 'Intermediate'),
+    ('Basic','Basic'),
+)
 
-# class MusicalExperienceFilter(filters.FilterSet):
-    # experience = df.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Skilled In Any Of", field_name="experience")
+class MusicalExperienceFilter(filters.FilterSet):
+    experience = filters.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Skilled In Any Of", field_name="experience")
 
     
-    # proficiency = df.MultipleChoiceFilter(choices=PROFICIENCY_M_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
-    # age_learning_started = df.RangeFilter(label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
-    # age_learning_ended = df.RangeFilter(label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    m_proficiency = filters.MultipleChoiceFilter(field_name="proficiency", choices=PROFICIENCY_M_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Proficiency Level")
+    m_age_learning_started = filters.RangeFilter(field_name="age_learning_started", label="Age Learning Started Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
+    m_age_learning_ended = filters.RangeFilter(field_name="age_learning_ended", label="Age Learning Ended Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 
-    # no_musical = df.BooleanFilter(field_name='experience', lookup_expr='isnull', label="People without musical skills listed")
-    # class Meta:
-    #     model = MusicalExperience
-    #     fields = ['experience']
+    class Meta:
+        model = MusicalExperience
+        fields = ['experience', 'proficiency', 'age_learning_started', 'age_learning_ended']
