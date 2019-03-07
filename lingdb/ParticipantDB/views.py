@@ -103,7 +103,7 @@ def adult_query(request):
     adultFilter = AdultFilter(request.GET, queryset=adults)
     speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
     speakers = speaksFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
-    combined = adultFilter.qs.filter(id__in=speakers)
+    combined = adultFilter.qs.filter(id__in=speakers).distinct('id')
     
     # return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
 

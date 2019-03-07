@@ -85,13 +85,18 @@
                                     </div>
                                 </div>
                             </div>
-                            {% comment %} <div class="col-lg-6">
+                            <div class="col-lg-6">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4>Musical Experiences</h4>
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-6 form-group removeDash">
+                                        {{adultFilter.form.no_musical|as_crispy_field}}
+                                    </div>
+                                </div>
+                                {% comment %} <div class="row">
                                     <div class="col-md-12">
                                         {{musicalExperienceFilter.form.no_musical|as_crispy_field}}
                                         {{adultFilter.form.mbe|as_crispy_field}}
@@ -115,6 +120,7 @@
                                         {{musicalExperienceFilter.form.age_learning_ended|as_crispy_field}}
                                     </div>
                                 </div>{% endcomment %}
+                            </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-12">

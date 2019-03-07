@@ -42,6 +42,8 @@ class AdultFilter(filters.FilterSet):
     contact_pref = filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Contact Preference")
     gender = filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
+    no_musical = filters.BooleanFilter(field_name='musical_background', lookup_expr='isnull', label="Show people without musical backgrounds")
+
     class Meta:
         model = Adult
         # exclude = ['id',]
