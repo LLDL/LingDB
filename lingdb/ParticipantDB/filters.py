@@ -65,6 +65,14 @@ class SpeaksFilter(filters.FilterSet):
         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
 
 
+class AssessmentRunFilter(filters.FilterSet):
+    assessment = filters.ModelMultipleChoiceFilter(queryset=Assessment.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Completed Assessment", field_name="assessment")
+    class Meta:
+        model = Assessment_Run
+        fields = ['assessment', 'date', 'notes', 'assessor']
+
+
+
 PROFICIENCY_M_CHOICES = (
     ('Professional', 'Professional'),
     ('Advanced', 'Advanced'),

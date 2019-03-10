@@ -15,7 +15,7 @@ class FamilyForm(ModelForm):
         model = Family
         fields = ('id', 'notes') 
         widgets = {
-            'id': TextInput(attrs={'readonly': 'readonly'}),
+            'id': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control-plaintext'}),
         }
 
 class ParentForm(ModelForm):
@@ -120,7 +120,7 @@ class AdultForm(ModelForm):
         model = Adult
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
-            'id': TextInput(attrs={'readonly': 'readonly'}),
+            'id': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control-plaintext'}),
             'birth_date': DateInput(attrs={'type': 'date'}),
             'gender': TextInput(attrs={'list':'auto-genders'}),
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
@@ -234,7 +234,7 @@ SpeaksInlineFormSet = inlineformset_factory(
     validate_min = True,
     widgets = {
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
-        'is_native': CheckboxInput(attrs={'class': 'centered-checkbox'}),
+        'is_native': CheckboxInput(attrs={'class': 'centered-checkbox-child position-static'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'proficiency': Select2Widget(),
         'lang': Select2Widget(),

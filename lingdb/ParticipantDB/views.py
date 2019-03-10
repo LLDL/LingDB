@@ -98,24 +98,44 @@ def add_musical_skill(request):
 
 # People -------------------------------------------------------------------------
 def adult_query(request):
+    # querysets
     adults = Adult.objects.all()
     speaks = Speaks.objects.all()
     music = MusicalExperience.objects.all()
+    assessment_run = Assessment_Run.objects.all()
+
+    # filter init
     adultFilter = AdultFilter(request.GET, queryset=adults)
+    
     speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
-    musicalExperienceFilter = MusicalExperienceFilter(request.GET, queryset=music)
     speakers = speaksFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
-    combined = adultFilter.qs.filter(id__in=speakers).distinct('id')
+    
+    musicalExperienceFilter = MusicalExperienceFilter(request.GET, queryset=music)
+    musicians = musicalExperienceFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
 
     musicians = musicalExperienceFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
-   
+
+
+    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run)
+    assessment_participants = assessmentRunFilter.qs.order_by('participantAdult__id').distinct('participantAdult__id').values_list('participantAdult__id', flat=True)
+
+    # filter by language skill
+    combined = adultFilter.qs.filter(id__in=speakers).distinct('id')
+    
+    # potentially filter by musical skill
     musical_field_filled = request.GET.get('experience', '') or request.GET.get('m_proficiency', '') or  request.GET.get('m_age_learning_started', '') or  request.GET.get('m_age_learning_ended', '')
     if musical_field_filled:
         combined = combined.filter(id__in=musicians).distinct('id')
     
-    # return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter})
 
-    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'combined': combined})
+     # potentially filter by assessment run
+    assessment_field_filled = request.GET.get('assessment', '')
+    if assessment_field_filled:
+        combined = combined.filter(id__in=assessment_participants).distinct('id')
+    
+
+
+    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'combined': combined})
 
 # Adult
 def add_adult(request):

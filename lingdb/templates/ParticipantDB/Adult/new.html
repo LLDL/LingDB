@@ -89,7 +89,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">
                         Languages Spoken
@@ -101,8 +101,8 @@
                                 <tr class="noTopBorder centeredCell">
                                     <th>Language*</th>
                                     <th>Proficiency*</th>
-                                    <th>Starting Age*</th>
-                                    <th>Ending Age</th>
+                                    <th>Starting*</th>
+                                    <th>Ending</th>
                                     <th>Native*</th>
                                 </tr>      
                             </thead>
@@ -113,7 +113,7 @@
                                         <td>{{speaks.proficiency|as_crispy_field}}</td>  
                                         <td>{{speaks.age_learning_started|as_crispy_field}}</td>  
                                         <td>{{speaks.age_learning_ended|as_crispy_field}}</td>  
-                                        <td class="centered-checkbox">{{speaks.is_native|as_crispy_field}}</td>  
+                                        <td class="centered-checkbox-child">{{speaks.is_native|as_crispy_field}}</td>  
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -121,7 +121,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6">
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">
                         Musical Experience
