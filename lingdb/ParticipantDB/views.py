@@ -97,6 +97,9 @@ def add_musical_skill(request):
 
 
 # People -------------------------------------------------------------------------
+
+
+@login_required
 def adult_query(request):
     # querysets
     adults = Adult.objects.all()
@@ -148,6 +151,8 @@ def adult_query(request):
     return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'experimentSectionRunFilter': experimentSectionRunFilter, 'combined': combined})
 
 # Adult
+
+@login_required
 def add_adult(request):
     musical_experience_forms = MusicalExperienceInlineFormSet(
         queryset = MusicalExperience.objects.none(), 
