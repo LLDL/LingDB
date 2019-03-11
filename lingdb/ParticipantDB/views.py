@@ -103,6 +103,7 @@ def adult_query(request):
     speaks = Speaks.objects.all()
     music = MusicalExperience.objects.all()
     assessment_run = Assessment_Run.objects.all()
+    experiment_section_run = Experiment_Section_Run.objects.all()
 
     # filter init
     adultFilter = AdultFilter(request.GET, queryset=adults)
@@ -119,6 +120,11 @@ def adult_query(request):
     assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run)
     assessment_participants = assessmentRunFilter.qs.order_by('participantAdult__id').distinct('participantAdult__id').values_list('participantAdult__id', flat=True)
 
+    experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run)
+    experiment_section_participants = experimentSectionRunFilter.qs.order_by('participantAdult__id').distinct('participantAdult__id').values_list('participantAdult__id', flat=True)
+
+
+
     # filter by language skill
     combined = adultFilter.qs.filter(id__in=speakers).distinct('id')
     
@@ -129,13 +135,17 @@ def adult_query(request):
     
 
      # potentially filter by assessment run
-    assessment_field_filled = request.GET.get('assessment', '')
+    assessment_field_filled = request.GET.get('assessment', '') or request.GET.get('assessment_run_date_min', '') or request.GET.get('assessment_run_date_max', '') or request.GET.get('assessment_run_assessor', '') or request.GET.get('assessment_run_notes')
     if assessment_field_filled:
         combined = combined.filter(id__in=assessment_participants).distinct('id')
     
+     # potentially filter by experiment section run
+    experiment_run_field_filled = request.GET.get('experiment_section', '') or request.GET.get('experiment_section_run_date_min', '') or request.GET.get('experiment_section_run_date_max', '') or request.GET.get('experiment_section_run_assessor', '') or request.GET.get('experiment_section_run_notes')
+    if experiment_run_field_filled:
+        combined = combined.filter(id__in=experiment_section_participants).distinct('id')
+    
 
-
-    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'combined': combined})
+    return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'experimentSectionRunFilter': experimentSectionRunFilter, 'combined': combined})
 
 # Adult
 def add_adult(request):

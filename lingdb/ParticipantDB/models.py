@@ -144,7 +144,7 @@ class Experiment_Section(models.Model):
     section_status = models.CharField(max_length = 10, choices = STATUS_CHOICES)
 
     def __str__(self):
-        return '%s' % (self.experiment_section_name) 
+        return '%s: %s' % (self.experiment, self.experiment_section_name) 
 
 class Experiment_Section_Run(models.Model):
     class Meta:

@@ -24,44 +24,45 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header">
-                    Query
-                </div>
-                <div class="card-body"> 
-                    <form method="get">
-                        <div class="row">
+                    <div class="row">
+                        <div class="col-md-8 mb-0">
+                            Query
                         </div>
-                        <div class="row">
+                        <div class="col-md-4">
+                            <div class="btn-group float-right"> 
+                                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".query-form" aria-expanded="true" aria-controls="personalTable">
+                                Expand/Collapse
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body query-form collapse show"> 
+                    <form method="get">
+                        <div class="form-row">
                             <div class="col-md-12">
                                 <h4>Personal Info</h4>
                             </div>
                         </div>
-                        <div class="row mb-4">
-                            <div class="col-md-4 form-group">
+                        <div class="form-row">
+                            <div class="col-md-3 form-group">
                                 {{ adultFilter.form.given_name|as_crispy_field }}
                             </div>
                             
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 {{ adultFilter.form.preferred_name|as_crispy_field }}
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 {{ adultFilter.form.surname|as_crispy_field }}
                             </div>
-                        </div> 
-                        <div class="row">
                             <div class="col-md-3 form-group">
                                 {{ adultFilter.form.gender|as_crispy_field}}
                             </div>
+                        </div> 
+                        <div class="form-row">
                             <div class="col-md-3 form-group">
                                 {{ adultFilter.form.contact_pref|as_crispy_field}}
                             </div>
-                            <div class="col-md-3 form-group removeDash">
-                                {{adultFilter.form.birth_date|as_crispy_field}}
-                            </div>
-                            <div class="col-md-3 form-group removeDash">
-                                {{adultFilter.form.years_of_education|as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="row mb-4">
                             <div class="col-md-3 form-group">
                                 {{adultFilter.form.health_notes_inc|as_crispy_field}}
                             </div>
@@ -72,28 +73,36 @@
                                 {{adultFilter.form.has_family|as_crispy_field}}
                             </div>
                         </div>
+                        <div class="form-row mb-4">
+                            <div class="col-md-6 form-group removeDash">
+                                {{adultFilter.form.birth_date|as_crispy_field}}
+                            </div>
+                            <div class="col-md-6 form-group removeDash">
+                                {{adultFilter.form.years_of_education|as_crispy_field}}
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-6 mb-4">
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-md-12">
                                         <h4>Languages</h4>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-md-12">
                                         {{speaksFilter.form.lang|as_crispy_field}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        {{speaksFilter.form.s_proficiency|as_crispy_field}}
+                                    </div>
                                     <div class="col-md-6">
                                         {{speaksFilter.form.is_native|as_crispy_field}}
                                     </div>
                                 
-                                    <div class="col-md-6">
-                                        {{speaksFilter.form.s_proficiency|as_crispy_field}}
-                                    </div>
                                 </div>
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-md-6 form-group removeDash">
                                         {{speaksFilter.form.s_age_learning_started|as_crispy_field}}
                                     </div>
@@ -108,17 +117,15 @@
                                         <h4>Musical Experiences</h4>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
+                                <div class="form-row">
+                                    <div class="col-md-6">
                                         {{musicalExperienceFilter.form.experience|as_crispy_field}}
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         {{musicalExperienceFilter.form.m_proficiency|as_crispy_field}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-md-6 form-group removeDash">
                                         {{musicalExperienceFilter.form.m_age_learning_started|as_crispy_field}}
                                     </div>
@@ -130,14 +137,47 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-6 mb-4">
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-md-12">
                                         <h4>Assessment Participation</h4>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
+                                <div class="form-row">
+                                    <div class="col-md-6">
                                         {{assessmentRunFilter.form.assessment|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{assessmentRunFilter.form.assessment_run_assessor|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 removeDash">
+                                        {{assessmentRunFilter.form.assessment_run_date|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{assessmentRunFilter.form.assessment_run_notes|as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div><div class="col-lg-6 mb-4">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <h4>Experiment Section Participation</h4>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        {{experimentSectionRunFilter.form.experiment_section|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{experimentSectionRunFilter.form.experiment_section_run_assessor|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 removeDash">
+                                        {{experimentSectionRunFilter.form.experiment_section_run_date|as_crispy_field}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{experimentSectionRunFilter.form.experiment_section_run_notes|as_crispy_field}}
                                     </div>
                                 </div>
                             </div>
