@@ -72,7 +72,7 @@ class AssessmentRunFilter(filters.FilterSet):
 
     assessment_run_assessor = filters.ModelMultipleChoiceFilter(queryset=User.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Assessed By Any Of", field_name="assessor")
 
-    assessment_run_notes = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Assessment Run Notes Include")
+    assessment_run_notes = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Notes Include")
 
     class Meta:
         model = Assessment_Run
@@ -80,13 +80,13 @@ class AssessmentRunFilter(filters.FilterSet):
 
 
 class ExperimentSectionRunFilter(filters.FilterSet):
-    experiment_section = filters.ModelMultipleChoiceFilter(queryset=Experiment_Section.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="experiment_section")
+        experiment_section = filters.ModelMultipleChoiceFilter(queryset=Experiment_Section.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="experiment_section")
 
     experiment_section_run_date = filters.DateFromToRangeFilter(field_name="date", label="Within the Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
 
     experiment_section_run_assessor = filters.ModelMultipleChoiceFilter(queryset=User.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Assessed By Any Of", field_name="assessor")
 
-    experiment_section_run_notes = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Experiment Section Run Notes Include")
+    experiment_section_run_notes = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Notes Include")
 
     class Meta:
         model = Assessment_Run
