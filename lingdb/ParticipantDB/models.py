@@ -257,7 +257,7 @@ class Speaks(models.Model):
     is_native = models.BooleanField('', default = False)
 
     PROFICIENCY_OPTIONS = (
-        ('Native', 'Native'),
+        ('Native', 'Native Like'),
         ('Advanced', 'Advanced'),
         ('Intermediate', 'Intermediate'),
         ('Basic','Basic'),

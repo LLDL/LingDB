@@ -121,7 +121,7 @@ class AdultForm(ModelForm):
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
             'id': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control-plaintext'}),
-            'birth_date': DateInput(attrs={'type': 'date'}),
+            'birth_date': DateInput(attrs={'type': 'date', 'min': '1900-01-01'}),
             'gender': TextInput(attrs={'list':'auto-genders'}),
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),
             'address': TextInput(attrs={}),
@@ -162,7 +162,7 @@ class ChildForm(ModelForm):
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','gestation_length_weeks','was_full_term','birth_weight','birth_height','personal_notes','hx_repeated_ear_infection','hereditary_audio_problems','hereditary_language_pathologies','health_notes')
         widgets = {
             'id': TextInput(attrs={'readonly': 'readonly'}),
-            'birth_date': DateInput(attrs={'type': 'date'}),
+            'birth_date': DateInput(attrs={'type': 'date', 'min': '2000-01-01'}),
             'gestation_length_weeks': TextInput(attrs={'min': 0, 'max': 50, 'type': 'number'}),
             'birth_weight': TextInput(attrs={'min': 0, 'max': 10000, 'type': 'number'}),
             'birth_height': TextInput(attrs={'min': 0, 'max': 100, 'type': 'number'}),
@@ -234,7 +234,7 @@ SpeaksInlineFormSet = inlineformset_factory(
     validate_min = True,
     widgets = {
         'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
-        'is_native': CheckboxInput(attrs={'class': 'centered-checkbox-child position-static'}),
+        'is_native': CheckboxInput(attrs={'class': 'centered-checkbox-child position-static isNative'}),
         'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
         'proficiency': Select2Widget(),
         'lang': Select2Widget(),

@@ -26,7 +26,7 @@
                         <table class="table table-hover">
                             <tr class="noTopBorder">
                                 <th>Assessment:</th>
-                                <td>{{assessment_run.assessment}}</td>
+                                <td><a href="{% url 'assessment_detail' assessment_name=assessment_run.assessment %}" class="btn btn-outline-primary" role="button">{{assessment_run.assessment}}</a></td>
                             </tr> 
                             <tr>
                                 <th>Participant:</th>

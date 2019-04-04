@@ -12,10 +12,12 @@ from django.forms import CheckboxSelectMultiple,DateInput, SelectMultiple
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
 
-genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
-GENDER_CHOICES = ()
-for gender_choice in genders:
-    GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
+def getGenders():  
+    genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
+    GENDER_CHOICES = ()
+    for gender_choice in genders:
+        GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
+    return GENDER_CHOICES
 
 
 CONTACT_CHOICES = (
@@ -24,7 +26,7 @@ CONTACT_CHOICES = (
 )
 
 PROFICIENCY_L_CHOICES = (
-    ('Native', 'Native'),
+    ('Native', 'Native Like'),
     ('Advanced', 'Advanced'),
     ('Intermediate', 'Intermediate'),
     ('Basic','Basic'),
@@ -39,7 +41,8 @@ class AdultFilter(filters.FilterSet):
     years_of_education = filters.RangeFilter(label="Years of Education Range", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
 
     contact_pref = filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Contact Preference")
-    gender = filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
+    # gender = filters.MultipleChoiceFilter(choices= GENDER_CHOICES,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
+    gender = filters.MultipleChoiceFilter(choices= getGenders,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
 
     health_notes_inc = filters.CharFilter(field_name='health_notes', lookup_expr='icontains', label="Health Notes Include")
