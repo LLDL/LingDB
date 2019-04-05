@@ -105,7 +105,10 @@ def adult_query(request):
     adults = Adult.objects.all()
     speaks = Speaks.objects.all()
     music = MusicalExperience.objects.all()
-    assessment_run = Assessment_Run.objects.all()
+    groups = get_user_groups(request)
+    assessment_run = Assessment_Run.objects.filter(assessment__lab__group__name__in=groups)
+    
+    # assessment_run = Assessment_Run.objects.all()
     experiment_section_run = Experiment_Section_Run.objects.all()
 
     # filter init
