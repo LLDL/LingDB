@@ -1,7 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
     {% load static %}
-    {{ adultFilter.form.media.css }}
+    {{ childFilter.form.media.css }}
     {% comment %} {{ speaksFilter.form.media.css }} {% endcomment %}
     <script src="{% static 'ParticipantDB/js/query.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>
@@ -11,14 +11,14 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-pills mb-4 justify-content-center">
-                <li class="nav-item"><a class="nav-link active" href="#">Adult</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'child_query' %}">Child</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'adult_query' %}">Adult</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Child</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Family</a></li>
             </ul>
         </div>
     </div>
     <h1>
-        Adult Query
+        Child Query
     </h1>
     <div class="row">
         <div class="col-md-12">
@@ -46,96 +46,84 @@
                         </div>
                         <div class="form-row">
                             <div class="col-md-3 form-group">
-                                {{ adultFilter.form.given_name|as_crispy_field }}
-                            </div>
-                            
-                            <div class="col-md-3 form-group">
-                                {{ adultFilter.form.preferred_name|as_crispy_field }}
+                                {{ childFilter.form.given_name|as_crispy_field }}
                             </div>
                             <div class="col-md-3 form-group">
-                                {{ adultFilter.form.surname|as_crispy_field }}
+                                {{ childFilter.form.preferred_name|as_crispy_field }}
                             </div>
                             <div class="col-md-3 form-group">
-                                {{ adultFilter.form.gender|as_crispy_field}}
+                                {{ childFilter.form.surname|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{ childFilter.form.gender|as_crispy_field}}
                             </div>
                         </div> 
                         <div class="form-row">
                             <div class="col-md-3 form-group">
-                                {{ adultFilter.form.contact_pref|as_crispy_field}}
+                                {{childFilter.form.has_family|as_crispy_field}}
                             </div>
                             <div class="col-md-3 form-group">
-                                {{adultFilter.form.health_notes_inc|as_crispy_field}}
+                                {{childFilter.form.was_full_term|as_crispy_field}}
                             </div>
                             <div class="col-md-3 form-group">
-                                {{adultFilter.form.personal_notes_inc|as_crispy_field}}
+                                {{childFilter.form.hereditary_audio_problems|as_crispy_field}}
                             </div>
                             <div class="col-md-3 form-group">
-                                {{adultFilter.form.has_family|as_crispy_field}}
+                                {{childFilter.form.hereditary_language_pathologies|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4 form-group">
+                                {{childFilter.form.hx_repeated_ear_infection|as_crispy_field}}
+                            </div>
+                        
+                            <div class="col-md-4 form-group">
+                                {{childFilter.form.health_notes_inc|as_crispy_field}}
+                            </div>
+                            <div class="col-md-4 form-group">
+                                {{childFilter.form.personal_notes_inc|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6 form-group removeDash">
+                                {{childFilter.form.birth_date|as_crispy_field}}
+                            </div>
+                            <div class="col-md-6 form-group removeDash">
+                                {{childFilter.form.gestation_length_weeks|as_crispy_field}}
                             </div>
                         </div>
                         <div class="form-row mb-4">
                             <div class="col-md-6 form-group removeDash">
-                                {{adultFilter.form.birth_date|as_crispy_field}}
+                                {{childFilter.form.birth_weight|as_crispy_field}}
                             </div>
                             <div class="col-md-6 form-group removeDash">
-                                {{adultFilter.form.years_of_education|as_crispy_field}}
+                                {{childFilter.form.birth_height|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 mb-4">
+                            <div class="col-lg-12">
                                 <div class="form-row">
                                     <div class="col-md-12">
                                         <h4>Languages</h4>
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        {{speaksFilter.form.lang|as_crispy_field}}
-                                    </div>
-                                </div>
+                            <div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 mb-4">
                                 <div class="form-row">
                                     <div class="col-md-6">
-                                        {{speaksFilter.form.s_proficiency|as_crispy_field}}
+                                        {{exposureFilter.form.lang|as_crispy_field}}
                                     </div>
-                                    <div class="col-md-6">
-                                        {{speaksFilter.form.is_native|as_crispy_field}}
+                                    <div class="col-md-6 removeDash">
+                                        {{exposureFilter.form.percentage_exposure|as_crispy_field}}
                                     </div>
                                 
                                 </div>
-                                <div class="form-row">
-                                    <div class="col-md-6 form-group removeDash">
-                                        {{speaksFilter.form.s_age_learning_started|as_crispy_field}}
-                                    </div>
-                                    <div class="col-md-6 form-group removeDash">
-                                        {{speaksFilter.form.s_age_learning_ended|as_crispy_field}}
-                                    </div>
-                                </div>
                             </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h4>Musical Experiences</h4>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        {{musicalExperienceFilter.form.experience|as_crispy_field}}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {{musicalExperienceFilter.form.m_proficiency|as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-6 form-group removeDash">
-                                        {{musicalExperienceFilter.form.m_age_learning_started|as_crispy_field}}
-                                    </div>
-                                    <div class="col-md-6 form-group removeDash">
-                                        {{musicalExperienceFilter.form.m_age_learning_ended|as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
-                        <div class="row">
+                        {% comment %} <div class="row">
                             <div class="col-lg-6 mb-4">
                                 <div class="form-row">
                                     <div class="col-md-12">
@@ -181,11 +169,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-primary">Query</button>
-                                <a href="{% url 'adult_query' %}" class="btn btn-outline-primary" role="button">Clear</a>
+                                <a href="{% url 'child_query' %}" class="btn btn-outline-primary" role="button">Clear</a>
                             </div>
                         </div>
                     </form>
@@ -209,50 +197,41 @@
                                 <th>Birth Date</th>
                                 <th>Gender</th>
                                 <th>Notes</th>
-                                <th>Phone</th>
-                                <th>Email</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% if combined.count %}
-                                {% for adult in combined%}
-                                {% comment %} {% for adult in combined %} {% endcomment %}
+                                {% for child in combined %}
                                     <tr class="centeredCell">
                                         <td>
-                                            {{adult.id}}
+                                            {{child.id}}
                                         </td>
                                         <td>
-                                            {{adult.given_name}} 
-                                            {% if adult.preferred_name %}
-                                                ({{adult.preferred_name}})
+                                            {{child.given_name}} 
+                                            {% if child.preferred_name %}
+                                                ({{child.preferred_name}})
                                             {% endif %}
-                                            {{adult.surname}}
+                                            {{child.surname}}
                                         </td>
                                         <td>
-                                            {{adult.birth_date}}
+                                            {{child.birth_date}}
                                         </td>
                                         <td>
-                                            {{adult.gender}}
+                                            {{child.gender}}
                                         </td>
                                         <td>
-                                            {% if adult.health_notes or adult.personal_notes %}
+                                            {% if child.health_notes or child.personal_notes %}
                                                 Yes
                                             {% else %}
                                                 No
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {{adult.phone}}
-                                        </td>
-                                        <td>
-                                            {{adult.email}}
-                                        </td>
-                                        <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Open</a>
-                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
-                                                <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                                <a href="{% url 'child_detail' child_id=child.id %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -271,6 +250,6 @@
         </div>
     </div>
   
-    {{ adultFilter.form.media.js }}  
+    {{ childFilter.form.media.js }}  
     {% comment %} {{ speaksFilter.form.media.js }}   {% endcomment %}
 {% endblock %}

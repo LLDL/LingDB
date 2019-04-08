@@ -188,7 +188,7 @@ class Assessment(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '%s' % (self.assessment_name) 
+        return '%s (%s)' % (self.assessment_name, self.lab.lab_name) 
 
 
 class Assessment_Run(models.Model):
@@ -320,12 +320,12 @@ class IsParentIn(models.Model):
         verbose_name = "Is Parent In"
         verbose_name_plural = "Are Parents In"
     parent = models.ForeignKey(Adult, related_name='parent', on_delete = models.CASCADE)
-    family = models.ForeignKey(Family, related_name='family', on_delete = models.CASCADE, blank=True, null=True)
+    family = models.ForeignKey(Family, related_name='a_family', on_delete = models.CASCADE, blank=True, null=True)
     isPrimary = models.BooleanField(default = False, verbose_name = "Primary Contact")
 
 class IsChildIn(models.Model):
     class Meta:
         verbose_name = "Is Child In"
         verbose_name_plural = "Are Children In"
-    child = models.ForeignKey(Child, on_delete = models.CASCADE)
-    family = models.ForeignKey(Family, on_delete = models.CASCADE, blank=True, null=True)
+    child = models.ForeignKey(Child, related_name='childin', on_delete = models.CASCADE)
+    family = models.ForeignKey(Family, related_name='c_family', on_delete = models.CASCADE, blank=True, null=True)

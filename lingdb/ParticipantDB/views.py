@@ -99,6 +99,8 @@ def add_musical_skill(request):
 # People -------------------------------------------------------------------------
 
 
+
+# Adult
 @login_required
 def adult_query(request):
     # querysets
@@ -109,8 +111,7 @@ def adult_query(request):
     assessment_run = Assessment_Run.objects.filter(assessment__lab__group__name__in=groups)
     
     # assessment_run = Assessment_Run.objects.all()
-    experiment_section_run = Experiment_Section_Run.objects.all()
-
+    experiment_section_run = Experiment_Section_Run.objects.filter(experiment_section__experiment__lab__group__name__in=groups)
     # filter init
     adultFilter = AdultFilter(request.GET, queryset=adults)
     
@@ -152,8 +153,6 @@ def adult_query(request):
     
 
     return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'experimentSectionRunFilter': experimentSectionRunFilter, 'combined': combined})
-
-# Adult
 
 @login_required
 def add_adult(request):
@@ -303,6 +302,23 @@ def delete_adult(request, adult_id):
         raise Http404("No adult with id" + adult_id)
 
 # Child
+@login_required
+def child_query(request):
+    # querysets
+    children = Child.objects.all()
+    lang_exposure = IsExposedTo.objects.all()
+
+    childFilter = ChildFilter(request.GET, queryset=children)
+
+    exposureFilter = ExposureFilter(request.GET, queryset=lang_exposure)
+    exposed_to_lang = exposureFilter.qs.order_by('child__id').distinct('child__id').values_list('child__id', flat=True)
+    
+    # filter by exposure
+    combined = childFilter.qs.filter(id__in=exposed_to_lang).distinct('id')
+
+    return render(request, 'ParticipantDB/Child/list.html', {'childFilter': childFilter,'exposureFilter': exposureFilter, 'combined': combined})
+
+
 @login_required
 def add_child(request):
     exposure_forms = ExposureInlineFormSet(
