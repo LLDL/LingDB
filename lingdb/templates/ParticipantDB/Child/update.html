@@ -4,7 +4,6 @@
     <script src="{% static 'ParticipantDB/js/child.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>
     {{ child_form.media.css}}
-    {{ exposure_forms.media.css }}
 {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -118,5 +117,4 @@
         <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
     </form>
     {{ child_form.media.js}}
-    {{ exposure_forms.media.js }}
 {% endblock %}

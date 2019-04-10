@@ -2,7 +2,6 @@
 {% block extraHead %}
     {% load static %}
     {{ childFilter.form.media.css }}
-    {% comment %} {{ speaksFilter.form.media.css }} {% endcomment %}
     <script src="{% static 'ParticipantDB/js/query.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>
 {% endblock %}
@@ -254,5 +253,4 @@
     </div>
   
     {{ childFilter.form.media.js }}  
-    {% comment %} {{ speaksFilter.form.media.js }}   {% endcomment %}
 {% endblock %}

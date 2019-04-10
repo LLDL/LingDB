@@ -2,7 +2,6 @@
 {% load static %}
 {% block extraHead %}
     {{ assessment_form.media.css }}
-    {{ assessment_field_formset.media.css }}
 {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -67,7 +66,6 @@
 
         </form>
         {{ assessment_form.media.js }}
-        {{ assessment_field_formset.media.js }}
     {% else %}
         <div>
             <h2>You are not authorized to access this assessment. Please contact the lab for access.</h2>

@@ -3,8 +3,6 @@
 {% load static %}
 {% block extraHead %}
     {{ assessment_run_form.media.css }}
-    {{ assessment_run_field_score_forms.media.css }}
-    {% comment %} {{ field_score_pairs.1.media.css }} {% endcomment %}
 {% endblock %}
 
 {% load crispy_forms_tags %}
@@ -79,6 +77,4 @@
         <input type="submit" class="btn btn-outline-primary" name="save" value="Save">
     </form>
     {{ assessment_run_form.media.js }}
-    {{ assessment_run_field_score_forms.media.js }}
-    {% comment %} {{ field_score_pairs.1.media.css }} {% endcomment %}
 {% endblock %}

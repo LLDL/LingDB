@@ -2,9 +2,6 @@
 {% block extraHead %}
     {% load static %}
     {{ adult_form.media.css }}
-    {{ speaks_formset.media.css }}
-    {{ musical_experience_formset.media.css}}
-    {{ addParentForm.media.css }}
     <script src="{% static 'ParticipantDB/js/adult.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>
 {% endblock %}
@@ -165,7 +162,4 @@
     </form>
     
     {{ adult_form.media.js }}
-    {{ speaks_formset.media.js }}
-    {{ musical_experience_formset.media.js}}
-    {{ addParentForm.media.js }}
 {% endblock %}

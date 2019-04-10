@@ -2,7 +2,6 @@
 {% load static %}
 {% block extraHead %}
     {{ experiment_form.media.css }}
-    {{ experiment_section_formset.media.css }}
 {% endblock %}
 
 
@@ -68,5 +67,4 @@
         <input type="submit" class="btn btn-outline-primary" value="Add Experiment Section Fields">
     </form>
     {{ experiment_form.media.js }}
-    {{ experiment_section_formset.media.js }}
 {% endblock %}

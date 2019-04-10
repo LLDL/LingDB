@@ -120,7 +120,7 @@ class AdultForm(ModelForm):
         model = Adult
         fields = ('id','given_name','preferred_name','surname','birth_date','gender','sfu_id','address','years_of_education','phone','email','contact_pref','pref_phone_time','personal_notes','health_notes')
         widgets = {
-            'id': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control-plaintext'}),
+            'id': TextInput(attrs={'readonly': 'readonly'}),
             'birth_date': DateInput(attrs={'type': 'date', 'min': '1900-01-01'}),
             'gender': TextInput(attrs={'list':'auto-genders'}),
             'sfu_id': TextInput(attrs={'min': 100000000, 'max': 999999999, 'type': 'number', }),

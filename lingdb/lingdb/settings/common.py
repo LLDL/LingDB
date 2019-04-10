@@ -121,6 +121,8 @@ STATIC_ROOT =  os.path.join(BASE_DIR, 'static'),
 
 LOGIN_REDIRECT_URL = '/'
 
+SELECT2_CSS = '/static/ParticipantDB/css/select2.min.css'
+SELECT2_JS = '/static/ParticipantDB/js/select2.min.js'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")

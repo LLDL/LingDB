@@ -2,8 +2,6 @@
 {% load static %}
 {% block extraHead %}
     {{ experiment_section_run_form.media.css }}
-    {{ experiment_section_run_field_score_formset.media.css }}
-    {{ field_score_pairs.media.css }}
     <script src="{% static 'ParticipantDB/js/run_validation.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>
 {% endblock %}
@@ -96,6 +94,4 @@
         </div>
     </form>
     {{ experiment_section_run_form.media.js }}
-    {{ experiment_section_run_field_score_formset.media.js }}
-    {{ field_score_pairs.media.js }}
 {% endblock %}
