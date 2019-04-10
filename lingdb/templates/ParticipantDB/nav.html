@@ -2,14 +2,13 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/bootstrap.min.css' %}">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'ParticipantDB/style.css' %}">
     <script src="{% static 'ParticipantDB/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'ParticipantDB/js/popper.min.js' %}" ></script>
+    <script src="{% static 'ParticipantDB/js/bootstrap.js' %}" ></script>
     {% block extraHead %}
     {% endblock %}
 </head>
@@ -24,7 +23,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown "> 
+                <li class="nav-item dropdown"> 
                     <a class="main-nav-link nav-link dropdown-toggle" href="#" id="peopleDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         People
                     </a>
