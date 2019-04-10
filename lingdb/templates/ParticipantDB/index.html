@@ -1,4 +1,147 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block content %}
-    <h1>TODO: Tutorial</h1>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    People
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Adults
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_adult' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                            <a class="btn btn-dark" href="{% url 'adult_query' %}">
+                                <span class="fa fa-search" aria-hidden="True"> Query</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Children
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_child' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                            <a class="btn btn-dark" href="{% url 'child_query' %}">
+                                <span class="fa fa-search" aria-hidden="True"> Query</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Families
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_family' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                            <a class="btn btn-dark" href="#">
+                                <span class="fa fa-search" aria-hidden="True"> Query</span>
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Participation
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Experiment Section Run
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'choose_experiment_section' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Assessment Run
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn  btn-dark" href="{% url 'choose_assessment' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Resources
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            How To Guide
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="#">
+                                <span class="fa fa-file" aria-hidden="True"> Get</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Experiments
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_experiment' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                            <a class="btn btn-dark" href="{% url 'experiment_list' %}">
+                                <span class="fa fa-list" aria-hidden="True"> List</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Assessments
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_assessment' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                            <a class="btn btn-dark" href="{% url 'assessment_list' %}">
+                                <span class="fa fa-list" aria-hidden="True"> List</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Languages
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_language' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="align-middle">
+                            Musical Skills
+                        </span>
+                        <span class="pull-right align-middle">
+                            <a class="btn btn-dark" href="{% url 'add_musical_skill' %}">
+                                <span class="fa fa-plus" aria-hidden="True"> Add</span>
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock  %}

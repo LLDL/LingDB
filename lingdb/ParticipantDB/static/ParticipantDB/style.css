@@ -3,7 +3,6 @@
 }
 #content{
     padding: 2em 5em;
-    /* background-color: #54585A; */
 }
 .login{
     background: #a6192e;
@@ -15,17 +14,12 @@
 table tbody tr td div .col-form-label{
     display: none;
 }
-/* .selection span{
-    height: calc(2.25rem + 2px) !important;
-} */
 .select2-selection, .select2-selection--single{
     border: 1px solid #ced4da !important;
     border-radius: .25rem !important;
 }
 .autoMargin{
     margin: auto;
-    /* margin-top: auto;
-    margin-bottom: auto; */
 }
 .whiteText{
     color: #ffffff;
