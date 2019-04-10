@@ -307,16 +307,37 @@ def child_query(request):
     # querysets
     children = Child.objects.all()
     lang_exposure = IsExposedTo.objects.all()
+    groups = get_user_groups(request)
+    assessment_run = Assessment_Run.objects.filter(assessment__lab__group__name__in=groups)
+    experiment_section_run = Experiment_Section_Run.objects.filter(experiment_section__experiment__lab__group__name__in=groups)
 
     childFilter = ChildFilter(request.GET, queryset=children)
 
     exposureFilter = ExposureFilter(request.GET, queryset=lang_exposure)
     exposed_to_lang = exposureFilter.qs.order_by('child__id').distinct('child__id').values_list('child__id', flat=True)
     
+    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run)
+    assessment_participants = assessmentRunFilter.qs.order_by('participantChild__id').distinct('participantChild__id').values_list('participantChild__id', flat=True)
+
+    experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run)
+    experiment_section_participants = experimentSectionRunFilter.qs.order_by('participantChild__id').distinct('participantChild__id').values_list('participantChild__id', flat=True)
+
     # filter by exposure
     combined = childFilter.qs.filter(id__in=exposed_to_lang).distinct('id')
 
-    return render(request, 'ParticipantDB/Child/list.html', {'childFilter': childFilter,'exposureFilter': exposureFilter, 'combined': combined})
+     # potentially filter by assessment run
+    assessment_field_filled = request.GET.get('assessment', '') or request.GET.get('assessment_run_date_min', '') or request.GET.get('assessment_run_date_max', '') or request.GET.get('assessment_run_assessor', '') or request.GET.get('assessment_run_notes')
+    if assessment_field_filled:
+        combined = combined.filter(id__in=assessment_participants).distinct('id')
+    
+     # potentially filter by experiment section run
+    experiment_run_field_filled = request.GET.get('experiment_section', '') or request.GET.get('experiment_section_run_date_min', '') or request.GET.get('experiment_section_run_date_max', '') or request.GET.get('experiment_section_run_assessor', '') or request.GET.get('experiment_section_run_notes')
+    if experiment_run_field_filled:
+        combined = combined.filter(id__in=experiment_section_participants).distinct('id')
+
+
+
+    return render(request, 'ParticipantDB/Child/list.html', {'childFilter': childFilter,'exposureFilter': exposureFilter, 'assessmentRunFilter': assessmentRunFilter, 'experimentSectionRunFilter': experimentSectionRunFilter, 'combined': combined})
 
 
 @login_required
