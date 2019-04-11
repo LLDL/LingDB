@@ -13,9 +13,9 @@
         </div>
         <div class="col-md-4">
             <div class="btn-group float-right"> 
-                <a href="{% url 'add_adult' %}" class="btn btn-outline-primary" role="button">Add Adult</a>
-                <a href="{% url 'add_child' %}" class="btn btn-outline-primary" role="button">Add Child</a>
-                <a href="{% url 'add_family' %}" class="btn btn-outline-primary" role="button">Add Family</a>
+                <a href="{% url 'add_adult' %}" class="btn btn-outline-dark" role="button">Add Adult</a>
+                <a href="{% url 'add_child' %}" class="btn btn-outline-dark" role="button">Add Child</a>
+                <a href="{% url 'add_family' %}" class="btn btn-outline-dark" role="button">Add Family</a>
             </div>
         </div>
     </div>
@@ -75,8 +75,8 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Open</a>
-                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-dark" role="button">Open</a>
+                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-dark" role="button">Update</a>
                                                 <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                                             </div>
 
@@ -143,8 +143,8 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'child_detail' child_id=child.id %}" class="btn btn-outline-primary" role="button">Open</a>
-                                                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'child_detail' child_id=child.id %}" class="btn btn-outline-dark" role="button">Open</a>
+                                                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-dark" role="button">Update</a>
                                                 <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                                             </div>
 
@@ -197,8 +197,8 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-primary" role="button">Open</a>
-                                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark" role="button">Open</a>
+                                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark" role="button">Update</a>
                                                 <a href="{% url 'delete_family' family_id=family.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                                             </div>
 

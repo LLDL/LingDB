@@ -9,10 +9,10 @@
         </div>
         <div class="col-md-4">
             <div class="btn-group float-right"> 
-                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
+                <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target=".sensitive" aria-expanded="false" aria-controls="personalTable">
                     Expand/Collapse
                 </button>
-                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-primary" role="button">Update</a>
+                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-dark" role="button">Update</a>
                 <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
             </div>
         </div>
@@ -151,7 +151,7 @@
                                         </th>
                                         <td>
                                             {% for parent in parents %}
-												<a href="{% url 'adult_detail' adult_id=parent.parent.id %}" class="btn btn-outline-primary" role="button">  
+												<a href="{% url 'adult_detail' adult_id=parent.parent.id %}" class="btn btn-outline-dark" role="button">  
 													{{parent.parent.given_name}} {{parent.parent.surname}} ({{parent.parent.id}})
 												</a>
                                             {% endfor %}
@@ -170,7 +170,7 @@
                                         <td>
                                             {% for sibling in siblings %}
                                                 {% if sibling.child.id != child.id %}
-													<a href="{% url 'child_detail' child_id=sibling.child.id %}" class="btn btn-outline-primary mb-1" role="button">  
+													<a href="{% url 'child_detail' child_id=sibling.child.id %}" class="btn btn-outline-dark mb-1" role="button">  
 														{{sibling.child.given_name}} {{sibling.child.surname}} ({{sibling.child.id}})
 													</a>
 												{% endif %}
@@ -183,8 +183,8 @@
                     </div>
                     <div class="card-footer">
                         <div class="btn-group">
-                            <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-primary" role="button">View Family ({{family.id}})</a>
-                            <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-primary" role="button">Update Family ({{family.id}})</a>
+                            <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark" role="button">View Family ({{family.id}})</a>
+                            <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark" role="button">Update Family ({{family.id}})</a>
                         </div>
                     </div>
                 </div>
@@ -243,8 +243,8 @@
                                             </td>   
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="{% url 'assessment_run_detail' assessment_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                    {% comment %} <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a> {% endcomment %}
+                                                    <a href="{% url 'assessment_run_detail' assessment_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Open</a>
+                                                    {% comment %} <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-dark" role="button">Update</a> {% endcomment %}
                                                     <a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a> 
                                                 </div>
                                             </td>   
@@ -270,7 +270,7 @@
                                 {% endfor %}
                             </select>
                             <div class="input-group-append">
-                                <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-primary" value="Add">
+                                <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-dark" value="Add">
                             </div>
                         </div>
                     </form>
@@ -342,7 +342,7 @@
                                 {% endfor %}
                             </select>
                             <div class="input-group-append">
-                                <input type="submit" id="chooseExperimentSectionButton" class="btn btn-outline-primary" value="Add">
+                                <input type="submit" id="chooseExperimentSectionButton" class="btn btn-outline-dark" value="Add">
                             </div>
                         </div>
                     </form>

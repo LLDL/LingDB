@@ -10,11 +10,11 @@
             </div>
             <div class="col-md-4">
                 <div class="btn-group float-right"> 
-                    <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target=".sensitive{{adult.id}}" aria-expanded="false" aria-controls="personalTable">
+                    <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".sensitive{{adult.id}}" aria-expanded="false" aria-controls="personalTable">
                         Expand/Collapse
                     </button>
-                    <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-primary" role="button">Update</a>
-                    <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                    <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn  btn-outline-light" role="button">Update</a>
+                    <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-danger border-light" role="button">Delete</a>
                     
                 </div>
             </div>
@@ -226,8 +226,8 @@
                                                 </td>   
                                                 <td>
                                                     <div class="btn-group">  
-                                                        <a href="{% url 'assessment_run_detail' assessment_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                        <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a>
+                                                        <a href="{% url 'assessment_run_detail' assessment_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Open</a>
+                                                        <a href="{% url 'update_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-dark" role="button">Update</a>
                                                         <a href="{% url 'delete_assessment_run' assessment_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a>  
                                                     </div>
                                                 </td>
@@ -253,7 +253,7 @@
                                     {% endfor %}
                                 </select>
                                 <div class="input-group-append">
-                                    <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-primary" value="Add">
+                                    <input type="submit" id="chooseAssessmentButton" class="btn btn-outline-dark" value="Add">
                                 </div>
                             </div>
                         </form>
@@ -304,8 +304,8 @@
                                                 </td>   
                                                 <td>
                                                     <div class="btn-group">
-                                                        <a href="{% url 'experiment_section_run_detail' experiment_section_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a> 
-                                                        <a href="{% url 'update_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-primary" role="button">Update</a>
+                                                        <a href="{% url 'experiment_section_run_detail' experiment_section_run_id=participation.id %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Open</a> 
+                                                        <a href="{% url 'update_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-dark" role="button">Update</a>
                                                         <a href="{% url 'delete_experiment_section_run' experiment_section_run_id=participation.id %}"  class="btn btn-outline-danger" role="button">Delete</a>  
                                                     </div>        
                                                 </td>  
@@ -331,7 +331,7 @@
                                     {% endfor %}
                                 </select>
                                 <div class="input-group-append">
-                                    <input type="submit" id="chooseExperimentSectionButton" class="btn btn-outline-primary" value="Add">
+                                    <input type="submit" id="chooseExperimentSectionButton" class="btn btn-outline-dark" value="Add">
                                 </div>
                             </div>
                         </form>

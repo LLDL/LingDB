@@ -9,7 +9,7 @@
         </div>
         <div class="col-md-4">
             <div class="btn-group float-right"> 
-                {% comment %} <a href="{% url 'update_assessment_run' assessment_run_id=assessment_run.id %}" class="btn btn-outline-primary" role="button">Update</a> {% endcomment %}
+                {% comment %} <a href="{% url 'update_assessment_run' assessment_run_id=assessment_run.id %}" class="btn btn-outline-dark" role="button">Update</a> {% endcomment %}
                 <a href="{% url 'delete_assessment_run' assessment_run_id=assessment_run.id %}" class="btn btn-outline-danger" role="button">Delete</a>
                 
             </div>
@@ -26,14 +26,14 @@
                         <table class="table table-hover">
                             <tr class="noTopBorder">
                                 <th>Assessment:</th>
-                                <td><a href="{% url 'assessment_detail' assessment_name=assessment_run.assessment %}" class="btn btn-outline-primary" role="button">{{assessment_run.assessment}}</a></td>
+                                <td><a href="{% url 'assessment_detail' assessment_name=assessment_run.assessment %}" class="btn btn-outline-dark" role="button">{{assessment_run.assessment}}</a></td>
                             </tr> 
                             <tr>
                                 <th>Participant:</th>
                                 {% if assessment_run.participantAdult %}
-                                    <td><a href="{% url 'adult_detail' adult_id=assessment_run.participantAdult.id %}" class="btn btn-outline-primary" role="button">{{assessment_run.participantAdult}}</a></td>
+                                    <td><a href="{% url 'adult_detail' adult_id=assessment_run.participantAdult.id %}" class="btn btn-outline-dark" role="button">{{assessment_run.participantAdult}}</a></td>
                                 {% elif assessment_run.participantChild %}
-                                    <td><a href="{% url 'child_detail' child_id=assessment_run.participantChild.id %}" class="btn btn-outline-primary" role="button">{{assessment_run.participantChild}}</a></td>
+                                    <td><a href="{% url 'child_detail' child_id=assessment_run.participantChild.id %}" class="btn btn-outline-dark" role="button">{{assessment_run.participantChild}}</a></td>
                                 {% endif %}
                             </tr> 
                             <tr>

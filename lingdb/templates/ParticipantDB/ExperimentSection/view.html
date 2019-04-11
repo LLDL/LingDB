@@ -10,9 +10,9 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="btn-group float-right"> 
-                    <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Update Experiment</a>
+                    <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-dark" role="button">Update Experiment</a>
                     <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-danger" role="button">Delete Section</a>
-                    {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
+                    {% comment %} <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
                         Show Sensitive
                 </button> {% endcomment %}
                 </div>
@@ -32,7 +32,7 @@
                                 </tr>
                                 <tr>
                                     <th>Experiment</th>
-                                    <td><a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">{{ experiment.experiment_name }}</td>
+                                    <td><a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}" class="btn btn-outline-dark" role="button">{{ experiment.experiment_name }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -90,12 +90,12 @@
                                             <td>
                                                 {% if run.participantAdult%}
 
-                                                    <a href="{% url 'adult_detail' adult_id=run.participantAdult.id %}" class="noBottomMargin btn btn-outline-primary mb-1" role="button">  
+                                                    <a href="{% url 'adult_detail' adult_id=run.participantAdult.id %}" class="noBottomMargin btn btn-outline-dark mb-1" role="button">  
 
                                                     {{run.participantAdult}}
                                                     </a>
                                                 {% else %}
-                                                    <a href="{% url 'child_detail' child_id=run.participantChild.id %}" class="btn btn-outline-primary mb-1" role="button">  
+                                                    <a href="{% url 'child_detail' child_id=run.participantChild.id %}" class="btn btn-outline-dark mb-1" role="button">  
                                                     {{run.participantChild}}
                                                     </a>
                                                 {% endif %}
@@ -115,8 +115,8 @@
                     
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="{% url 'experiment_section_run_detail' experiment_section_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                    {% comment %} <a href="{% url 'update_experiment_section_run' experiment_section_run_id=run.id %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a> {% endcomment %}
+                                                    <a href="{% url 'experiment_section_run_detail' experiment_section_run_id=run.id %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Open</a>
+                                                    {% comment %} <a href="{% url 'update_experiment_section_run' experiment_section_run_id=run.id %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Update</a> {% endcomment %}
                                                     <a href="{% url 'delete_experiment_section_run' experiment_section_run_id=run.id %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
                                                 </div>
                                             </td>
@@ -135,7 +135,7 @@
                                 <option value="child">New Child Run</option>
                             </select>
                             <div class="input-group-append">
-                                <input type="submit" id="chooseexperiment_sectionButton" class="btn btn-outline-primary" value="Add">
+                                <input type="submit" id="chooseexperiment_sectionButton" class="btn btn-outline-dark" value="Add">
                             </div>
                         </div>
                     </form>

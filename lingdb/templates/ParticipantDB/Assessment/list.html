@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <div class="btn-group float-right"> 
             
-                <a href="{% url 'add_assessment' %}" class="btn btn-outline-primary" role="button">Add Assessment</a>
+                <a href="{% url 'add_assessment' %}" class="btn btn-outline-dark" role="button">Add Assessment</a>
                 
             </div>
         </div>
@@ -25,7 +25,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
-                                <tr class="noTopBorder centeredCell">
+                                <tr class="noTopBorder centeredCell color-header">
                                     <th>Name</th>
                                     <th>Lab</th>
                                     <th>Fields</th>
@@ -46,7 +46,7 @@
                                             {% for fields in assessment_fields.items %}
                                                 {% if fields.0 == assessment.assessment_name %}
                                                     {% for field in fields.1%} 
-                                                        {{field.field_name}} ({{field.type}})<br>
+                                                        {{field.field_name}} ({{field.type}})&nbsp&nbsp&nbsp&nbsp
                                                     {% endfor %}
                                                 {% endif %}
                                             {% endfor %}
@@ -60,8 +60,8 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'assessment_detail' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                                <a href="{% url 'assessment_detail' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Open</a>
+                                                <a href="{% url 'update_assessment' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Update</a>
                                                 <a href="{% url 'delete_assessment' assessment_name=assessment.assessment_name %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
                                             </div>
                                         </td>

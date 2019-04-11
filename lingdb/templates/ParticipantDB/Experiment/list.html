@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <div class="btn-group float-right"> 
             
-                <a href="{% url 'add_experiment' %}" class="btn btn-outline-primary" role="button">Add Experiment</a>
+                <a href="{% url 'add_experiment' %}" class="btn btn-outline-dark" role="button">Add Experiment</a>
                 
             </div>
         </div>
@@ -25,7 +25,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
-                                <tr class="noTopBorder centeredCell">
+                                <tr class="noTopBorder centeredCell color-header">
                                     <th>Name</th>
                                     <th>Lab</th>
                                     <th>Sections</th>
@@ -47,7 +47,7 @@
                                                 {% if sections.0 == experiment.experiment_name %}
                                                     <div class="btn-group">
                                                         {% for section in sections.1%} 
-                                                            <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=section.experiment_section_name %}"  class="noBottomMargin btn btn-outline-primary" role="button">{{section.experiment_section_name}}</a>
+                                                            <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=section.experiment_section_name %}"  class="noBottomMargin btn btn-outline-dark" role="button">{{section.experiment_section_name}}</a>
                                                         {% endfor %}
                                                     </div>
                                                 {% endif %}
@@ -62,8 +62,8 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Open</a>
-                                                <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-primary mb-1" role="button">Update</a>
+                                                <a href="{% url 'experiment_detail' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Open</a>
+                                                <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-dark mb-1" role="button">Update</a>
                                                 <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}"  class="noBottomMargin btn btn-outline-danger mb-1" role="button">Delete</a>
                                             </div>
                                         </td>

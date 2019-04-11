@@ -43,6 +43,7 @@ nav{
 }
 .noTopBorder th, .noTopBorder td{
     border-top: 0 !important;
+    
 }
 .noBottomMargin{
     margin-bottom: 0 !important;
@@ -80,4 +81,25 @@ nav{
 .no-lr{
     margin-right: 0 !important;
     margin-left: 0 !important;
+}
+.card-header{
+    color: #ffffff !important;
+    background: #007096 !important;
+    border-color:#343a40;
+}
+.card{
+    border-color: #343a40;
+}
+.list-group-item{
+    border-color: #343a40;
+}
+td, th{
+    border-color: #343a40 !important;
+}
+th{
+    border-bottom-width: 1px !important;
+}
+.color-header{
+    color: #ffffff !important;    
+    background: #007096 !important;
 }

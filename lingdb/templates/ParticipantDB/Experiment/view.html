@@ -10,9 +10,9 @@
             <div class="col-md-4">
                 <div class="btn-group float-right"> 
                 
-                    <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-primary" role="button">Update</a>
+                    <a href="{% url 'update_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-dark" role="button">Update</a>
                     <a href="{% url 'delete_experiment' experiment_name=experiment.experiment_name %}" class="btn btn-outline-danger" role="button">Delete</a>
-                    {% comment %} <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
+                    {% comment %} <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#sensitive" aria-expanded="false" aria-controls="personalTable">
                         Show Sensitive
                 </button> {% endcomment %}
                 </div>
@@ -61,7 +61,7 @@
                                             <td>{{experiment_section.section_status}}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-primary" role="button">Open</a>
+                                                <a href="{% url 'experiment_section_detail' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-dark" role="button">Open</a>
                                                 <a href="{% url 'delete_experiment_section' experiment_name=experiment.experiment_name experiment_section_name=experiment_section.experiment_section_name %}" class="btn btn-outline-danger" role="button">Delete</a>
                                                 </div>
                                             </td>
