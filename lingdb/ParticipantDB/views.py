@@ -672,6 +672,7 @@ def add_assessment(request):
     else:
         assessment_form = AssessmentForm()
     
+        assessment_form.fields["lab"].queryset = Lab.objects.filter(group__name__in=get_user_groups(request))
     return render(request, "ParticipantDB/Assessment/new.html", {'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms})
 
 @login_required
@@ -722,6 +723,7 @@ def update_assessment(request, assessment_name):
     else:
         assessment_form = AssessmentForm(instance = assessment_inst)
     
+        assessment_form.fields["lab"].queryset = Lab.objects.filter(group__name__in=get_user_groups(request))
     return render(request, "ParticipantDB/Assessment/update.html", {'assessment_name': assessment_name,'assessment_form': assessment_form, 'assessment_field_formset': assessment_field_forms, 'canAccess': canAccess})
 
 @login_required
@@ -829,7 +831,7 @@ def add_assessment_run(request, assessment_name, participant_type, participant=N
             assessment_run_form = ChildAssessmentRunForm(initial = {'assessment': assessment, 'participantChild': child}, prefix = 'assessment_run_form')
         else:
             assessment_run_form = ChildAssessmentRunForm(initial = {'assessment': assessment}, prefix = 'assessment_run_form')
-
+        assessment_run_form.fields["assessor"].queryset = User.objects.filter(groups=assessment.lab.group)
     field_score_pairs = zip(assessment_fields, assessment_run_field_score_forms)
     return render(request, "ParticipantDB/AssessmentRun/new2.html", {'assessment_name': assessment_name, 'field_score_pairs': field_score_pairs ,'assessment_run_form': assessment_run_form, 'assessment_run_field_score_formset': assessment_run_field_score_forms, 'participant_type': participant_type})
 
@@ -915,6 +917,8 @@ def add_experiment(request):
     else:
         experiment_form = ExperimentForm()
     
+    
+        experiment_form.fields["lab"].queryset = Lab.objects.filter(group__name__in=get_user_groups(request))
     return render(request, "ParticipantDB/Experiment/new.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms})
 
 @login_required
@@ -959,6 +963,7 @@ def update_experiment(request, experiment_name):
     else:
         experiment_form = ExperimentForm(instance = experiment_inst)
 
+        experiment_form.fields["lab"].queryset = Lab.objects.filter(group__name__in=get_user_groups(request))
     return render(request, "ParticipantDB/Experiment/update.html", {'experiment_form': experiment_form, 'experiment_section_formset': experiment_section_forms, 'experiment_name': experiment_name, 'canAccess': canAccess})
 
 @login_required
@@ -1172,6 +1177,7 @@ def add_experiment_section_run(request, experiment_section_name, experiment_name
         else:
             experiment_section_run_form = ChildExperimentSectionRunForm(initial = {'experiment_section': experiment_section}, prefix = 'experiment_run_form')
 
+        experiment_section_run_form.fields["assessor"].queryset = User.objects.filter(groups=experiment.lab.group)
     
     field_score_pairs = zip(experiment_section_fields, experiment_section_run_field_score_forms)
     return render(request, "ParticipantDB/ExperimentSectionRun/new2.html", {'experiment_section_name': experiment_section_name,'experiment_name': experiment_name, 'field_score_pairs': field_score_pairs ,'experiment_section_run_form': experiment_section_run_form, 'experiment_section_run_field_score_formset': experiment_section_run_field_score_forms, 'participant_type': participant_type})
