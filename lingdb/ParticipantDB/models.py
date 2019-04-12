@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from django.contrib.auth.models import Group, User
-from .models import *
+
 
 
 class Language(models.Model):
@@ -71,7 +71,7 @@ class Adult(Person):
         ('P', 'Phone'),
         ('E', 'Email'),
     )
-    contact_pref = models.CharField(max_length=1, choices = CONTACT_CHOICES, verbose_name = "Contact Preference")    
+    contact_pref = models.CharField(max_length=1, choices = CONTACT_CHOICES, verbose_name = "Contact Preference", blank = True, null = True)    
 
     PHONETIME_CHOICES = (
         ('WDM', 'Weekday Mornings'),
@@ -83,7 +83,7 @@ class Adult(Person):
         ('ANY', 'Anytime'),
         ('DNC', 'Do Not Call'),
     )
-    pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, verbose_name = "Preferred Phone Time", blank = True, null = True, default="ANY")
+    pref_phone_time = models.CharField(max_length = 3, choices = PHONETIME_CHOICES, verbose_name = "Preferred Phone Time", blank = True, null = True)
     
     languages = models.ManyToManyField('Language', blank = True, through='Speaks', related_name = 'speaks')
     musical_background = models.ManyToManyField('MusicalSkill', blank = True, through='MusicalExperience')
@@ -198,10 +198,10 @@ class Assessment_Run(models.Model):
         ordering = ['participantAdult', 'participantChild']
     participantAdult = models.ForeignKey(Adult, verbose_name='Adult Participant', on_delete = models.CASCADE, null=True, blank=True)
     participantChild = models.ForeignKey(Child, verbose_name='Child Participant', on_delete = models.CASCADE, null=True, blank=True)
-    assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE)
+    assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE, related_name="assessment_ran")
 
     date = models.DateField()
-    notes = models.TextField(max_length=1000)
+    notes = models.TextField(max_length=1000, null= True, blank= True)
     assessor = models.ForeignKey(User, null= True, blank= True, on_delete = models.SET_NULL)
     
     def __str__(self):

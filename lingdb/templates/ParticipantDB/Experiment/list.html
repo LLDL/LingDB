@@ -1,31 +1,23 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-
     <div class="row">
-        <div class="col-md-8">
-            <h1>
-                All Experiments
-            </h1>
-        </div>
-        <div class="col-md-4">
-            <div class="btn-group float-right"> 
-            
-                <a href="{% url 'add_experiment' %}" class="btn btn-outline-dark" role="button">Add Experiment</a>
-                
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-            
         <div class="col-xl-12">
             {% if experiments %}
                 <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-12 mb-0">
+                                <span class="align-middle">All Experiments</span>
+                                <a href="{% url 'add_experiment' %}" class="btn btn-outline-light  float-sm-right  align-middle" role="button">Add Experiment</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
-                                <tr class="noTopBorder centeredCell color-header">
+                                <tr class="noTopBorder centeredCell">
                                     <th>Name</th>
                                     <th>Lab</th>
                                     <th>Sections</th>

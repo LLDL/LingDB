@@ -1,0 +1,125 @@
+{% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    {% load static %}
+    {{ familyFilter.form.media.css }}
+    <script src="{% static 'ParticipantDB/js/query.js' %}"></script>
+    <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs mb-4">
+                <li class="nav-item"><a class="nav-link" href="{% url 'adult_query' %}">Adult</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'child_query' %}">Child</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'family_query' %}">Family</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1>
+        Family Query
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 mb-0">
+                            Query
+                            <div class="btn-group float-right"> 
+                                <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".query-form" aria-controls="personalTable">
+                                Expand/Collapse
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body query-form collapse show"> 
+                    <form method="get" action="">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <h4>Personal Info</h4>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3 form-group">
+                                {{ familyFilter.form.parent_given_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{ familyFilter.form.parent_surname|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{ familyFilter.form.child_given_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{ familyFilter.form.child_surname|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row mb-4">
+                            <div class="col-md-4 form-group">
+                                {{ familyFilter.form.notes_inc|as_crispy_field}}
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-outline-dark">Query</button>
+                                <a href="{% url 'family_query' %}" class="btn btn-outline-dark" role="button">Clear</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} </div> {% endcomment %}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Results
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="noTopBorder centeredCell">
+                                <th>ID</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if familyFilter.qs.count %}
+                                {% for family in familyFilter.qs%}
+                                {% comment %} {% for adult in combined %} {% endcomment %}
+                                    <tr class="centeredCell">
+                                        <td>
+                                            {{family.id}}
+                                        </td>
+                                        <td>
+                                            {{family.notes}}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark" role="button">Open</a>
+                                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark" role="button">Update</a>
+                                                <a href="{% url 'delete_family'  family_id=family.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else%}
+                                <tr class="centeredCell">
+                                    <td colspan='8'>
+                                        Sorry, no results.
+                                    </tr>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    {{ adultFilter.form.media.js }}  
+{% endblock %}

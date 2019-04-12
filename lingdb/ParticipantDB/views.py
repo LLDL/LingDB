@@ -108,7 +108,7 @@ def adult_query(request):
     speaks = Speaks.objects.all()
     music = MusicalExperience.objects.all()
     groups = get_user_groups(request)
-    assessment_run = Assessment_Run.objects.filter(assessment__lab__group__name__in=groups)
+    assessment_run = Assessment_Run.objects.all()
     
     # assessment_run = Assessment_Run.objects.all()
     experiment_section_run = Experiment_Section_Run.objects.filter(experiment_section__experiment__lab__group__name__in=groups)
@@ -124,7 +124,7 @@ def adult_query(request):
     musicians = musicalExperienceFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
 
 
-    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run)
+    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run, request=request)
     assessment_participants = assessmentRunFilter.qs.order_by('participantAdult__id').distinct('participantAdult__id').values_list('participantAdult__id', flat=True)
 
     experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run)
@@ -153,6 +153,14 @@ def adult_query(request):
     
 
     return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'experimentSectionRunFilter': experimentSectionRunFilter, 'combined': combined})
+
+
+@login_required
+def assessment_run_query(request):
+    assessment_runs = Assessment_Run.objects.all()
+    
+    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_runs, request=request)
+    return render(request, 'ParticipantDB/AssessmentRun/list.html', {'assessmentRunFilter': assessmentRunFilter})
 
 @login_required
 def add_adult(request):
@@ -460,6 +468,12 @@ def delete_child(request, child_id):
         raise Http404("No child with id" + child_id)
 
 # Family
+
+@login_required
+def family_query(request):
+    families = Family.objects.all()
+    familyFilter = FamilyFilter(request.GET, queryset=families)
+    return render(request, 'ParticipantDB/Family/list.html', {'familyFilter': familyFilter})
 @login_required
 def add_family(request):
     child_forms = ChildInFamilyInlineFormSet(

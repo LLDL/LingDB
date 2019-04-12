@@ -28,20 +28,21 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-4">
-                            <div class="card-header">
-                                Parent(s)
-                            </div>
                             <div class="table-responsive">
                                 {{ parent_forms.management_form|crispy}}
                                 <table class="table table-hover">
+                                    <thead class="card-header">
+                                        <tr class="noTopBorder">
+                                            <td>
+                                                Parent(s)
+                                            </td>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         {% for parent_form in parent_forms %}
                                             <tr>
                                                 <td>
                                                     {{parent_form.parent|as_crispy_field}}
-                                                {% comment %} </td>
-                                                <td> {% endcomment %}
-                                                
                                                     {{parent_form.isPrimary|as_crispy_field}}
                                                 </td>
                                             </tr>
@@ -55,12 +56,16 @@
             </div>
             <div class="col-lg-6">
                 <div class="card mb-4">
-                    <div class="card-header">
-                        Child(ren)
-                    </div>
                     <div class="table-responsive">
                         {{ child_forms.management_form|crispy}}
                         <table class="table table-hover">
+                            <thead class="card-header">
+                                <tr class="noTopBorder">
+                                    <td>
+                                        Child(ren)
+                                    </td>
+                                </tr>
+                            </thead>
                             <tbody>
                                 {% for child_form in child_forms %}
                                     <tr>

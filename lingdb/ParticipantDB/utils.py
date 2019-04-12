@@ -22,6 +22,7 @@ def get_user_groups(request):
     # print(groups)
     return groups
 
+
 def get_user_authed_list(request, full_queryset, sub_of=""):
     # print(full_queryset)
     groups = request.user.groups.values_list('id', flat=True)

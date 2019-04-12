@@ -51,6 +51,9 @@ nav{
 .card-header{
     font-weight: 600 !important;
     font-size: 1.25em !important;
+    color: #ffffff !important;
+    background: #343a40 !important;
+    border-color:#343a40;
 }
 .table > tbody > tr > td, .table > tbody > tr > th {
     vertical-align: middle;
@@ -60,6 +63,9 @@ nav{
 }
 .vertical-align{
     align-items: center;
+}
+.vert-center{
+    vertical-align: middle !important;
 }
 .centered-checkbox{
     position: inherit !important;
@@ -82,11 +88,6 @@ nav{
     margin-right: 0 !important;
     margin-left: 0 !important;
 }
-.card-header{
-    color: #ffffff !important;
-    background: #007096 !important;
-    border-color:#343a40;
-}
 .card{
     border-color: #343a40;
 }
@@ -101,5 +102,9 @@ th{
 }
 .color-header{
     color: #ffffff !important;    
-    background: #007096 !important;
+    background: #343a40 !important;
+}
+.dropdown-item:hover, .dropdown-item:focus{
+    background-color: #343a40 !important;
+    color: #ffffff;
 }

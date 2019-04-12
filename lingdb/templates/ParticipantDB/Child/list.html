@@ -11,8 +11,8 @@
         <div class="col-md-12">
             <ul class="nav nav-tabs mb-4">
                 <li class="nav-item"><a class="nav-link" href="{% url 'adult_query' %}">Adult</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#">Child</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Family</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'child_query' %}">Child</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'family_query' %}">Family</a></li>
             </ul>
         </div>
     </div>
@@ -24,12 +24,10 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-8 mb-0">
+                        <div class="col-md-12 mb-0">
                             Query
-                        </div>
-                        <div class="col-md-4">
                             <div class="btn-group float-right"> 
-                                <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target=".query-form" aria-expanded="true" aria-controls="personalTable">
+                                <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".query-form" aria-expanded="true" aria-controls="personalTable">
                                 Expand/Collapse
                                 </button>
                             </div>

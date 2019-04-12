@@ -1,31 +1,25 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-
-    <div class="row">
-        <div class="col-md-8">
-            <h1>
-                All Assessments
-            </h1>
-        </div>
-        <div class="col-md-4">
-            <div class="btn-group float-right"> 
-            
-                <a href="{% url 'add_assessment' %}" class="btn btn-outline-dark" role="button">Add Assessment</a>
-                
-            </div>
-        </div>
-    </div>
-
     <div class="row">
             
         <div class="col-xl-12">
             {% if assessments %}
                 <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-12 mb-0 vert-center">
+                                    <span class="vert-center">All Assessments</span>
+                                    <a href="{% url 'add_assessment' %}" class="btn btn-outline-light float-right vert-center" role="button">Add Assessment</a>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
-                                <tr class="noTopBorder centeredCell color-header">
+                                <tr class="noTopBorder centeredCell">
                                     <th>Name</th>
                                     <th>Lab</th>
                                     <th>Fields</th>

@@ -15,12 +15,6 @@ def getAdultGenders():
         GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
     return GENDER_CHOICES
 
-def getassessments(request):
-    # print(request)
-    # if request is None:
-        # return Assessment.objects.none()
-
-    return Assessment.objects.all()
 
 CONTACT_CHOICES = (
     ('P', 'Phone'),
@@ -46,11 +40,11 @@ PROFICIENCY_M_CHOICES = (
 
 
 class AdultFilter(filters.FilterSet):
-    given_name = filters.CharFilter(field_name='given_name', lookup_expr="icontains", label="Given Name")
+    given_name = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='given_name', lookup_expr="icontains", label="Given Name")
 
-    surname = filters.CharFilter(field_name='surname', lookup_expr='icontains', label="Surname")
+    surname = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(), field_name='surname', lookup_expr='icontains', label="Surname")
 
-    preferred_name = filters.CharFilter(field_name='preferred_name',lookup_expr='icontains', label="Preferred Name")
+    preferred_name = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='preferred_name',lookup_expr='icontains', label="Preferred Name")
 
     birth_date = filters.DateFromToRangeFilter(label="Birth Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
 
@@ -58,7 +52,7 @@ class AdultFilter(filters.FilterSet):
 
     contact_pref = filters.MultipleChoiceFilter(choices=CONTACT_CHOICES, widget=Select2MultipleWidget(), lookup_expr='icontains', label="Contact Preference")
 
-    gender = filters.MultipleChoiceFilter(choices= getAdultGenders,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
+    gender = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
 
     health_notes_inc = filters.CharFilter(field_name='health_notes', lookup_expr='icontains', label="Health Notes Include")
@@ -87,23 +81,66 @@ class SpeaksFilter(filters.FilterSet):
         model = Speaks
         fields = ['lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended']
 
+def assessments(request):
+        groups = get_user_groups(request)
+        if request is None:
+            return Assessment.objects.none()
+
+        return Assessment.objects.filter(lab__group__name__in=groups)
+
+def assessors(request):
+    if request is None:
+        return User.objects.none()
+    user = getattr(request, 'user', None)
+
+    print(user)
+    print(user.groups.all())
+
+
+    valid_users = User.objects.filter(groups__in=user.groups.all()).order_by('id').distinct('id')
+    # return User.objects.all()
+    return valid_users
+
+
+
+    # genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
+    # GENDER_CHOICES = ()
+    # for gender_choice in genders:
+    #     GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
+    # return GENDER_CHOICES
+
+
+
+
+
 
 class AssessmentRunFilter(filters.FilterSet):
-    assessment = filters.ModelMultipleChoiceFilter(queryset=getassessments,widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="assessment")
+    assessment = filters.ModelMultipleChoiceFilter(queryset=assessments, widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="assessment")
 
     assessment_run_date = filters.DateFromToRangeFilter(field_name="date", label="Within the Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
 
-    assessment_run_assessor = filters.ModelMultipleChoiceFilter(queryset=User.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Assessed By Any Of", field_name="assessor")
+    assessment_run_assessor = filters.ModelMultipleChoiceFilter(queryset=assessors, widget=Select2MultipleWidget(attrs={}),label="Assessed By Any Of", field_name="assessor")
 
     assessment_run_notes = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Notes Include")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        print('request', self.request)
+   
 
     class Meta:
         model = Assessment_Run
         fields = ['assessment', 'date', 'notes', 'assessor']
+    
+    @property
+    def qs(self):
+        parent = super(AssessmentRunFilter, self).qs
+        print(self.request)
+        user = getattr(self.request, 'user', None)
+        print("USER: {}".format(user))
+        if(self.request):
+            print('valid request')
+            print(user.groups)
+            return parent.filter(assessment__lab__group__name__in=get_user_groups(self.request))
+        else:
+            print('invalid request')
+            return Assessment_Run.objects.none()
 
 
 class ExperimentSectionRunFilter(filters.FilterSet):
@@ -135,21 +172,14 @@ class MusicalExperienceFilter(filters.FilterSet):
 # Child Filters ------------------------
 
 
-def getChildGenders():  
-    genders = Child.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
-    GENDER_CHOICES = ()
-    for gender_choice in genders:
-        GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
-    return GENDER_CHOICES
-
 class ChildFilter(filters.FilterSet):
-    given_name = filters.CharFilter(field_name='given_name', lookup_expr="icontains", label="Given Name")
+    given_name = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='given_name', lookup_expr="icontains", label="Given Name")
 
-    surname = filters.CharFilter(field_name='surname', lookup_expr='icontains', label="Surname")
+    surname = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(), field_name='surname', lookup_expr='icontains', label="Surname")
 
-    preferred_name = filters.CharFilter(field_name='preferred_name',lookup_expr='icontains', label="Preferred Name")
+    preferred_name = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='preferred_name',lookup_expr='icontains', label="Preferred Name")
 
-    gender = filters.MultipleChoiceFilter(choices= getChildGenders,widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
+    gender = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(), lookup_expr='icontains', label="Gender")
 
     health_notes_inc = filters.CharFilter(field_name='health_notes', lookup_expr='icontains', label="Health Notes Include")
 
@@ -185,3 +215,19 @@ class ExposureFilter(filters.FilterSet):
         model = IsExposedTo
         fields = ['lang', 'percentage_exposure']
 
+# Family
+
+class FamilyFilter(filters.FilterSet):
+
+    parent_given_name = filters.CharFilter(field_name='a_family__parent__given_name', lookup_expr='icontains', label="Parental Given Name")
+    child_given_name = filters.CharFilter(field_name='c_family__child__given_name', lookup_expr='icontains', label="Child Given Name")
+
+    parent_surname = filters.CharFilter(field_name='a_family__parent__surname', lookup_expr='icontains', label="Parental Surname")
+    child_surname = filters.CharFilter(field_name='c_family__child__surname', lookup_expr='icontains', label="Child Surname")
+
+    notes_inc = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Notes Include")
+
+
+    class Meta:
+        model = Family
+        exclude = ['a_family__parent__surname', 'c_family__child__surname', 'a_family__parent__given_name', 'c_family__child__given_name', 'notes']

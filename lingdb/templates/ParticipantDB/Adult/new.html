@@ -28,6 +28,7 @@
                             <div class="col-md-4">
                                 {{ addParentForm.management_form|crispy }}
                                 {{addParentForm.family|as_crispy_field}}
+                                <small id="familyHelp" class="form-text text-muted">If their family already exists in the database, select it here.</small>
                             </div>
                         </div>
                         <div class="row">
@@ -62,6 +63,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 {{ adult_form.email|as_crispy_field}}
+                                <small id="emailHelp" class="form-text text-muted">At least one contact method (email or phone) is required</small>
                             </div>
                             <div class="col-md-3">
                                 {{ adult_form.phone|as_crispy_field}}
