@@ -90,8 +90,8 @@ class AddChildForm(ModelForm):
     def clean_family(self):
         family = self.cleaned_data['family']
         if family:
-            parents = IsParentIn.objects.filter(family=family)
-            if len(parents)>9:
+            children = IsChildIn.objects.filter(family=family)
+            if len(children)>9:
                 raise ValidationError('This family already has ten children.')
         return self.cleaned_data['family']
 
@@ -196,14 +196,6 @@ class SpeaksForm(ModelForm):
     class Meta:
         model = Speaks
         fields = ('lang', 'is_native', 'proficiency', 'age_learning_started', 'age_learning_ended')
-        
-    # def clean_age_learning_ended(self):
-    #     started = self.cleaned_data['age_learning_started']
-    #     ended = self.cleaned_data['age_learning_ended']
-    #     if ended and started > ended:
-    #         return ValidationError('Language learning must start before ending')
-    #     else:
-    #         return ended
 
 class ExposureForm(ModelForm):
     class Meta:
@@ -233,9 +225,9 @@ SpeaksInlineFormSet = inlineformset_factory(
     min_num = 1,
     validate_min = True,
     widgets = {
-        'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number', 'class': 'age_learning_started'}),
         'is_native': CheckboxInput(attrs={'class': 'centered-checkbox-child position-static isNative'}),
-        'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number', 'class': 'age_learning_ended'}),
         'proficiency': Select2Widget(),
         'lang': Select2Widget(),
     }
@@ -273,15 +265,6 @@ class MusicalExperienceForm(ModelForm):
     class Meta:
         model = MusicalExperience
         fields = ('experience', 'proficiency', 'age_learning_started', 'age_learning_ended')
-    # def clean(self):
-    #     super(MusicalExperienceInlineFormSet, self).clean()
-    #     print('test')
-    #     for form in self.forms:
-    #         started = form.cleaned_data['age_learning_started']
-    #         ended = form.cleaned_data['age_learning_ended']
-    #         if ended and started > ended:
-    #             return ValidationError('Experience must start before ending')
-    #     return self
     
 
 MusicalExperienceFormSet = modelformset_factory(
@@ -300,8 +283,8 @@ MusicalExperienceInlineFormSet = inlineformset_factory(
     min_num = 0,
     validate_min = True,
     widgets = {
-        'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
-        'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number'}),
+        'age_learning_started': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number', 'class': 'age_learning_started'}),
+        'age_learning_ended': TextInput(attrs={'min': 0, 'max': 120, 'type': 'number', 'class': 'age_learning_ended'}),
         'proficiency': Select2Widget(),
         'experience': Select2Widget()
     }

@@ -1,7 +1,4 @@
-// $(function(){
-//     var fam = $("#id_parent-family");
-//     fam.attr('required', false)
-// });
+
 $(function(){
     $(".isNative").change(function(){
         var nativeCount = 0
@@ -22,9 +19,37 @@ $(function(){
         }
     });
     
+    $(".age_learning_started").change(function(){
+        var started = $(".age_learning_started")
+        var ended = $(".age_learning_ended")
+
+        started.each(function(index){
+            // console.log(this.value, ended[index].value, ended[index].value == '')
+            if(ended[index].value != '' && this.value > ended[index].value){
+                this.setCustomValidity('Learning must start before it ends')
+            }else{
+                this.setCustomValidity('')
+            }
+        });
+
+        // for(var i=0; i<started.length; i++){
+        //     console.log(i)
+        //     if ($(started[i]).val() > $(ended[i]).val() && $(ended[i]).val() != 0){
+        //         this.setCustomValidity('Learning must start before it ends')
+        //     }
+        // }
+
+    });
+
+    $(".age_learning_ended").change(function(){
+        $(".age_learning_started").change();
+    });
+
+
+
     $(".isNative").change();
+    $(".age_learning_started").change();
+    $(".age_learning_ended").change();
 
-    // var fam = $("#id_child-family");
 
-    // fam.attr('required', false)
 });
