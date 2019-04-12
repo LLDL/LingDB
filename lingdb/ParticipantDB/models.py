@@ -262,7 +262,7 @@ class Speaks(models.Model):
         ('Intermediate', 'Intermediate'),
         ('Basic','Basic'),
     )
-    proficiency = models.CharField(max_length = 11, choices = PROFICIENCY_OPTIONS, default = 'Basic')
+    proficiency = models.CharField(max_length = 12, choices = PROFICIENCY_OPTIONS, default = 'Basic')
 
     age_learning_started = models.SmallIntegerField(
         validators=[
