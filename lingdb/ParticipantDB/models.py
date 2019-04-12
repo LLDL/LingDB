@@ -188,7 +188,7 @@ class Assessment(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '%s (%s)' % (self.assessment_name, self.lab.lab_name) 
+        return '%s' % (self.assessment_name) 
 
 
 class Assessment_Run(models.Model):

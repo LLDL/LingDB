@@ -113,12 +113,12 @@ def adult_query(request):
     # assessment_run = Assessment_Run.objects.all()
     experiment_section_run = Experiment_Section_Run.objects.filter(experiment_section__experiment__lab__group__name__in=groups)
     # filter init
-    adultFilter = AdultFilter(request.GET, queryset=adults)
+    adultFilter = AdultFilter(request.GET, queryset=adults, request=request)
     
-    speaksFilter = SpeaksFilter(request.GET, queryset=speaks)
+    speaksFilter = SpeaksFilter(request.GET, queryset=speaks, request=request)
     speakers = speaksFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
     
-    musicalExperienceFilter = MusicalExperienceFilter(request.GET, queryset=music)
+    musicalExperienceFilter = MusicalExperienceFilter(request.GET, queryset=music, request=request)
     musicians = musicalExperienceFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
 
     musicians = musicalExperienceFilter.qs.order_by('person__id').distinct('person__id').values_list('person__id', flat=True)
@@ -127,7 +127,7 @@ def adult_query(request):
     assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run, request=request)
     assessment_participants = assessmentRunFilter.qs.order_by('participantAdult__id').distinct('participantAdult__id').values_list('participantAdult__id', flat=True)
 
-    experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run)
+    experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run, request=request)
     experiment_section_participants = experimentSectionRunFilter.qs.order_by('participantAdult__id').distinct('participantAdult__id').values_list('participantAdult__id', flat=True)
 
 
@@ -155,12 +155,6 @@ def adult_query(request):
     return render(request, 'ParticipantDB/Adult/list.html', {'adultFilter': adultFilter, 'speaksFilter': speaksFilter, 'musicalExperienceFilter': musicalExperienceFilter, 'assessmentRunFilter': assessmentRunFilter, 'experimentSectionRunFilter': experimentSectionRunFilter, 'combined': combined})
 
 
-@login_required
-def assessment_run_query(request):
-    assessment_runs = Assessment_Run.objects.all()
-    
-    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_runs, request=request)
-    return render(request, 'ParticipantDB/AssessmentRun/list.html', {'assessmentRunFilter': assessmentRunFilter})
 
 @login_required
 def add_adult(request):
@@ -319,15 +313,15 @@ def child_query(request):
     assessment_run = Assessment_Run.objects.filter(assessment__lab__group__name__in=groups)
     experiment_section_run = Experiment_Section_Run.objects.filter(experiment_section__experiment__lab__group__name__in=groups)
 
-    childFilter = ChildFilter(request.GET, queryset=children)
+    childFilter = ChildFilter(request.GET, queryset=children, request=request)
 
-    exposureFilter = ExposureFilter(request.GET, queryset=lang_exposure)
+    exposureFilter = ExposureFilter(request.GET, queryset=lang_exposure, request=request)
     exposed_to_lang = exposureFilter.qs.order_by('child__id').distinct('child__id').values_list('child__id', flat=True)
     
-    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run)
+    assessmentRunFilter = AssessmentRunFilter(request.GET, queryset=assessment_run, request=request)
     assessment_participants = assessmentRunFilter.qs.order_by('participantChild__id').distinct('participantChild__id').values_list('participantChild__id', flat=True)
 
-    experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run)
+    experimentSectionRunFilter = ExperimentSectionRunFilter(request.GET, queryset=experiment_section_run, request=request)
     experiment_section_participants = experimentSectionRunFilter.qs.order_by('participantChild__id').distinct('participantChild__id').values_list('participantChild__id', flat=True)
 
     # filter by exposure
@@ -472,7 +466,7 @@ def delete_child(request, child_id):
 @login_required
 def family_query(request):
     families = Family.objects.all()
-    familyFilter = FamilyFilter(request.GET, queryset=families)
+    familyFilter = FamilyFilter(request.GET, queryset=families, request=request)
     return render(request, 'ParticipantDB/Family/list.html', {'familyFilter': familyFilter})
 @login_required
 def add_family(request):

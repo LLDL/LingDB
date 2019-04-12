@@ -57,8 +57,6 @@ urlpatterns = [
     ## update assessment run
     path('assessment_run/<str:assessment_run_id>/update/', views.update_assessment_run, name='update_assessment_run'),
 
-    path('assessment_run/', views.assessment_run_query, name='assessment_run_query'),
-
     # experiments
     path('experiment/', views.experiment_list, name='experiment_list'),
     path('experiment/add/', views.add_experiment, name='add_experiment'),

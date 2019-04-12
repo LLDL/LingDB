@@ -93,26 +93,8 @@ def assessors(request):
         return User.objects.none()
     user = getattr(request, 'user', None)
 
-    print(user)
-    print(user.groups.all())
-
-
     valid_users = User.objects.filter(groups__in=user.groups.all()).order_by('id').distinct('id')
-    # return User.objects.all()
     return valid_users
-
-
-
-    # genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
-    # GENDER_CHOICES = ()
-    # for gender_choice in genders:
-    #     GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
-    # return GENDER_CHOICES
-
-
-
-
-
 
 class AssessmentRunFilter(filters.FilterSet):
     assessment = filters.ModelMultipleChoiceFilter(queryset=assessments, widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="assessment")
@@ -131,31 +113,40 @@ class AssessmentRunFilter(filters.FilterSet):
     @property
     def qs(self):
         parent = super(AssessmentRunFilter, self).qs
-        print(self.request)
         user = getattr(self.request, 'user', None)
-        print("USER: {}".format(user))
         if(self.request):
-            print('valid request')
-            print(user.groups)
-            return parent.filter(assessment__lab__group__name__in=get_user_groups(self.request))
+            return parent.filter(assessment__lab__group__name__in=user.groups.values_list('name', flat=True))
         else:
-            print('invalid request')
             return Assessment_Run.objects.none()
 
+def experiment_sections(request):
+        groups = get_user_groups(request)
+        if request is None:
+            return Experiment_Section.objects.none()
+
+        return Experiment_Section.objects.filter(experiment__lab__group__name__in=groups)
 
 class ExperimentSectionRunFilter(filters.FilterSet):
-    experiment_section = filters.ModelMultipleChoiceFilter(queryset=Experiment_Section.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="experiment_section")
+    experiment_section = filters.ModelMultipleChoiceFilter(queryset=experiment_sections, widget=Select2MultipleWidget(attrs={}),label="Participated In Any Of", field_name="experiment_section")
 
     experiment_section_run_date = filters.DateFromToRangeFilter(field_name="date", label="Within the Date Range", widget=RangeWidget(attrs={'type': 'date', 'class': 'form-control mb-2'}))
 
-    experiment_section_run_assessor = filters.ModelMultipleChoiceFilter(queryset=User.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Assessed By Any Of", field_name="assessor")
+    experiment_section_run_assessor = filters.ModelMultipleChoiceFilter(queryset=assessors, widget=Select2MultipleWidget(attrs={}),label="Assessed By Any Of", field_name="assessor")
 
     experiment_section_run_notes = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Notes Include")
 
     class Meta:
-        model = Assessment_Run
+        model = Experiment_Section_Run
         fields = ['experiment_section', 'date', 'notes', 'assessor']
 
+    @property
+    def qs(self):
+        parent = super(ExperimentSectionRunFilter, self).qs
+        user = getattr(self.request, 'user', None)
+        if(self.request):
+            return parent.filter(experiment_section__experiment__lab__group__name__in=user.groups.values_list('name', flat=True))
+        else:
+            return Experiment_Section_Run.objects.none()
 
 class MusicalExperienceFilter(filters.FilterSet):
     experience = filters.ModelMultipleChoiceFilter(queryset=MusicalSkill.objects.all(), widget=Select2MultipleWidget(attrs={}),label="Skilled In Any Of", field_name="experience")

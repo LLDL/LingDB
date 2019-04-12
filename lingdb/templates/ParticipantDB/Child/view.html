@@ -209,9 +209,9 @@
 				{% if assessment_participations|length > 0 %}
                 	<div>
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover centeredCell">
                                 <thead>
-                                    <tr class="noTopBorder centeredCell">
+                                    <tr class="noTopBorder ">
                                         <th>Assessment</th>
                                         <th>Lab</th>
                                         <th>Assessor</th>
@@ -287,9 +287,9 @@
 				{% if experiment_section_participations|length > 0 %}
                 	<div>
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover centeredCell">
                                 <thead>
-                                    <tr  class="noTopBorder centeredCell">
+                                    <tr class="noTopBorder ">
                                         <th>Experiment</th>
                                         <th>Section</th>
                                         <th>Lab</th>
@@ -303,7 +303,7 @@
                                 
                                 <tbody>
                                     {% for participation in experiment_section_participations %}
-                                        <tr>
+                                        <tr cl>
                                             <td>{{participation.experiment_section.experiment}}</td>
                                             <td>{{participation.experiment_section}}</td>
                                             <td>{{participation.experiment_section.experiment.lab}}</td>
