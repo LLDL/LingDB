@@ -169,56 +169,69 @@
             {% endif %}
             
 
-            {% if family %}
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Family
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <tbody>
-                                {% if parents.count > 1 %}
-                                    <tr class="noTopBorder">
-                                        <th>Spouse:</th>
-                                        <td>
-                                            {% for parent in parents %}
-                                                {% if parent.parent.id != adult.id %}
-                                                    <a href="{% url 'adult_detail' adult_id=parent.parent.id %}" class="btn btn-outline-dark" role="button">  
-                                                        {{parent.parent.given_name}} {{parent.parent.surname}} ({{parent.parent.id}})
-                                                    </a>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                                {% if children.count > 0 %}
-                                    <tr>
-                                        <th>
-                                            {% if children.count > 1%}
-                                                Children:
-                                            {% else %}
-                                                Child:
-                                            {% endif %}
-                                        </th>
-                                        <td>
-                                            {% for child in children %}
-                                                <a href="{% url 'child_detail' child_id=child.child.id %}" class="btn btn-outline-dark mb-1" role="button">  
-                                                    {{child.child.given_name}} {{child.child.surname}} ({{child.child.id}})
-                                                </a>
-                                            {% endfor %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <div class="btn-group">
-                            <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark" role="button">View Family ({{family.id}})</a>
-                            <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark" role="button">Update Family ({{family.id}})</a>
+            {% if families %}
+                {% for family in families %}
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Family
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tbody>
+
+                                
+
+                                    {% load family_tags %}
+                                    {% with all_parents|hashval:family.id as parents %}
+                                        {% if parents.count > 1 %}
+                                            <tr class="noTopBorder">
+                                                <th>Spouse:</th>
+                                                <td>
+                                                    {% for parent in parents %}
+                                                        {% if parent.parent.id != adult.id %}
+                                                            <a href="{% url 'adult_detail' adult_id=parent.parent.id %}" class="btn btn-outline-dark" role="button">  
+                                                                {{parent.parent.given_name}} {{parent.parent.surname}} ({{parent.parent.id}})
+                                                            </a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endwith %}
+
+
+                                    {% load family_tags %}
+                                    {% with all_children|hashval:family.id as children %}
+                                        {% if children.count > 0 %}
+                                            <tr>
+                                                <th>
+                                                    {% if children.count > 1%}
+                                                        Children:
+                                                    {% else %}
+                                                        Child:
+                                                    {% endif %}
+                                                </th>
+                                                <td>
+                                                    {% for child in children %}
+                                                        <a href="{% url 'child_detail' child_id=child.child.id %}" class="btn btn-outline-dark mb-1" role="button">  
+                                                            {{child.child.given_name}} {{child.child.surname}} ({{child.child.id}})
+                                                        </a>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endwith%}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-group">
+                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark" role="button">View Family ({{family.id}})</a>
+                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark" role="button">Update Family ({{family.id}})</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             {% endif %}
         </div>
     </div>

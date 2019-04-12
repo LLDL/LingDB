@@ -13,6 +13,7 @@
                     <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".sensitive{{adult.id}}" aria-expanded="false" aria-controls="personalTable">
                         Expand/Collapse
                     </button>
+                    <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn  btn-outline-light" role="button">Open</a>
                     <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn  btn-outline-light" role="button">Update</a>
                     <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-danger border-light" role="button">Delete</a>
                     

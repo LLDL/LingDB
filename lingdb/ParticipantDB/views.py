@@ -285,11 +285,17 @@ def adult_detail(request, adult_id):
         messages.info(request, 'Please see health/personal notes')
 
     try:
-        parent_in = IsParentIn.objects.get(parent = adult)
-        family = Family.objects.get(pk=parent_in.family.id)
-        all_parents = IsParentIn.objects.filter(family = family)
-        all_children = IsChildIn.objects.filter(family = family)
-        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'family': family, 'parents': all_parents, 'children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
+        parent_in_families = IsParentIn.objects.filter(parent = adult)
+        families = []
+        all_parents = {}
+        all_children = {}
+        for parent_in in parent_in_families:
+            family = Family.objects.get(pk=parent_in.family.id)
+            families.append(family)
+            all_parents[family.id] =IsParentIn.objects.filter(family = family)
+            all_children[family.id] =IsChildIn.objects.filter(family = family)
+
+        return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'families': families, 'all_parents': all_parents, 'all_children': all_children, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
     except IsParentIn.DoesNotExist:
         return render(request, 'ParticipantDB/Adult/view.html', {'adult': adult, 'speaksLanguages': speaks, 'musical_exps': musical_exps, 'assessment_participations': assessment_participations, 'all_scores': all_scores, 'eligible_assessments': eligible_assessments, 'experiment_section_participations': experiment_participations, 'eligible_experiment_sections': eligible_experiment_sections, 'all_experiment_scores': all_experiment_scores})
 

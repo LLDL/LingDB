@@ -185,6 +185,7 @@ class ChildFilter(filters.FilterSet):
     gestation_length_weeks = filters.RangeFilter(label="Gestation Length Range (Weeks)", widget=RangeWidget(attrs={'type': 'number', 'class': 'form-control mb-2'}))
     #hx ear inf
 
+    hx_repeated_ear_infection = filters.CharFilter(field_name='hx_repeated_ear_infection', lookup_expr='icontains', label="HX Repeated Ear Infection Includes")
     class Meta:
         model = Child
         exclude = ['id']
