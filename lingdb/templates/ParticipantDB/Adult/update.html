@@ -1,6 +1,8 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
+    
+    <title>Update Adult #{{adult_id}} - ParticipantDB</title>
     {{ adult_form.media.css }}
     <script src="{% static 'ParticipantDB/js/adult.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>

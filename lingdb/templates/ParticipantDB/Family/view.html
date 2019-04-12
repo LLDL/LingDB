@@ -1,5 +1,8 @@
 {% extends "ParticipantDB/nav.html" %}
 
+{% block extraHead %}
+    <title>Family #{{family.id}} - ParticipantDB</title>
+{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="row">

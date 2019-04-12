@@ -1,6 +1,8 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
+
+    <title>Update Fields for Sections of {{experiment.experiment_name}} - ParticipantDB</title>
     {{ fields.media.css }}
 {% endblock %}
 {% load crispy_forms_tags %}

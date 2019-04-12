@@ -1,4 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    <title>ParticipantDB</title>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-4">
@@ -41,7 +44,7 @@
                             <a class="btn btn-sm btn-outline-dark" href="{% url 'add_family' %}">
                                 Add
                             </a>
-                            <a class="btn btn-sm btn-outline-dark" href="#">
+                            <a class="btn btn-sm btn-outline-dark" href="{% url 'family_query' %}">
                                 Query
                             </a>
                         </div>

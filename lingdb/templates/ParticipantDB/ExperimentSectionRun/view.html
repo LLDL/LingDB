@@ -1,5 +1,8 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load crispy_forms_tags %}
+{% block extraHead %}
+    <title>View Experiment Section {{experiment_section_run.experiment_section}} Run #{{experiment_section_run.id}} - ParticipantDB</title>
+{% endblock%}
 {% block content %}
     <div class="row">
         <div class="col-md-8">

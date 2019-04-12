@@ -1,5 +1,8 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load crispy_forms_tags %}
+{% block extraHead %}
+    <title>View Experiment Section {{experiment_section.experiment_section_name}} - ParticipantDB</title>
+{% endblock %}
 {% block content %}
     {% if canAccess%}
         <div class="row">

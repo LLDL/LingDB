@@ -1,6 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
+    <title>Update Assessment {{assessment_name}} - ParticipantDB</title>
     {{ assessment_form.media.css }}
 {% endblock %}
 {% load crispy_forms_tags %}

@@ -1,5 +1,6 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
+    <title>Child Query - ParticipantDB</title>
     {% load static %}
     {{ childFilter.form.media.css }}
     <script src="{% static 'ParticipantDB/js/query.js' %}"></script>

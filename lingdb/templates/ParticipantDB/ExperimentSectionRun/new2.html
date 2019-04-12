@@ -1,6 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
+    <title>Add Experiment Section {{experiment_section_name}} Run - ParticipantDB</title>
     {{ experiment_section_run_form.media.css }}
     <script src="{% static 'ParticipantDB/js/run_validation.js' %}"></script>
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>

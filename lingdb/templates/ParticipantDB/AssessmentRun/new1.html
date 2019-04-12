@@ -1,8 +1,9 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
+    <title>Add Assessment Run - ParticipantDB</title>
     {% load static %}
     <script src="{% static 'ParticipantDB/js/invoke_select2.js' %}"></script>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" type="text/css" media="screen" rel="stylesheet">
+    <link href="{% static 'ParticipantDB/css/select2.min.css' %}" type="text/css" media="screen" rel="stylesheet">
 {% endblock %}
 {% block content %}
     <div>
@@ -47,8 +48,6 @@
             <input type="submit" class="btn btn-outline-dark"  id="chooseAssessmentButton" value="Add Run">
         </form>
     </div>
-        
-    <script src="/static/django_select2/django_select2.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
-
+    <script src="{% static 'ParticipantDB/js/django_select2.js' %}"></script>
+    <script src="{% static 'ParticipantDB/js/select2.min.js' %}"></script>
 {% endblock  %}

@@ -1,4 +1,9 @@
 {% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    <title>View Assessment {{assessment_run.assessment}} Run #{{assessment_run.id}} - ParticipantDB</title>
+    {{ assessment_run_form.media.css }}
+    
+{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="row">

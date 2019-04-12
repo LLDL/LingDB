@@ -1,5 +1,6 @@
 {% extends "ParticipantDB/nav.html" %}
 {% block extraHead %}
+    <title>Family Query - ParticipantDB</title>
     {% load static %}
     {{ familyFilter.form.media.css }}
     <script src="{% static 'ParticipantDB/js/query.js' %}"></script>
@@ -16,16 +17,13 @@
             </ul>
         </div>
     </div>
-    <h1>
-        Family Query
-    </h1>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 mb-0">
-                            Query
+                            Family Query
                             <div class="btn-group float-right"> 
                                 <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".query-form" aria-controls="personalTable">
                                 Expand/Collapse

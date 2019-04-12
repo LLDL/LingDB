@@ -2,6 +2,7 @@
 
 {% load static %}
 {% block extraHead %}
+    <title>Add Assessment {{assessment_name}} Run - ParticipantDB</title>
     {{ assessment_run_form.media.css }}
     
     <script src="{% static 'ParticipantDB/js/date_warning.js' %}"></script>

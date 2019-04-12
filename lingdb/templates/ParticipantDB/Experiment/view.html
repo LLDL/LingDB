@@ -1,4 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
+{% block extraHead %}
+    <title>View Experiment {{experiment.experiment_name}} - ParticipantDB</title>
+{% endblock %}
 {% block content %}
     {% if canAccess %}
         <div class="row">

@@ -1,6 +1,7 @@
 {% extends "ParticipantDB/nav.html" %}
 {% load static %}
 {% block extraHead %}
+    <title>Update Family #{{family_id}} - ParticipantDB</title>
     {{ parent_forms.media.css }}
     <script src="{% static 'ParticipantDB/js/family.js' %}"></script>
 {% endblock %}
