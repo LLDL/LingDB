@@ -38,28 +38,48 @@
                     <form method="get" action="">
                         <div class="form-row">
                             <div class="col-md-12">
-                                <h4>Personal Info</h4>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-3 form-group">
-                                {{ familyFilter.form.parent_given_name|as_crispy_field }}
-                            </div>
-                            <div class="col-md-3 form-group">
-                                {{ familyFilter.form.parent_surname|as_crispy_field }}
-                            </div>
-                            <div class="col-md-3 form-group">
-                                {{ familyFilter.form.child_given_name|as_crispy_field }}
-                            </div>
-                            <div class="col-md-3 form-group">
-                                {{ familyFilter.form.child_surname|as_crispy_field }}
+                                <h4>General</h4>
                             </div>
                         </div>
                         <div class="form-row mb-4">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-12 form-group">
                                 {{ familyFilter.form.notes_inc|as_crispy_field}}
                             </div>
                         </div> 
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <h4>Parental Info</h4>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-4">
+                                    <div class="col-md-6 form-group">
+                                        {{ familyFilter.form.parent_given_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        {{ familyFilter.form.parent_surname|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <h4>Child Info</h4>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-4">
+                                    <div class="col-md-6 form-group">
+                                        {{ familyFilter.form.child_given_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        {{ familyFilter.form.child_surname|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-dark">Query</button>
@@ -100,9 +120,9 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark" role="button">Open</a>
-                                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark" role="button">Update</a>
-                                                <a href="{% url 'delete_family'  family_id=family.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                                <a href="{% url 'family_detail' family_id=family.id %}" class="btn btn-outline-dark btn-sm" role="button">Open</a>
+                                                <a href="{% url 'update_family' family_id=family.id %}" class="btn btn-outline-dark btn-sm" role="button">Update</a>
+                                                <a href="{% url 'delete_family'  family_id=family.id %}" class="btn btn-outline-danger btn-sm" role="button">Delete</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -121,5 +141,5 @@
         </div>
     </div>
   
-    {{ adultFilter.form.media.js }}  
+    {{ familyFilter.form.media.js }}  
 {% endblock %}

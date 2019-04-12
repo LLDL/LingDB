@@ -8,14 +8,6 @@ from django_filters import DateFromToRangeFilter
 from django.forms import CheckboxSelectMultiple,DateInput, SelectMultiple
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
-def getAdultGenders():  
-    genders = Adult.objects.order_by('gender').distinct('gender').values_list('gender', flat=False)
-    GENDER_CHOICES = ()
-    for gender_choice in genders:
-        GENDER_CHOICES += (gender_choice[0], gender_choice[0]),
-    return GENDER_CHOICES
-
-
 CONTACT_CHOICES = (
     ('P', 'Phone'),
     ('E', 'Email'),
@@ -210,11 +202,11 @@ class ExposureFilter(filters.FilterSet):
 
 class FamilyFilter(filters.FilterSet):
 
-    parent_given_name = filters.CharFilter(field_name='a_family__parent__given_name', lookup_expr='icontains', label="Parental Given Name")
-    child_given_name = filters.CharFilter(field_name='c_family__child__given_name', lookup_expr='icontains', label="Child Given Name")
+    parent_given_name = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='a_family__parent__given_name', lookup_expr='icontains', label="Parental Given Name")
+    child_given_name = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='c_family__child__given_name', lookup_expr='icontains', label="Child Given Name")
 
-    parent_surname = filters.CharFilter(field_name='a_family__parent__surname', lookup_expr='icontains', label="Parental Surname")
-    child_surname = filters.CharFilter(field_name='c_family__child__surname', lookup_expr='icontains', label="Child Surname")
+    parent_surname = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='a_family__parent__surname', lookup_expr='icontains', label="Parental Surname")
+    child_surname = filters.AllValuesMultipleFilter(widget=Select2MultipleWidget(),field_name='c_family__child__surname', lookup_expr='icontains', label="Child Surname")
 
     notes_inc = filters.CharFilter(field_name='notes', lookup_expr='icontains', label="Notes Include")
 

@@ -16,16 +16,13 @@
             </ul>
         </div>
     </div>
-    <h1>
-        Adult Query
-    </h1>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 mb-0">
-                            Query
+                            Adult Query
                             <div class="btn-group float-right"> 
                                 <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".query-form" aria-controls="personalTable">
                                 Expand/Collapse
@@ -247,9 +244,9 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-dark" role="button">Open</a>
-                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-dark" role="button">Update</a>
-                                                <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                                <a href="{% url 'adult_detail' adult_id=adult.id %}" class="btn btn-outline-dark btn-sm" role="button">Open</a>
+                                                <a href="{% url 'update_adult' adult_id=adult.id %}" class="btn btn-outline-dark btn-sm" role="button">Update</a>
+                                                <a href="{% url 'delete_adult' adult_id=adult.id %}" class="btn btn-outline-danger btn-sm" role="button">Delete</a>
                                             </div>
                                         </td>
                                     </tr>

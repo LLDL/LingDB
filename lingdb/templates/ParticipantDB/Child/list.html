@@ -16,16 +16,13 @@
             </ul>
         </div>
     </div>
-    <h1>
-        Child Query
-    </h1>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 mb-0">
-                            Query
+                            Child Query
                             <div class="btn-group float-right"> 
                                 <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target=".query-form" aria-expanded="true" aria-controls="personalTable">
                                 Expand/Collapse
@@ -169,9 +166,8 @@
                             </div>
                         </div>
 
-
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12 mb-0">
                                 <button type="submit" class="btn btn-outline-dark">Query</button>
                                 <a href="{% url 'child_query' %}" class="btn btn-outline-dark" role="button">Clear</a>
                             </div>
@@ -229,9 +225,9 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{% url 'child_detail' child_id=child.id %}" class="btn btn-outline-dark" role="button">Open</a>
-                                                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-dark" role="button">Update</a>
-                                                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger" role="button">Delete</a>
+                                                <a href="{% url 'child_detail' child_id=child.id %}" class="btn btn-outline-dark btn-sm" role="button">Open</a>
+                                                <a href="{% url 'update_child' child_id=child.id %}" class="btn btn-outline-dark btn-sm" role="button">Update</a>
+                                                <a href="{% url 'delete_child' child_id=child.id %}" class="btn btn-outline-danger btn-sm" role="button">Delete</a>
                                             </div>
                                         </td>
                                     </tr>
