@@ -1,4 +1,4 @@
-from lingdb.settings.common import *
+from lingdb.common import *
 
 SECRET_KEY = ""
 DATABASES = {

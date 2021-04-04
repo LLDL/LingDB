@@ -22,4 +22,4 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('select2/', include('django_select2.urls')),
     # path('search/', include('watson.urls', "watson"), {"template_name":"ParticipantDB/searchResults.html"})
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
