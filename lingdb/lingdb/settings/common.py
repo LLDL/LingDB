@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*',]
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,13 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dateutil',
-    'ParticipantDB.apps.ParticipantDBConfig',
     'django_select2',
     'crispy_forms',
-    # 'rest_framework',
     'django_filters',
-    # 'rest_framework_filters',
-    # 'watson',
+    'ParticipantDB',
 ]
 
 MIDDLEWARE = [
@@ -119,7 +117,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT =  os.path.join(BASE_DIR, 'static'),
+STATIC_ROOT =  BASE_DIR / 'static'
 
 LOGIN_REDIRECT_URL = '/'
 
