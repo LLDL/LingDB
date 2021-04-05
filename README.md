@@ -126,13 +126,13 @@ cd lingdb
 pip install -r requirements.txt
 ```
 
-In the settingsSensitive file, update the secret key and database values as previously set in psql.
+In the common file, update the secret key and database values as previously set in psql.
 
 ```
-python3 manage.py makemigrations --settings=lingdb.settings.settingsSensitive
-python3 manage.py migrate --settings=lingdb.settings.settingsSensitive
+python3 manage.py makemigrations --settings=lingdb.common
+python3 manage.py migrate --settings=lingdb.common
 python3 manage.py createsuperuser 
-python3 manage.py runserver --settings=lingdb.settings.settingsSensitive 0.0.0.0:8000
+python3 manage.py runserver --settings=lingdb.common 0.0.0.0:8000
 ```
 The application should be available at port 8000. To test static files, do the following:
 ```
