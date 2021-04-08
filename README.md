@@ -7,7 +7,7 @@ This guide assumes CentOS 8, and a sudoer user named admin
 Based on [Installing Apache on Centos 7](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-centos-7) and [mod_wsgi's install guide](https://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html).
 
 ```bash
-sudo yum -y install httpd httpd-devel.x86_64 python36 python36-devel gcc make redhat-rpm-config git postgresql-server
+sudo yum -y install httpd httpd-devel.x86_64 python36 python36-devel gcc make redhat-rpm-config git postgresql-server wget tar
 
 sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
