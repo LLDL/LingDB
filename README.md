@@ -34,7 +34,7 @@ sudo nano /etc/httpd/conf/httpd.conf
 ``` 
 
 Following the instructions [here](https://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html#loading-module-into-apache), we will insert a line into `/etc/httpd/conf/httpd.conf`  right below the line `Include conf.modules.d/*.conf`: 
-```
+```conf
 LoadModule wsgi_module modules/mod_wsgi.so
 ```
 
@@ -45,7 +45,7 @@ sudo nano /etc/services
 Based on [this tutorial on ports](https://www.thegeekdiary.com/how-to-open-a-ports-in-centos-rhel-7/) allow port 8000 by inserting the following at the bottom of /etc/services (requires sudo):
 
 
-```
+```conf
 django-test     8000/tcp                # ankit-test
 django-test     8000/udp                # ankit-test
 ```
@@ -79,7 +79,7 @@ Now, we must modify `/var/lib/pgsql/data/pg_hba.conf`
 sudo nano /var/lib/pgsql/data/pg_hba.conf
 ```
 Replace the IPv4 local and IPv6 local with:
-```
+```conf
 # IPv4 local connections:
 host    all        all 0.0.0.0/0                md5
 # IPv6 local connections:
@@ -114,7 +114,7 @@ sudo chmod -R g+rwx /var/www/LingDB
 
 Now, we will configure our Django app:
 
-```
+```bash
 cd /var/www/LingDB
 git clone https://github.com/LLDL/LingDB.git
 mv /var/www/LingDB/LingDB/lingdb /var/www/LingDB
@@ -128,14 +128,14 @@ pip install -r requirements.txt
 
 In the common file, update the secret key and database values as previously set in psql.
 
-```
+```bash
 python3 manage.py makemigrations --settings=lingdb.common
 python3 manage.py migrate --settings=lingdb.common
 python3 manage.py createsuperuser 
 python3 manage.py runserver --settings=lingdb.common 0.0.0.0:8000
 ```
 The application should be available at port 8000. To test static files, do the following:
-```
+```bash
 pip install waitress
 python manage.py collectstatic
 waitress-serve --host=0.0.0.0 --port=8000 lingdb.wsgi:application
@@ -145,13 +145,12 @@ The webpage should load with the static files (images, css, js) without complain
 Last step, fingers crossed: plug the app into Apache using [the mod_wsgi tutorial](https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/modwsgi/)
 
 
-
-```
+```bash
 sudo nano /etc/httpd/conf/httpd.conf
 ```
 
 Append to `/etc/httpd/conf/httpd.conf`:
-```
+```conf
 
 WSGIScriptAlias / /var/www/LingDB/lingdb/lingdb/wsgi.py
 WSGIPythonHome /var/www/LingDB/venv
@@ -167,6 +166,6 @@ Require all granted
 ```
 
 Then, restart apache:
-```
+```bash
 sudo systemctl restart httpd
 ```
