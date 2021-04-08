@@ -129,10 +129,10 @@ pip install -r requirements.txt
 In the common file, update the secret key and database values as previously set in psql.
 
 ```bash
-python3 manage.py makemigrations --settings=lingdb.common
-python3 manage.py migrate --settings=lingdb.common
-python3 manage.py createsuperuser 
-python3 manage.py runserver --settings=lingdb.common 0.0.0.0:8000
+python manage.py makemigrations --settings=lingdb.common
+python manage.py migrate --settings=lingdb.common
+python manage.py createsuperuser 
+python manage.py runserver --settings=lingdb.common 0.0.0.0:8000
 ```
 The application should be available at port 8000. To test static files, do the following:
 ```bash
